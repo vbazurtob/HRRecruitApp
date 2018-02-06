@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Fragment Profile Forms Layout</title>
+</head>
+<body>
+	<div th:fragment="profile_forms_layout(content)">
+		<aside id="profile_side_menu">
+			<div>
+				<a title="Applicants profile" href="/profile.html" th:href="@{/cv/profile}">User Profile</a>
+			</div>
+			<div>
+				<a title="Academics" href="/academics.html" th:href="@{/cv/academics}">Academics</a>
+			</div>
+			<div>
+				<a title="Applicants profile" href="/workexp.html" th:href="@{/cv/workexp}">Work Experience</a>
+			</div>
+			
+		</aside>
+		<div id="profile_form_container">
+			<div th:replace="${content}"></div>
+		</div>
+	</div>
+</body>
+</html>

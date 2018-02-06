@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+<meta charset="UTF-8">
+<title>HRRecruitApp ::Home Page::</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})">
+	<div id="main-content">
+				 SECURED PAGE
+				 
+				 <a href="profile.html" th:href="@{/cv/profile}" >My profile</a>
+	</div>
+</body>
+</html>

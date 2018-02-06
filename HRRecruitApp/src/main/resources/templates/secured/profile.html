@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - User profile</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+			
+			<div id="form-messages">
+				<div class="form-info-messages" th:if="(${saved}==true or ${pwdchanged}==true)">
+					<ul>
+						<li th:if="${saved}==true">
+							Form has been saved sucessfully!
+						</li>
+						
+						<li th:if="${pwdchanged}==true">
+							Password has been successfully changed!
+						</li>
+						
+					</ul>
+				</div>
+				<div class="form-error-messages">
+				</div>
+			</div>
+			
+			
+			<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#input_form} )">
+				<form th:id="input_form" id="input_form"  th:object="${applicant}" th:method="post" th:action="@{/cv/save-profile}">
+					
+					<label for="username">Username</label>
+					<input id="username" th:id="username" type="text" th:readonly="true" class="disabled-text" th:field="*{username}" />
+					
+					<label for="password">Password</label>
+					<input id="password" th:id="password"  th:name="password" type="password" />
+					
+					
+					<label for="passwordConfirmation">Confirm your password</label>
+					<input id="passwordConfirmation" th:id="passwordConfirmation" th:name="passwordConfirmation" type="password"  />
+					
+					<label for="names">Names</label>
+					<input id="names" th:id="names" type="text" th:field="*{names}" />
+					
+					<label for="lastnames">Lastname(s)</label>
+					<input id="lastnames" th:id="lastnames" type="text" th:field="*{lastname}" />
+					
+					<label for="address1">Address</label>
+					<input id="address1" th:id="address1" type="text"  th:field="*{address1}"/>
+					
+					<input id="address2" th:id="address2" type="text"  th:field="*{address2}"/>
+					
+					<label for="country">Country</label>
+					<select id="country" th:field="*{country}">
+						<option th:each="countryObj : ${countriesLst}" th:value="${countryObj.getCode()}" th:text="${countryObj.getName()}">Option1</option>
+					</select>
+					
+					<label for="state">State</label>
+					<input id="state" th:id="state" type="text" maxlength="100" th:field="*{state}"/>
+					
+					
+					<label for="zipcode">Zipcode</label>
+					<input id="zipcode" th:id="zipcode" type="text" maxlength="6" th:field="*{zipcode}"/>
+					
+					
+					<label for="email">E-mail</label>
+					<input id="email" th:id="email" type="email" maxlength="45" th:field="*{email}" />
+					
+					<input type="submit" value="Save" />
+				</form>
+			</div>
+			
+<!-- 			<h1 th:text="|${httpStatus} - ${httpStatus.getReasonPhrase()}|">404</h1> -->
+<!-- 	        <p th:utext="${errorMessage}">Error java.lang.NullPointerException</p> -->
+<!-- 	        <a href="index.html" th:href="@{/index}">Back to Home Page</a> -->
+	</div>
+</body>
+</html>

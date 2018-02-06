@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head th:fragment="master_head(title, links, css)">
+	<meta charset="UTF-8">
+	<title th:replace="${title}">HRRecruitApp</title>
+	<!-- Basic required scripts -->
+	<script src="http://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+	
+	<!-- Basic css -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" ></link>
+	
+	
+	<!-- Additional scripts -->
+	<th:block th:replace="${links}" />
+		
+	<!-- Additional css -->
+	<th:block th:replace="${css}" />
+	
+	
+</head>
+<body th:fragment="master_body(bodycontent)">
+	<div th:fragment="header" class="main-header">
+		HRRecruitApp
+	</div>
+	<div id="main_menu"  sec:authorize="isAuthenticated()">
+		
+		<div class="user-info">
+			
+			
+			<!--/* 
+				
+				Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows 
+				access to the spring security module from thymeleaf templates.
+				
+				This can also be achieved without this module by accessing the #request object utility
+				in thymeleaf
+				[[${#request.getUserPrincipal().getName()}]]  
+			
+			*/-->
+			Hi <span sec:authentication="name">TestUser</span>
+			
+			
+			
+		</div>
+		<div  th:replace="public/logout::post_logout"></div>
+	</div>
+	<div class="main-content" th:replace="${bodycontent}">
+		
+	
+		
+		
+		Content is here
+	</div>
+	<div th:fragment="footer" class="main-footer">
+		Created by Voltaire Bazurto Blacio - 2018
+	</div>
+
+</body>
+</html>
