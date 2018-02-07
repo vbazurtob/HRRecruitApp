@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,7 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,18 +59,50 @@ public class PersonalProfileController {
 		
 		Applicant currentApplicant = applicantRepository.findOneByUsername(username);
 	
-		model.addAttribute("applicant", currentApplicant);
+		ApplicantProfileForm applicantProfileForm = new ApplicantProfileForm(currentApplicant);
+		
+		
+		model.addAttribute("applicant", applicantProfileForm);
 		model.addAttribute("countriesLst", countryService.getListCountries());
 		
 		return "secured/profile.html";
 	}
 	
 	
-	@RequestMapping(value = "/save-profile", method = RequestMethod.POST  )
+	@PostMapping("/profile")
 	public String saveProfile(
-			@ModelAttribute ApplicantProfileForm applicant,
-			BindingResult results, RedirectAttributes redirectAttrs) {
+			
+			@Valid @ModelAttribute("applicant") ApplicantProfileForm applicant,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model) {
+		
+		//System.out.println("Count errors: " + results.getErrorCount());
+		
+		if(results.hasErrors()) {
+			
+			
+			//System.out.println("Count errors: " + results.getErrorCount());
+			
+			
+			
+			for(FieldError eee : (List<FieldError>) results.getFieldErrors() ) {
+			
+				//System.out.println("---------------ERR" + eee);
 				
+				
+			}
+			
+			for(ObjectError eee : (List<ObjectError>) results.getAllErrors() ) {
+				
+				//System.out.println("---ERRores generales---" + eee);
+				
+				
+			}
+
+			model.addAttribute("countriesLst", countryService.getListCountries());
+			return "secured/profile.html";
+		}
 		
 //		String repassword = Arrays.toString( request.getParameterNames() );
 		//String repassword = applicant.getPasswordConfirmation();
@@ -83,6 +119,10 @@ public class PersonalProfileController {
 		if( isPwdChanged ) {
 			//flags+="&pwdchanged=true";
 			redirectAttrs.addFlashAttribute("pwdchanged",true);
+		}else {
+			//results.addError(new ObjectError("passwordsNotEqual", "Passwords  don't match. No changes were made"));
+			System.out.println("No changed");
+			//annotation no error;
 		}
 		
 		

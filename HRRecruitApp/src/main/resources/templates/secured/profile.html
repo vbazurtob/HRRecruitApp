@@ -8,26 +8,47 @@
 
 	<div id="main-content">
 			
-			<div id="form-messages">
-				<div class="form-info-messages" th:if="(${saved}==true or ${pwdchanged}==true)">
-					<ul>
-						<li th:if="${saved}==true">
-							Form has been saved sucessfully!
-						</li>
-						
-						<li th:if="${pwdchanged}==true">
-							Password has been successfully changed!
-						</li>
-						
-					</ul>
-				</div>
-				<div class="form-error-messages">
-				</div>
-			</div>
+			
+			
 			
 			
 			<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#input_form} )">
-				<form th:id="input_form" id="input_form"  th:object="${applicant}" th:method="post" th:action="@{/cv/save-profile}">
+
+
+
+							
+				
+				
+				
+				<form th:id="input_form" id="input_form"  th:object="${applicant}" th:method="post" >
+				
+				
+				
+					<div id="form-messages">
+						<div class="form-info-messages" th:if="(${saved}==true or ${pwdchanged}==true)">
+							<ul>
+								<li th:if="${saved}==true">
+									Form has been saved sucessfully!
+								</li>
+								
+								<li th:if="${pwdchanged}==true">
+									Password has been successfully changed!
+								</li>
+								
+							</ul>
+						</div>
+						<div class="form-error-messages">
+							<ul>
+								<li th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+									Error  codes
+								</li>
+								
+								
+							</ul>
+						</div>
+					</div>
+				
+				
 					
 					<label for="username">Username</label>
 					<input id="username" th:id="username" type="text" th:readonly="true" class="disabled-text" th:field="*{username}" />
@@ -41,38 +62,50 @@
 					
 					<label for="names">Names</label>
 					<input id="names" th:id="names" type="text" th:field="*{names}" />
+					<div th:if="${#fields.hasErrors('names')}" th:errors="*{names}">Names error</div>
+										
+
+					<label for="lastname">Lastname(s)</label>
+					<input id="lastname" th:id="lastname" type="text" th:field="*{lastname}" />
+					<div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastnames error</div>
 					
-					<label for="lastnames">Lastname(s)</label>
-					<input id="lastnames" th:id="lastnames" type="text" th:field="*{lastname}" />
 					
 					<label for="address1">Address</label>
 					<input id="address1" th:id="address1" type="text"  th:field="*{address1}"/>
+					<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}">Address error</div>
+					
 					
 					<input id="address2" th:id="address2" type="text"  th:field="*{address2}"/>
+					<div th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}">Address2 error</div>
+						
 					
 					<label for="country">Country</label>
 					<select id="country" th:field="*{country}">
 						<option th:each="countryObj : ${countriesLst}" th:value="${countryObj.getCode()}" th:text="${countryObj.getName()}">Option1</option>
 					</select>
+					<div th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country error</div>
+					
 					
 					<label for="state">State</label>
 					<input id="state" th:id="state" type="text" maxlength="100" th:field="*{state}"/>
-					
+					<div th:if="${#fields.hasErrors('state')}" th:errors="*{state}">State error</div>
+			
 					
 					<label for="zipcode">Zipcode</label>
 					<input id="zipcode" th:id="zipcode" type="text" maxlength="6" th:field="*{zipcode}"/>
-					
+					<div th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}">Zipcode error</div>
+			
 					
 					<label for="email">E-mail</label>
 					<input id="email" th:id="email" type="email" maxlength="45" th:field="*{email}" />
+					<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">E-mail error</div>
+			
 					
 					<input type="submit" value="Save" />
 				</form>
 			</div>
 			
-<!-- 			<h1 th:text="|${httpStatus} - ${httpStatus.getReasonPhrase()}|">404</h1> -->
-<!-- 	        <p th:utext="${errorMessage}">Error java.lang.NullPointerException</p> -->
-<!-- 	        <a href="index.html" th:href="@{/index}">Back to Home Page</a> -->
+
 	</div>
 </body>
 </html>

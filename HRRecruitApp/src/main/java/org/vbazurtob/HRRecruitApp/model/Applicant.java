@@ -2,6 +2,13 @@ package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import java.util.List;
 
 
@@ -16,24 +23,44 @@ public class Applicant implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	//@Size(min = 5, max = 35, message = "Username must be between 10 and 35 characters")
+	@NotNull( message ="Username cannot be null")
 	private String username;
 
+	@NotEmpty(message = "Address cannot be empty")
+	@Size(message = "Address cannot exceed 150 characters", max = 150)
 	private String address1;
 
+	@NotNull(message = "Second line of the Address cannot be null")
+	@Size(message = "Second line of the Address cannot exceed 150 characters", max= 150)
 	private String address2;
 
+	@Size(message = "Country cannot exceed 2 characters", max= 2)
+	@NotEmpty(message = "Country cannot be empty")
 	private String country;
 
+	@Size(message = "E-mail cannot exceed 45 characters", max= 45)
+	@Email(message = "E-mail should be a valid address")
+	@NotEmpty(message = "E-mail cannot be empty")
 	private String email;
 
+	@Size(message = "Lastname(s) cannot exceed 100 characters", max= 100)
+	@NotEmpty(message = "Lastname(s) cannot be empty")
 	private String lastname;
 
+	@Size(message = "Name(s) cannot exceed 100 characters", max= 100)
+	@NotEmpty(message = "Name(s) cannot be empty")
 	private String names;
 
+	@Size(message = "Password cannot exceed 128 characters", max= 128)
+	@NotNull(message = "Password cannot be null")
 	private String password;
 
+	@Size(message = "State cannot exceed 100 characters", max= 100)
+	@NotEmpty(message = "State cannot be empty")
 	private String state;
 
+	@Size(message = "Zipcode cannot exceed 10 characters", max= 10)
 	private String zipcode;
 
 	//bi-directional many-to-one association to ApplicantAcademic
