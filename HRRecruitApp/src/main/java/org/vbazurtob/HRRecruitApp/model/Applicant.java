@@ -1,15 +1,18 @@
 package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import java.util.List;
 
 
 /**
@@ -52,8 +55,9 @@ public class Applicant implements Serializable {
 	@NotEmpty(message = "Name(s) cannot be empty")
 	private String names;
 
-	@Size(message = "Password cannot exceed 128 characters", max= 128)
+	@Size(message = "Password cannot exceed 128 characters", min= 8, max= 128)
 	@NotNull(message = "Password cannot be null")
+	@Pattern(message = "Password is too weak. It must include at least 1 number, 1 lowercase character, 1 uppercase character and 1 special character(@#$%^&+=)", regexp ="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
 	private String password;
 
 	@Size(message = "State cannot exceed 100 characters", max= 100)

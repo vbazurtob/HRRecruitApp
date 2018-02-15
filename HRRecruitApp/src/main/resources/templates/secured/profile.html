@@ -55,10 +55,13 @@
 					
 					<label for="password">Password</label>
 					<input id="password" th:id="password"  th:name="password" type="password" />
+					<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
 					
 					
 					<label for="passwordConfirmation">Confirm your password</label>
 					<input id="passwordConfirmation" th:id="passwordConfirmation" th:name="passwordConfirmation" type="password"  />
+					<div th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}">Confirmation Password error</div>
+					
 					
 					<label for="names">Names</label>
 					<input id="names" th:id="names" type="text" th:field="*{names}" />

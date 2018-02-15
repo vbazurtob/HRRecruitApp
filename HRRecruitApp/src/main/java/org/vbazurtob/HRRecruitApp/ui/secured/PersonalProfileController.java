@@ -1,14 +1,21 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +24,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,11 +34,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.model.Applicant;
+import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
+import org.vbazurtob.HRRecruitApp.model.ApplicantAcademicPK;
 import org.vbazurtob.HRRecruitApp.model.ApplicantProfileForm;
-import org.vbazurtob.HRRecruitApp.model.Country;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
+import org.vbazurtob.HRRecruitApp.model.service.ApplicantAcademicsService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
+import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
 
 @Controller
 @RequestMapping("/cv")
@@ -46,8 +59,25 @@ public class PersonalProfileController {
 	private CountryService countryService;
 	
 	
+	@Autowired
+	private ApplicantAcademicsService applicantAcademicsService;
+	
+	@Autowired
+	private ApplicantAcademicsRepository appAcademicsRepository;
+	
+	@Autowired
+	private TypeDegreeService degreeTypeService;
+	
 	public PersonalProfileController() {
 	}
+	
+	
+	@InitBinder     
+	public void initBinder(WebDataBinder binder){
+	     binder.registerCustomEditor( Date.class,     
+	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
+	}
+	
 
 	@RequestMapping("/profile")
 	public String showDetails(Model model) {
@@ -86,19 +116,19 @@ public class PersonalProfileController {
 			
 			
 			
-			for(FieldError eee : (List<FieldError>) results.getFieldErrors() ) {
-			
-				//System.out.println("---------------ERR" + eee);
-				
-				
-			}
-			
-			for(ObjectError eee : (List<ObjectError>) results.getAllErrors() ) {
-				
-				//System.out.println("---ERRores generales---" + eee);
-				
-				
-			}
+//			for(FieldError eee : (List<FieldError>) results.getFieldErrors() ) {
+//			
+//				//System.out.println("---------------ERR" + eee);
+//				
+//				
+//			}
+//			
+//			for(ObjectError eee : (List<ObjectError>) results.getAllErrors() ) {
+//				
+//				//System.out.println("---ERRores generales---" + eee);
+//				
+//				
+//			}
 
 			model.addAttribute("countriesLst", countryService.getListCountries());
 			return "secured/profile.html";
@@ -132,9 +162,80 @@ public class PersonalProfileController {
 	
 	
 	@RequestMapping("/academics")
-	public String showAcademics() {
+	public String showAcademics(Model model /*, Pageable page*/) {
+		
+		PageRequest page = new PageRequest(0, 1);
+		
+		
+		System.out.println("offset " + page.getOffset());
+		
+		Page<ApplicantAcademic> academics =  appAcademicsRepository.findAll(page);
+		
+		System.out.println("==================== " + academics.getNumberOfElements());
+		
+		ApplicantAcademicPK  newApplicantPK = new ApplicantAcademicPK();
+		
+		//TODO
+		newApplicantPK.setApplicantId("abc");
+		//newApplicantPK.setStarted(new Date());
+		//newApplicantPK.setFinished(new Date());
+		
+		ApplicantAcademic newApplicant = new ApplicantAcademic();
+		newApplicant.setId(newApplicantPK);
+		
+		model.addAttribute("academics", academics.stream().sorted().collect( Collectors.toList()) );
+		
+		model.addAttribute("academicsForm", newApplicantPK);
+		
+		model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+		
+		//newApplicant.getId().get
 		
 		return "secured/academics_form.html";
+	}
+	
+	@PostMapping("/academics")
+	public String showAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademicPK academicsForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model ) {
+		
+		
+		//System.out.println("Error count: " + results.getErrorCount());
+		
+		//System.out.println("Institution" + academicsForm.getInstitution() );
+		
+		if(results.hasErrors()) {
+			
+//			System.out.println("ERROR RRRRR");
+//			
+//			
+//			
+//			
+//			for(FieldError eee : (List<FieldError>) results.getFieldErrors() ) {
+//			
+//				System.out.println("---------------ERR" + eee);
+//				
+//				
+//			}
+//			
+//			for(ObjectError eee : (List<ObjectError>) results.getAllErrors() ) {
+//				
+//				System.out.println("---ERRores generales---" + eee);
+//				
+//				
+//			}
+			
+			
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			return "secured/academics_form.html";
+		}
+		
+		
+		applicantAcademicsService.saveAcademicDetail(academicsForm);
+		
+		redirectAttrs.addFlashAttribute("saved",true);
+		return "redirect:/cv/academics";
 	}
 	
 	@RequestMapping("/workexp")

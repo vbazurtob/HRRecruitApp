@@ -2,30 +2,51 @@ package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
 
 /**
  * The primary key class for the applicant_academics database table.
  * 
  */
 @Embeddable
+@FormFieldsDatesConstraint(from= "started", to="finished", message="Dates contain errors, they have to follow these rules: Initial date cannot be blank. Initial date must be before the Final date")
 public class ApplicantAcademicPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
 
+	@NotNull(message="ApplicantId cannot be null")
 	@Column(name="applicant_id", insertable=false, updatable=false)
 	private String applicantId;
 
+	@Size(min=3, max=255, message="Institution name length must be between 3 to 255 characters")
+	@NotEmpty(message="Institution name cannot be empty")
+	@NotNull(message="Institution name cannot be null")
 	private String institution;
 
+	@NotNull(message="You must select a ''Started'' date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private java.util.Date started;
 
+	//@NotNull(message="You must select a ''finished'' date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private java.util.Date finished;
 
+	@Size(max=80, message="Degree type cannot exceed 80 characters")
+	@NotEmpty(message="Degree type cannot be empty")
+	@NotNull(message="Degree type cannot be null")
 	@Column(name="degree_type")
 	private String degreeType;
 
+	@Size(max=150, message="Degree name cannot exceed 150 characters")
+	@NotEmpty(message="Degree name cannot be empty")
+	@NotNull(message="Degree name cannot be null")
 	@Column(name="degree_name")
 	private String degreeName;
 
