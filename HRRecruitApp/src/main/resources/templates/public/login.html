@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+
+
+	LOGIN
+	<form th:action="@{/login}" method="post">
+		Username:
+		<input type="text" id="username" name="username">
+		Password:
+		<input type="password" id="password" name="password">
+
+		
+		
+		<input type="submit" value="Login">
+		
+		 <div th:if="${param.error}">Bad login or password.</div>
+    	<div th:if="${param.logout}">Log out successful.</div>
+	</form>
+
+</body>
+</html>
