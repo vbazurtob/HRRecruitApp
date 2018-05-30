@@ -43,10 +43,11 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_academics(
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
     institution VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
-    finished DATE NOT NULL,
+    finished DATE ,
+    in_progress CHAR(1) DEFAULT 'N',
     degree_type VARCHAR(80) NOT NULL,
     degree_name VARCHAR(150) NOT NULL,
-    PRIMARY KEY(applicant_id, institution, started, finished, degree_type, degree_name )
+    PRIMARY KEY(applicant_id, institution, started, finished, degree_type, degree_name, in_progress )
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_work_experience(

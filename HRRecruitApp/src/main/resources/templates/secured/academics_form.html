@@ -1,19 +1,65 @@
 <!DOCTYPE html>
 <html>
-	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
 	<meta charset="UTF-8">
 	<title>HRRecruitApp - Work Experience</title>
+	<div id="scriptsjs">
+		<script src="/js/formHelpers.js"></script>
+	</div>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+	
+	    var baseUrl = /*[[${baseUrl}]]*/ '';
+	    var currentPage = /*[[${pageObj.getNumber()}]]*/ 0;
+		
+	
+	/*]]>*/
+	</script>
+	
+	<script>
+		window.onload = function(){
+			
+			const inProgressChk = document.getElementById('inProgress');
+			
+			if(inProgressChk.value === 'Y'){
+				
+				document.getElementById('finished').disabled = false;
+				document.getElementById('finished').value = '';
+				document.getElementById('finished').disabled = true;
+				
+				
+			}else{
+				console.log(inProgressChk.value);
+			}
+		}
+		
+		
+		function changePage(page, url){
+			window.location = baseUrl + (page);
+		}
+		
+	</script>
+	
+	
+	
 </head>
 <body th:replace="public/master::master_body(~{::#main-content})" >
 
+
+	
+
 	<div id="main-content">
+	
+	
+	
 	
 		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
 				
 				
 			<div id="applicant_academics_container">
 				
-				<form th:id="input_form" id="input_form"  th:object="${academicsForm}" th:method="post" >
+				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${academicsForm}" th:method="post" >
 					
 							<ul>
 								<li th:if="${saved}==true">
@@ -44,7 +90,7 @@
 							
 							
 							<label for="degreeType">Degree type:</label>
-							<select id="degreeType" th:name="degreeType" th:value="*{degreeType}">
+							<select id="degreeType" th:name="degreeType" th:field="*{degreeType}">
 								<option th:each="degreeTypeObj : ${degreeTypeLst}" th:value="${degreeTypeObj}" th:text="${degreeTypeObj}">Option1</option>
 							</select>
 							<div th:if="${#fields.hasErrors('degreeType')}" th:errors="*{degreeType}">Degree type error</div>
@@ -57,7 +103,7 @@
 							
 							
 							
-							<label for="started">From:</label>
+							<label for="started">Started:</label>
 							
 							
 							<input id="started" th:id="started" type="date" th:name="started" th:value="${#dates.format(academicsForm.started, 'yyyy-MM-dd')}"/>
@@ -65,16 +111,44 @@
 							
 							
 							
-							<label for="finished">To:</label>
-							<input id="finished" th:id="finished" type="date" th:name="finished" th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" />
+							<label for="finished">Finished:</label>
+							<input id="finished" th:id="finished" type="date" th:name="finished" 
+							th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" 
+							th:disabled="(*{inProgress} == 'Y') ? 'true'  : 'false' "
+							/>
+							
 							<div th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
 							
 							
+							<input th:id="inProgress" th:name="inProgress" th:value="*{inProgress}" type="checkbox" id="inProgress" onclick="enableDisableToDateInput(this, 'finished')"  th:checked="${academicsForm.inProgress == 'Y' }" >
+							<label for="chkStillInProgress">Present</label>
+							
+							<div th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">From error</div>
 							
 							<input type="submit" value="Add" />
 						</div>
 					</form>
 					<div id="list-academics">
+						
+						<div id="paginationBar">
+							<a th:href="${baseUrl} + ${prevPage}"><</a>
+							
+							<a th:href="${baseUrl} + ${nextPage}">></a>
+							
+							<span th:if="${pageObj.getTotalPages()} > 1">
+								
+								Page #
+								<select id="selectPage" th:name="selectPage" onchange="changePage(this.options[this.selectedIndex].value)"
+								th:value="${pageObj.getNumber()}"
+								>
+								<option th:each="pageNumber : ${#numbers.sequence(1,  pageObj.getTotalPages()) }"
+								 th:value="${pageNumber}-1" th:text="${pageNumber}" th:selected=" ( ${pageNumber} - 1 ) == ${pageObj.getNumber()} " >0</option>
+								</select> / <span th:text="${pageObj.getTotalPages()}"></span>
+							</span>
+							
+							
+						</div>
+					
 						<table th:if="${academics.size()} > 0">
 							<tr>
 								<td>Institution</td>
@@ -91,8 +165,8 @@
 									<td th:text="*{institution}">institution</td>
 									<td th:text="*{degreeType}">degreetype</td>
 									<td th:text="*{degreeName}">degreename</td>
-									<td th:text="*{started}">started</td>
-									<td th:text="*{finished}">finished</td>
+									<td th:text="*{started}  ">started</td>
+									<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
 									<td> - </td>
 									
 								</th:block>

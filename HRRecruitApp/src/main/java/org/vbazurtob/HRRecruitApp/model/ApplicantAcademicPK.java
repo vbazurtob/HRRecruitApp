@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.vbazurtob.HRRecruitApp.lib.FormFieldsDateToPresentNotNullConstraint;
 import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
 
 /**
@@ -15,6 +16,7 @@ import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
  */
 @Embeddable
 @FormFieldsDatesConstraint(from= "started", to="finished", message="Dates contain errors, they have to follow these rules: Initial date cannot be blank. Initial date must be before the Final date")
+@FormFieldsDateToPresentNotNullConstraint(inProgress="inProgress", toDate="finished", message = "If the ''In Progress'' field hasn't been checked, a ''finished'' date must be specified " )
 public class ApplicantAcademicPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
@@ -33,11 +35,14 @@ public class ApplicantAcademicPK implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private java.util.Date started;
 
-	//@NotNull(message="You must select a ''finished'' date")
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private java.util.Date finished;
 
+	
+	private String inProgress;
+	
 	@Size(max=80, message="Degree type cannot exceed 80 characters")
 	@NotEmpty(message="Degree type cannot be empty")
 	@NotNull(message="Degree type cannot be null")
@@ -118,4 +123,21 @@ public class ApplicantAcademicPK implements Serializable {
 		
 		return hash;
 	}
+	
+	
+	public String getInProgress() {
+		return inProgress;
+	}
+	public void setInProgress(String inProgress) {
+		this.inProgress = inProgress;
+	}
+	@Override
+	public String toString() {
+		return "ApplicantAcademicPK [applicantId=" + applicantId + ", institution=" + institution + ", started="
+				+ started + ", finished=" + finished + ", inProgress=" + inProgress + ", degreeType=" + degreeType
+				+ ", degreeName=" + degreeName + "]";
+	}
+	
+	
+	
 }

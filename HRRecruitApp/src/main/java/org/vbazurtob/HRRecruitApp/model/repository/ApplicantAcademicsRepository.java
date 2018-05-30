@@ -1,5 +1,6 @@
 package org.vbazurtob.HRRecruitApp.model.repository;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,5 +15,7 @@ public interface ApplicantAcademicsRepository extends PagingAndSortingRepository
 	
 	public Page<ApplicantAcademic> findAll(Pageable page);
 	
+	
+	public Page<ApplicantAcademic> findByIdApplicantId(String applicantId, Pageable page);
 	
 }
