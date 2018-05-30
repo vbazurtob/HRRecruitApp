@@ -21,7 +21,11 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+<<<<<<< HEAD
 		<java.version>1.9</java.version>
+=======
+		<java.version>1.8</java.version>
+>>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 	</properties>
 
 	<dependencies>
@@ -104,6 +108,7 @@
 		    <version>2.7.1</version>
 		</dependency>
 		
+<<<<<<< HEAD
 		
 		<!--   Fix for JAVA 9 -->		
 		<dependency>
@@ -113,6 +118,8 @@
 		</dependency> 
 		
 		
+=======
+>>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 	</dependencies>
 
 

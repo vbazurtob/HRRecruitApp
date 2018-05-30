@@ -18,6 +18,3 @@ INSERT INTO "vbazurtobPortfolio".applicant(
             state, zipcode, email)
     VALUES ('abc', '$2b$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'ABC', 'Demo U.', 'St', '2005', 'NZ', 
             'RR', 'X45644', 'abc@abc.com');
-
-
-
