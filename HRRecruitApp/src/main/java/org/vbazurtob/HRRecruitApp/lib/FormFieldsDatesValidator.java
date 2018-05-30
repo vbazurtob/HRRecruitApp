@@ -27,13 +27,7 @@ public class FormFieldsDatesValidator  implements ConstraintValidator<FormFields
 		
 		System.out.println( fromDateField + " < " + toDateField );
 		if(toDateField != null && fromDateField != null) {
-<<<<<<< HEAD
-			
 			// System.out.println( "if date before?" + fromDateField.before(toDateField)  );
-			
-			
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 			return fromDateField.before(toDateField);
 		}else {
 			return true;//we don't care about the rest. FromDate is validated with NotNull

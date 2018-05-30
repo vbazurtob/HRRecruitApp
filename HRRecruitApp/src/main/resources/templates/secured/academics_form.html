@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<<<<<<< HEAD
+
 	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
 	<meta charset="UTF-8">
 	<title>HRRecruitApp - Work Experience</title>
@@ -51,31 +51,15 @@
 	
 
 	<div id="main-content">
-	
-	
-	
-	
-=======
-	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
-	<meta charset="UTF-8">
-	<title>HRRecruitApp - Work Experience</title>
-</head>
-<body th:replace="public/master::master_body(~{::#main-content})" >
 
-	<div id="main-content">
-	
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
 				
 				
 			<div id="applicant_academics_container">
 				
-<<<<<<< HEAD
+
 				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${academicsForm}" th:method="post" >
-=======
-				<form th:id="input_form" id="input_form"  th:object="${academicsForm}" th:method="post" >
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
-					
+
 							<ul>
 								<li th:if="${saved}==true">
 									Form has been saved sucessfully!
@@ -105,11 +89,7 @@
 							
 							
 							<label for="degreeType">Degree type:</label>
-<<<<<<< HEAD
 							<select id="degreeType" th:name="degreeType" th:field="*{degreeType}">
-=======
-							<select id="degreeType" th:name="degreeType" th:value="*{degreeType}">
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 								<option th:each="degreeTypeObj : ${degreeTypeLst}" th:value="${degreeTypeObj}" th:text="${degreeTypeObj}">Option1</option>
 							</select>
 							<div th:if="${#fields.hasErrors('degreeType')}" th:errors="*{degreeType}">Degree type error</div>
@@ -122,11 +102,7 @@
 							
 							
 							
-<<<<<<< HEAD
 							<label for="started">Started:</label>
-=======
-							<label for="started">From:</label>
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 							
 							
 							<input id="started" th:id="started" type="date" th:name="started" th:value="${#dates.format(academicsForm.started, 'yyyy-MM-dd')}"/>
@@ -134,7 +110,6 @@
 							
 							
 							
-<<<<<<< HEAD
 							<label for="finished">Finished:</label>
 							<input id="finished" th:id="finished" type="date" th:name="finished" 
 							th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" 
@@ -148,20 +123,11 @@
 							<label for="chkStillInProgress">Present</label>
 							
 							<div th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">From error</div>
-=======
-							<label for="finished">To:</label>
-							<input id="finished" th:id="finished" type="date" th:name="finished" th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" />
-							<div th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
-							
-							
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 							
 							<input type="submit" value="Add" />
 						</div>
 					</form>
 					<div id="list-academics">
-<<<<<<< HEAD
-						
 						<div id="paginationBar">
 							<a th:href="${baseUrl} + ${prevPage}"><</a>
 							
@@ -181,8 +147,6 @@
 							
 						</div>
 					
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 						<table th:if="${academics.size()} > 0">
 							<tr>
 								<td>Institution</td>
@@ -199,13 +163,8 @@
 									<td th:text="*{institution}">institution</td>
 									<td th:text="*{degreeType}">degreetype</td>
 									<td th:text="*{degreeName}">degreename</td>
-<<<<<<< HEAD
 									<td th:text="*{started}  ">started</td>
 									<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
-=======
-									<td th:text="*{started}">started</td>
-									<td th:text="*{finished}">finished</td>
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 									<td> - </td>
 									
 								</th:block>

@@ -7,10 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
-<<<<<<< HEAD
 import org.vbazurtob.HRRecruitApp.lib.FormFieldsDateToPresentNotNullConstraint;
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
 
 /**
@@ -19,10 +16,7 @@ import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
  */
 @Embeddable
 @FormFieldsDatesConstraint(from= "started", to="finished", message="Dates contain errors, they have to follow these rules: Initial date cannot be blank. Initial date must be before the Final date")
-<<<<<<< HEAD
 @FormFieldsDateToPresentNotNullConstraint(inProgress="inProgress", toDate="finished", message = "If the ''In Progress'' field hasn't been checked, a ''finished'' date must be specified " )
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 public class ApplicantAcademicPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
@@ -41,21 +35,14 @@ public class ApplicantAcademicPK implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private java.util.Date started;
 
-<<<<<<< HEAD
 
-=======
-	//@NotNull(message="You must select a ''finished'' date")
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Temporal(TemporalType.DATE)
 	private java.util.Date finished;
 
-<<<<<<< HEAD
 	
 	private String inProgress;
 	
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 	@Size(max=80, message="Degree type cannot exceed 80 characters")
 	@NotEmpty(message="Degree type cannot be empty")
 	@NotNull(message="Degree type cannot be null")
@@ -136,8 +123,6 @@ public class ApplicantAcademicPK implements Serializable {
 		
 		return hash;
 	}
-<<<<<<< HEAD
-	
 	
 	public String getInProgress() {
 		return inProgress;
@@ -154,6 +139,4 @@ public class ApplicantAcademicPK implements Serializable {
 	
 	
 	
-=======
->>>>>>> b5256d02c41f6f6ae9c92ffeb8fec7c47c4e487b
 }
