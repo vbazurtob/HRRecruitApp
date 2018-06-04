@@ -23,7 +23,7 @@ public class FormFieldsDateToPresentNotNullValidator  implements ConstraintValid
 		
 		String inProgressField = (String) new BeanWrapperImpl(value).getPropertyValue(inProgress);
 		Date toDateField   = (Date) new BeanWrapperImpl(value).getPropertyValue(toDate);
-		System.out.println( "inProgress: " + inProgressField + " toDate: " + toDateField );
+		// System.out.println( "inProgress: " + inProgressField + " toDate: " + toDateField );
 		
 		if( (inProgressField == null || inProgressField.equals("N") ) && toDateField == null ) {
 			return false;

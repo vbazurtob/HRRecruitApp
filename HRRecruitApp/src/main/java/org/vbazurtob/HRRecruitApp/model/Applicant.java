@@ -254,4 +254,12 @@ public class Applicant implements Serializable {
 		return jobApplicant;
 	}
 
+	@Override
+	public String toString() {
+		return "Applicant [username=" + username + ", address1=" + address1 + ", address2=" + address2 + ", country="
+				+ country + ", email=" + email + ", lastname=" + lastname + ", names=" + names + ", state=" + state + ", zipcode=" + zipcode + "]";
+	}
+	
+	
+
 }

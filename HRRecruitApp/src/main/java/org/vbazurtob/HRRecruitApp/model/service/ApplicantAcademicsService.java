@@ -1,13 +1,14 @@
 package org.vbazurtob.HRRecruitApp.model.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.vbazurtob.HRRecruitApp.model.Applicant;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
-import org.vbazurtob.HRRecruitApp.model.ApplicantAcademicPK;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
 
@@ -23,19 +24,47 @@ public class ApplicantAcademicsService {
 	public ApplicantAcademicsService() {
 	}
 	
-	public void saveAcademicDetail(ApplicantAcademicPK pk) {
+	public void saveAcademicDetail( ApplicantAcademic applicantAcademicForm, String applicantUsername ) {
 		
-		ApplicantAcademic applicantAcademic =  new ApplicantAcademic();
-		applicantAcademic.setId(pk);
-		applicantAcademic.setApplicant(applicantRepository.findOneByUsername(pk.getApplicantId()));
+		if(applicantAcademicForm.getInProgress() == null) {
+			applicantAcademicForm.setInProgress("N");
+		}
 		
-		applicantAcademicRepository.save(applicantAcademic);
+		applicantAcademicForm.setApplicant(applicantRepository.findOneByUsername( applicantUsername ));
+		// System.out.println("ToBeSaved " + applicantAcademicForm.toString());;
+		applicantAcademicRepository.save(applicantAcademicForm);
 		
 	}
 	
-	public List<ApplicantAcademic> getPagedApplicantAcademics(Applicant applicant, Pageable p) {
-				
-		return new ArrayList<>();
+	public boolean recordExists(
+			String username ,
+			Date started,
+			Date finished,
+			String degreeName,
+			String degreeType,
+			String institution
+			
+			) {
+		
+		long count = applicantAcademicRepository.countByApplicantUsernameAndStartedAndFinishedAndDegreeNameAndDegreeTypeAndInstitution(
+				username, started, finished, degreeName, degreeType, institution);
+		return  (count > 0) ;
 	}
+	
+	public Page<ApplicantAcademic> getPaginatedRecords(String username, Optional<Integer> page, int recordsPerPage) {
+		
+		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "finished", "started" ); 
+		Page<ApplicantAcademic> academicsPageObj = applicantAcademicRepository.findByApplicantUsername(username, pageReqObj);
+		
+		
+		return academicsPageObj;
+	}
+	
+	public long[] getPaginationNumbers(Page<ApplicantAcademic> academicsPageObj) {
+		int previousPageNum = academicsPageObj.isFirst() ? 0 : academicsPageObj.previousPageable().getPageNumber() ;
+		int nextPageNum = academicsPageObj.isLast() ? academicsPageObj.getTotalPages() - 1 : academicsPageObj.nextPageable().getPageNumber() ;
+		return  new  long[]{ previousPageNum, nextPageNum };
+	}
+	
 
 }

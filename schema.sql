@@ -40,37 +40,35 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant(
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_academics(
+    id BIGSERIAL PRIMARY KEY,
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
     institution VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
     finished DATE ,
     in_progress CHAR(1) DEFAULT 'N',
     degree_type VARCHAR(80) NOT NULL,
-    degree_name VARCHAR(150) NOT NULL,
-    PRIMARY KEY(applicant_id, institution, started, finished, degree_type, degree_name, in_progress )
+    degree_name VARCHAR(150) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_work_experience(
+    id BIGSERIAL PRIMARY KEY,
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
     institution VARCHAR(255) NOT NULL,
     position VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
-    finished DATE NOT NULL,
-    PRIMARY KEY(applicant_id, institution, position, started, finished)
+    finished DATE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_skills(
+    id BIGSERIAL PRIMARY KEY,
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
     name VARCHAR(100) NOT NULL,
-    proficiency INTEGER NOT NULL, -- 1 - 5 Scale    
-    PRIMARY KEY(applicant_id, name)
+    proficiency INTEGER NOT NULL -- 1 - 5 Scale    
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_applicant(
-    
+    id BIGSERIAL PRIMARY KEY,
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant (username),
     job_id BIGINT NOT NULL REFERENCES "vbazurtobPortfolio".job(id),
-    date_application_sent TIMESTAMP,
-    
-    PRIMARY KEY(applicant_id, job_id)
+    date_application_sent TIMESTAMP
 );

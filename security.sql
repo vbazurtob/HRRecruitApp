@@ -30,6 +30,8 @@ ALTER USER hrapp_demo SET search_path to "vbazurtobPortfolio";
 -- Grant usage on sequences
 GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".job_id_seq TO hrapp_demo;
 GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".job_type_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".applicant_academics_id_seq TO hrapp_demo;
+
 
 
 ALTER DEFAULT PRIVILEGES 

@@ -16,6 +16,7 @@ public class FormFieldsDatesValidator  implements ConstraintValidator<FormFields
 	public void initialize(FormFieldsDatesConstraint constraint) {
 		fromDate = constraint.from();
 		toDate = constraint.to();
+		//inProgress = constraint.inProgress();
 	}
 
 	@Override
@@ -24,8 +25,7 @@ public class FormFieldsDatesValidator  implements ConstraintValidator<FormFields
 		Date fromDateField = (Date) new BeanWrapperImpl(value).getPropertyValue(fromDate);
 		Date toDateField   = (Date) new BeanWrapperImpl(value).getPropertyValue(toDate);
 		
-		
-		System.out.println( fromDateField + " < " + toDateField );
+		// System.out.println( fromDateField + " < " + toDateField );
 		if(toDateField != null && fromDateField != null) {
 			// System.out.println( "if date before?" + fromDateField.before(toDateField)  );
 			return fromDateField.before(toDateField);

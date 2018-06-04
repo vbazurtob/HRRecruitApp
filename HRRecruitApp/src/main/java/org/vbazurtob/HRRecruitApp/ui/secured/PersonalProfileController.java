@@ -3,6 +3,7 @@ package org.vbazurtob.HRRecruitApp.ui.secured;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.model.Applicant;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
-import org.vbazurtob.HRRecruitApp.model.ApplicantAcademicPK;
+
 import org.vbazurtob.HRRecruitApp.model.ApplicantProfileForm;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
@@ -146,106 +148,100 @@ public class PersonalProfileController {
 		
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-		
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		//TODO
 		username = "abc";
 		
+		// New blank record for adding new record
+		ApplicantAcademic newAppAcademic = new ApplicantAcademic();
+		newAppAcademic.setInProgress("N");
 		
-		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , RECORDS_PER_PAGE, Direction.DESC, "id.started", "id.finished" ); 
+		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		newAppAcademic.setApplicant(newApplicantQuery);
 		
-		ApplicantAcademicPK  newApplicantPK = new ApplicantAcademicPK();
-		newApplicantPK.setApplicantId(username);
-		Page<ApplicantAcademic> academics = appAcademicsRepository.findByIdApplicantId(newApplicantPK.getApplicantId(), pageReqObj);
-		
+		// Pagination for listing
+		Page<ApplicantAcademic> academicsPageObj = applicantAcademicsService.getPaginatedRecords(username, page, RECORDS_PER_PAGE);
+		long previousPageNum = applicantAcademicsService.getPaginationNumbers(academicsPageObj)[0];
+		long nextPageNum = applicantAcademicsService.getPaginationNumbers(academicsPageObj)[1];
 
-		newApplicantPK.setInProgress("N"); // Set value of checkbox to 'N'.
 		
-//		int p = academics.getNumber();
-//		System.out.println("Next p "  + p + "/ " + academics.getTotalPages());;
-		
-		//academics.getTotalPages()
-		
-		int previousPageNum = academics.isFirst() ? 0 : academics.previousPageable().getPageNumber() ;
-		int nextPageNum = academics.isLast() ? academics.getTotalPages() - 1 : academics.nextPageable().getPageNumber() ;
-			
-		
+		// View attributes
 		model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
-		
-		
-		model.addAttribute("pageObj", academics );
-		model.addAttribute("academics", academics.getContent());
-		
-		model.addAttribute("academicsForm", newApplicantPK);
+		model.addAttribute("pageObj", academicsPageObj );
+		model.addAttribute("academics", academicsPageObj.getContent());
+		model.addAttribute("academicsForm", newAppAcademic);
 		model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 				
 		return "secured/academics_form.html";
 	}
 	
 	@PostMapping(value= ACADEMICS_BASE_URL)
-	public String showAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademicPK academicsForm,
+	public String showAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademic academicsForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
 			Model model ) {
 		
-
-		//Get Controller Name
-		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-
+		//Check if record already exists (DB validation)
+		if ( applicantAcademicsService.recordExists(academicsForm.getApplicant().getUsername(), 
+				academicsForm.getStarted(), 
+				academicsForm.getFinished(), 
+				academicsForm.getDegreeName(), 
+				academicsForm.getDegreeType(),
+				academicsForm.getInstitution())  ){
+			ObjectError errorDuplicateRecord = new ObjectError("AcademicsRecordDuplicate", "Records already exists in db!");
+			results.addError(errorDuplicateRecord);
+		}
 		
+		//Get Controller Name for url construction
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		//TODO
 		username = "abc";
 		
-		// Pagination code
-		PageRequest page = PageRequest.of(0, RECORDS_PER_PAGE, Direction.DESC, "id.started", "id.finished" ); 
+		// Set Applicant nested object for proper validation	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		academicsForm.setApplicant(newApplicantQuery);
 		
-		ApplicantAcademicPK  newApplicantPK = new ApplicantAcademicPK();
-		newApplicantPK.setApplicantId(username);
-		Page<ApplicantAcademic> academics = appAcademicsRepository.findByIdApplicantId(newApplicantPK.getApplicantId(), page);
-			
+		// Pagination for listing
+		Page<ApplicantAcademic> academicsPageObj = applicantAcademicsService.getPaginatedRecords(username, Optional.of( Integer.valueOf(0) )
+				, RECORDS_PER_PAGE);
+		long previousPageNum = applicantAcademicsService.getPaginationNumbers(academicsPageObj)[0];
+		long nextPageNum = applicantAcademicsService.getPaginationNumbers(academicsPageObj)[1];
 		
-		if(academicsForm.getInProgress() != null && academicsForm.getInProgress().equals("Y")) {
-			try {
-				// If inProgress = Y, we set the finished date to something else given it cannot be null because it is part of a composed PK
-				academicsForm.setFinished(new SimpleDateFormat("yyyy-MM-dd").parse("1900-01-01"));
-			}catch(ParseException pe) {
-				pe.printStackTrace();
-			}
-		}else {
-			if(academicsForm.getInProgress() == null ) {
-				academicsForm.setInProgress("N");
-			}
-		}
-		System.out.println("inP: "  + academicsForm.toString());
-		
-		
-		int previousPageNum = academics.isFirst() ? 0 : academics.previousPageable().getPageNumber() ;
-		int nextPageNum = academics.isLast() ? academics.getTotalPages() - 1 : academics.nextPageable().getPageNumber() ;
+		// View attributes
 		model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", academicsPageObj );
+		model.addAttribute("academics", academicsPageObj.getContent() );	
+		model.addAttribute("academicsForm", academicsForm); // Pass the updated academicsForm to the UI
+
+		// DEBUG form Validations
+		//		System.out.println("Errors? " + results.hasErrors() );
+		//		
+		//		List<ObjectError> oes = results.getAllErrors();
+		//		for( ObjectError oe: oes ) {
+		//			System.out.println(oe.toString());
+		//		}
+		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
 		
 		
-				
-		model.addAttribute("pageObj", academics );
-		model.addAttribute("academics", 
-				academics.getContent() );
 		
-		System.out.println("Errors? " + results.hasErrors() );
 		if(results.hasErrors()) { // Reload the form with errors			
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			return "secured/academics_form.html";
 		}
 		
-		
-		applicantAcademicsService.saveAcademicDetail(academicsForm);
-		
+		// Save the form data
+		applicantAcademicsService.saveAcademicDetail(academicsForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
 		return "redirect:/cv/academics/";
 	}
@@ -255,6 +251,7 @@ public class PersonalProfileController {
 		
 		return "secured/workexp.html";
 	}
+	
 	
 	
 }
