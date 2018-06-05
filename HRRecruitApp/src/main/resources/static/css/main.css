@@ -1,6 +1,39 @@
 @charset "UTF-8";
 
-body{
+html, body{
 	font-family: Verdana, Ubuntu;
 	font size: 11pt;
+	height: 100%;
 }
+
+.main-header{
+	height: 90px;
+}
+.main-menu {
+	height: 50px;
+}
+
+#main-content{
+	height: 70%;
+	padding-top: 10px;
+}
+
+.main-footer{
+	height: 90px;
+	text-align: center;
+}
+
+.form-errors{
+	font-size: 0.8em;
+}
+
+.form-error-messages, .form-saved-message{
+	border-radius: 3px;
+	text-align: center;
+	
+	margin-left: 15%;
+	margin-right: 15%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+

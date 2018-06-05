@@ -27,10 +27,10 @@
 	
 </head>
 <body th:fragment="master_body(bodycontent)">
-	<div th:fragment="header" class="main-header">
+	<nav th:fragment="header" class="main-header navbar-wrapper">
 		HRRecruitApp
-	</div>
-	<div id="main_menu"  sec:authorize="isAuthenticated()">
+	
+		<div id="main_menu"  sec:authorize="isAuthenticated()">
 		
 		<div class="user-info">
 			
@@ -52,6 +52,11 @@
 		</div>
 		<div  th:replace="public/logout::post_logout"></div>
 	</div>
+	
+	
+	</nav>
+	
+	
 	<div class="main-content" th:replace="${bodycontent}">
 		
 	
@@ -59,9 +64,11 @@
 		
 		Content is here
 	</div>
-	<div th:fragment="footer" class="main-footer">
-		Created by Voltaire Bazurto Blacio - 2018
-	</div>
+	<footer th:fragment="footer" class="row main-footer">
+		<div class="col s12">
+			Created by Voltaire Bazurto Blacio - 2018
+		</div>
+	</footer>
 	 <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
 </body>
 </html>

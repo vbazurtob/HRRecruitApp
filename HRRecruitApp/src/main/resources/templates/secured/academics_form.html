@@ -34,11 +34,16 @@
 				console.log(inProgressChk.value);
 			}
 			
+// 			const dPickerOptions = {
+// 					 dateFormat: 'mm/dd/yyyy'
+// 			 };
 			
-
+// 			 $(document).ready(function(){
+// 				    $('.datepicker').datepicker(dPickerOptions);
+// 			  });
+			 
 		}
-		
-	
+
 		
 		
 		function changePage(page, url){
@@ -63,95 +68,130 @@
 
 		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
 				
-				
-			<div id="applicant_academics_container">
+			<div id="applicant_academics_container" >
 				
 
 				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${academicsForm}" th:method="post" >
 
-							<ul>
+						    <ul th:if="${saved}==true" class="form-saved-message green lighten-4">
 								<li th:if="${saved}==true">
 									Form has been saved sucessfully!
 								</li>
 								
 							</ul>
-							<div class="form-error-messages">
-								<ul>
-									<li th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+							
+							<div class="form-error-messages red lighten-4 " th:if="${#fields.hasErrors('global')}">
+								<ul class="general-errors ">
+									<li th:errors="*{global}">
 										Error  codes
 									</li>
 									
 									
 								</ul>
 							</div>
-					
-						<div id="newAcademicRecord">
-							
-							<input type="hidden" th:name="applicant.username" th:id="applicant.username" th:value="*{applicant.username}"> 
-							
-							<label for="institution">Institution:</label>
-							<input id="institution" th:id="institution" th:name="institution" type="input" th:value="*{institution}"/>
-							<div th:if="${#fields.hasErrors('institution')}" th:errors="*{institution}">Institution error</div>
-							
-							
+						<input type="hidden" th:name="applicant.username" th:id="applicant.username" th:value="*{applicant.username}"> 
+						<div id="newAcademicRecord" >
 						
+							<div class="row">
+								
+								<div class="input-field col s4">
+									<label  for="institution">Institution</label>
+									<input id="institution" th:id="institution" th:name="institution" type="text" th:value="*{institution}" class="validate" />
+									<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('institution')}" th:errors="*{institution}">Institution error</div>
+								</div>
+								
+								<div class="col s4 input-field">
+									<label for="degreeName">Degree name</label>
+									<input  id="degreeName" th:id="degreeName" th:name="degreeName" type="text" th:value="*{degreeName}" class="validate" />
+									<div  class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('degreeName')}" th:errors="*{degreeName}">Degree name error</div>
+								</div>
+								
+								<div class="col s4">
+									<label for="degreeType">Degree type</label>
+									<select id="degreeType" th:name="degreeType" th:field="*{degreeType}" class="browser-default">
+										<option th:each="degreeTypeObj : ${degreeTypeLst}" th:value="${degreeTypeObj}" th:text="${degreeTypeObj}">Option1</option>
+									</select>
+									<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('degreeType')}" th:errors="*{degreeType}">Degree type error</div>
+								</div>
+								
+								
+								
+							</div>
+							
+							<div class="row">
+								
+								<div class="col s4">
+									<label for="started">Started</label>
+									<input format="mm/dd/yyyy" class="datepicker" id="started" th:id="started" type="date" th:name="started" th:value="${#dates.format(academicsForm.started, 'yyyy-MM-dd')}"/>		
+									<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('started')}" th:errors="*{started}">From error</div>
+								</div>
 							
 							
-							<label for="degreeType">Degree type:</label>
-							<select id="degreeType" th:name="degreeType" th:field="*{degreeType}">
-								<option th:each="degreeTypeObj : ${degreeTypeLst}" th:value="${degreeTypeObj}" th:text="${degreeTypeObj}">Option1</option>
-							</select>
-							<div th:if="${#fields.hasErrors('degreeType')}" th:errors="*{degreeType}">Degree type error</div>
+								<div class="col s4">
+									<label for="finished">Finished</label>
+									<input id="finished" th:id="finished" type="date" th:name="finished" 
+										th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" 
+										th:disabled="(*{inProgress} == 'Y') ? 'true'  : 'false' "
+										/>
+									<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
+								</div>
 
+								<div class="col s4">
+									<label for="inProgress">
+										<input th:id="inProgress" th:name="inProgress" th:value="*{inProgress}" type="checkbox" id="inProgress" onclick="enableDisableToDateInput(this, 'finished')"  th:checked="${academicsForm.inProgress == 'Y' }" >
+										<span>Present</span>
+									</label>
+									<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">In Progress error</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col s12">
+									<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
+										<i class="material-icons right">add</i>
+									</button>
+										
+								</div>
+							</div>
 							
-
-							<label for="degreeName">Degree name:</label>
-							<input id="degreeName" th:id="degreeName" th:name="degreeName" type="input" th:value="*{degreeName}"/>
-							<div th:if="${#fields.hasErrors('degreeName')}" th:errors="*{degreeName}">Degree name error</div>
-							
-							
-							
-							<label for="started">Started:</label>
-							
-							
-							<input id="started" th:id="started" type="date" th:name="started" th:value="${#dates.format(academicsForm.started, 'yyyy-MM-dd')}"/>
-							<div th:if="${#fields.hasErrors('started')}" th:errors="*{started}">From error</div>
-							
-							
-							
-							<label for="finished">Finished:</label>
-							<input id="finished" th:id="finished" type="date" th:name="finished" 
-							th:value="${#dates.format(academicsForm.finished, 'yyyy-MM-dd')}" 
-							th:disabled="(*{inProgress} == 'Y') ? 'true'  : 'false' "
-							/>
-							
-							<div th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
-							
-							
-							<input th:id="inProgress" th:name="inProgress" th:value="*{inProgress}" type="checkbox" id="inProgress" onclick="enableDisableToDateInput(this, 'finished')"  th:checked="${academicsForm.inProgress == 'Y' }" >
-							<label for="chkStillInProgress">Present</label>
-							
-							<div th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">From error</div>
-							
-							<input type="submit" value="Add" />
 						</div>
 					</form>
-					<div id="list-academics">
-						<div id="paginationBar">
-							<a th:href="${baseUrl} + ${prevPage}"><</a>
+					
+					<div id="list-academics" >
+						<div id="paginationBar" class="row">
+							<div class="col s1">
+								<a title="Previous page"  th:href="${baseUrl} + ${prevPage}">
+									<i class="material-icons">chevron_left</i>
+								</a>
 							
-							<a th:href="${baseUrl} + ${nextPage}">></a>
-							
-							<span th:if="${pageObj.getTotalPages()} > 1">
+							</div>
+							<div class="col s1">
+								<a title="Next page" th:href="${baseUrl} + ${nextPage}">
+									<i class="material-icons">chevron_right</i>
+								</a>
+							</div>
+							<div class="col s9">
+								<span th:if="${pageObj.getTotalPages()} > 1" class="row">
+									<div class="col s2">
+										Page #
+									</div>
+									<div class="col s1">
+										<select id="selectPage" th:name="selectPage" onchange="changePage(this.options[this.selectedIndex].value)"
+											th:value="${pageObj.getNumber()}" class="browser-default" style="height: 1.8em;"
+											>
+											<option th:each="pageNumber : ${#numbers.sequence(1,  pageObj.getTotalPages()) }"
+											 th:value="${pageNumber}-1" th:text="${pageNumber}" th:selected=" ( ${pageNumber} - 1 ) == ${pageObj.getNumber()} " >0</option>
+										</select>
+									</div>
+									<div class="col s1">
+										/ <span th:text="${pageObj.getTotalPages()}"></span>																			
+									</div>
 								
-								Page #
-								<select id="selectPage" th:name="selectPage" onchange="changePage(this.options[this.selectedIndex].value)"
-								th:value="${pageObj.getNumber()}" class="browser-default"
-								>
-								<option th:each="pageNumber : ${#numbers.sequence(1,  pageObj.getTotalPages()) }"
-								 th:value="${pageNumber}-1" th:text="${pageNumber}" th:selected=" ( ${pageNumber} - 1 ) == ${pageObj.getNumber()} " >0</option>
-								</select> / <span th:text="${pageObj.getTotalPages()}"></span>
-							</span>
+								</span>
+							</div>
+							
+							
+							
+							
 							
 							
 						</div>
