@@ -15,7 +15,7 @@ html, body{
 
 #main-content{
 	height: 70%;
-	padding-top: 10px;
+	padding-top: 0px;
 }
 
 .main-footer{
@@ -37,3 +37,33 @@ html, body{
 	padding-bottom: 5px;
 }
 
+#profile_side_menu{
+
+	height: 100%;
+	margin: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+}
+
+.sidemenu-option{
+	padding: 15px;
+	border-bottom-left-radius: 10px;
+	
+	border-right-width: 0px;	
+	
+}
+
+.optionFormSelected{
+	border-right-width: 0px;
+	padding: 15px;
+	border: 0px none;
+	border-bottom-left-radius: 10px;
+	background-color: white;
+	
+}
+
+#profile_form_container{
+	padding-top: 15px;
+	padding-left: 25px;
+	padding-right: 10px;
+}

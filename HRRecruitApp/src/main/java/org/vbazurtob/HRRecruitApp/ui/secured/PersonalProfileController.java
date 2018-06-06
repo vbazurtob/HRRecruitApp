@@ -5,24 +5,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.vbazurtob.HRRecruitApp.lib.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.model.Applicant;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 
@@ -87,7 +94,7 @@ public class PersonalProfileController {
 	
 		ApplicantProfileForm applicantProfileForm = new ApplicantProfileForm(currentApplicant);
 		
-		
+		model.addAttribute("userProfileOptionSelected",true);
 		model.addAttribute("applicant", applicantProfileForm);
 		model.addAttribute("countriesLst", countryService.getListCountries());
 		
@@ -107,7 +114,7 @@ public class PersonalProfileController {
 		
 		if(results.hasErrors()) {
 
-
+			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
 			return "secured/profile.html";
 		}
@@ -177,6 +184,7 @@ public class PersonalProfileController {
 		model.addAttribute("academics", academicsPageObj.getContent());
 		model.addAttribute("academicsForm", newAppAcademic);
 		model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+		model.addAttribute("academicsOptionSelected",true);
 				
 		return "secured/academics_form.html";
 	}
@@ -223,7 +231,7 @@ public class PersonalProfileController {
 		model.addAttribute("pageObj", academicsPageObj );
 		model.addAttribute("academics", academicsPageObj.getContent() );	
 		model.addAttribute("academicsForm", academicsForm); // Pass the updated academicsForm to the UI
-
+		model.addAttribute("academicsOptionSelected",true);
 		// DEBUG form Validations
 		//		System.out.println("Errors? " + results.hasErrors() );
 		//		
@@ -246,10 +254,97 @@ public class PersonalProfileController {
 		return "redirect:/cv/academics/";
 	}
 	
+	
+	@RequestMapping( ACADEMICS_BASE_URL + "edit/{id}" )
+	public String editAcademics(
+			Model model,
+			@PathVariable Long id
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		
+		Optional<ApplicantAcademic> academicsOpt = appAcademicsRepository.findById(id);
+		
+		if(academicsOpt.isPresent()) {
+			ApplicantAcademic appAcademicsFormObj = academicsOpt.get();
+			
+			// View attributes
+			model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL + "edit/" + id);
+			model.addAttribute("academicsForm", appAcademicsFormObj);
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			model.addAttribute("academicsOptionSelected",true);
+					
+			return "secured/academics_form_edit.html";
+			
+			
+		} else {
+			throw new RecordNotFoundException();
+		}
+		
+		
+		
+	
+	}
+	
+	
+	@PostMapping( ACADEMICS_BASE_URL + "edit/{id}" )
+	public String editAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademic academicsForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model,
+			@PathVariable Long id) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+		
+			// View attributes
+			model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL + "edit/" + id);
+			model.addAttribute("academicsForm", academicsForm);
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			model.addAttribute("academicsOptionSelected",true);
+						
+			return "secured/academics_form_edit.html";
+
+			
+			
+		}
+	
+			
+					
+		// Save the form data
+		applicantAcademicsService.saveAcademicDetail(academicsForm, username);
+		redirectAttrs.addFlashAttribute("updated",true);
+		return "redirect:/cv/academics/";
+		
+		
+	
+	}
+	
 	@RequestMapping("/workexp")
 	public String showWorkExperience() {
 		
 		return "secured/workexp.html";
+	}
+	
+	@ExceptionHandler(RecordNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public String handleResourceNotFoundException() {
+	        return "error.html";
 	}
 	
 	

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title>HRRecruitApp - Work Experience</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<div th:replace="secured/academics_form_fragment::inlineJsFragment">
+		</div>
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+	
+
+	<div id="main-content">
+
+		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
+				
+			<div id="applicant_academics_container" >
+				
+				<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl})">
+				</th:block>
+		
+					
+						
+				
+				
+						
+			</div>
+									
+				
+				
+				
+		</div>	
+	
+	</div>
+</body>
+</html>
