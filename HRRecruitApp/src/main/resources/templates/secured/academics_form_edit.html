@@ -25,15 +25,20 @@
 				
 			<div id="applicant_academics_container" >
 				
-				<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl})">
-				</th:block>
-		
+				<h4> Edit information</h4>
+				<form th:id="input_form" id="input_form" th:action="${baseURL}"  th:object="${academicsForm}" th:method="post" >
+					<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl})">
+					</th:block>
 					
-						
-				
-				
-						
-			</div>
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">save</i>
+							</button>		
+						</div>
+					</div>
+				</form>
+			</div> <!--  applicantAcademic Container -->
 									
 				
 				

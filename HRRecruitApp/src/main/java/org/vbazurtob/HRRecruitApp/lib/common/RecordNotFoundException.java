@@ -1,4 +1,4 @@
-package org.vbazurtob.HRRecruitApp.lib;
+package org.vbazurtob.HRRecruitApp.lib.common;
 
 public class RecordNotFoundException extends RuntimeException{
 

@@ -4,7 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.vbazurtob.HRRecruitApp.lib.FormFieldsMatchConstraint;
+import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsMatchConstraint;
 
 @FormFieldsMatchConstraint.List({
 		@FormFieldsMatchConstraint(field="password", fieldMatch="passwordConfirmation", message="Passwords don''t match! No changes were made.")

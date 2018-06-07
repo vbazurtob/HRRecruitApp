@@ -1,4 +1,4 @@
-package org.vbazurtob.HRRecruitApp.lib;
+package org.vbazurtob.HRRecruitApp.lib.validators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -24,13 +24,9 @@
 
 		
 		
-		function changePage(page, url){
-			window.location = baseUrl + (page);
-		}
 		
-		function askConfirmation(){
-			return window.confirm("Are you sure to delete this record?");
-		}
+		
+		
 		
 	</script>
 
@@ -38,11 +34,17 @@
 
 
 <th:block th:fragment="form_academics(formURL)">
-	<form th:id="input_form" id="input_form" th:action="${formURL}"  th:object="${academicsForm}" th:method="post" >
 	
 							    <ul th:if="${saved}==true" class="form-saved-message green lighten-4">
 									<li th:if="${saved}==true">
 										Form has been saved sucessfully!
+									</li>
+									
+								</ul>
+								
+								<ul th:if="${updated}==true" class="form-saved-message green lighten-4">
+									<li th:if="${updated}==true">
+										Record has been updated sucessfully!
 									</li>
 									
 								</ul>
@@ -110,16 +112,6 @@
 										</label>
 										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">In Progress error</div>
 									</div>
-								</div>
-								<div class="row">
-									<div class="col s12">
-										<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
-											<i class="material-icons right">add</i>
-										</button>
-											
-									</div>
-								</div>
-								
+								</div>								
 							</div>
-	</form>
 </th:block>

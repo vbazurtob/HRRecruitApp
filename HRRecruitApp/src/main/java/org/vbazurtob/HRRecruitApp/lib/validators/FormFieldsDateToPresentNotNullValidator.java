@@ -1,4 +1,4 @@
-package org.vbazurtob.HRRecruitApp.lib;
+package org.vbazurtob.HRRecruitApp.lib.validators;
 
 import java.util.Date;
 

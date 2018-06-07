@@ -7,8 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.vbazurtob.HRRecruitApp.lib.FormFieldsDateToPresentNotNullConstraint;
-import org.vbazurtob.HRRecruitApp.lib.FormFieldsDatesConstraint;
+import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDateToPresentNotNullConstraint;
+import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDatesConstraint;
 
 import java.util.Date;
 

@@ -19,6 +19,51 @@
 		/*]]>*/
 		</script>
 		
+		<script>
+		
+		function ajaxDelete( actionUrl, id ){
+			$.ajax({
+			    url: actionUrl + id,
+			    type: 'DELETE',
+			    success: function(response) {
+					console.log(response.result);
+					if(response.result==='OK'){
+						alert("Record has been deleted!");
+						window.location = baseUrl;
+					}else {
+						console.log(response);
+						alert("Couldn't delete the selected record");
+					}
+					
+			    },
+			    data: {
+			    	id: id
+			    }
+			});
+			
+		}
+		
+		
+			function changePage(page, url){
+				window.location = baseUrl + (page);
+			}
+			
+			function askConfirmation(formDeleteId, actionUrl, id){
+				if ( window.confirm("Are you sure to delete this record?") == true ) {
+					ajaxDelete( actionUrl + 'delete/', id );
+					
+					return false;
+				} else {
+					
+					return false;
+				}
+			}
+			
+			
+		
+		</script>
+		
+		
 		<div th:replace="secured/academics_form_fragment::inlineJsFragment">
 		</div>
 	
@@ -30,15 +75,29 @@
 	
 
 	<div id="main-content">
-
-		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
+	  <th:block th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )" >
+	
+		<div id="applicant_academics_container" >		
+				<h5>Add a new record</h5>
 				
-			<div id="applicant_academics_container" >
+				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${academicsForm}" th:method="post" >
+					<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl} )">
+					</th:block>
+					
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" title="Add new record" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">add</i>
+							</button>		
+						</div>
+					</div>
+				</form>
 				
-				<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl} )">
-				</th:block>
-		
-					<div id="list-academics" >
+				<p class="separator-line"></p>
+				<h5>My academic information</h5>
+				<br>
+				<div id="list-academics">
+				
 						<div id="paginationBar" class="row">
 							<div class="col s1">
 								<a title="Previous page"  th:href="${baseUrl} + ${prevPage}">
@@ -71,58 +130,63 @@
 								</span>
 							</div>
 							
-							
-							
-							
-							
-							
 						</div>
-					
-						<table th:if="${academics.size()} > 0" width="80%" class="responsive-table ">
-							<tr>
-								<th>Institution</th>
-								<th>Degree type</th>
-								<th>Degree name</th>
-								<th>Started</th>
-								<th>Finished</th>
-								<th>Action</th>
-							</tr>
+						<div class="row">
+							<div class="col s12">
 							
-							<tr th:each="academicObj : ${academics}"  >
-								<th:block th:object="${academicObj}">
-									
-									<td>
-										<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{institution}">Edit</a>
-									</td>
-									<td th:text="*{degreeType}">degreetype</td>
-									<td th:text="*{degreeName}">degreename</td>
-									<td th:text="*{started}  ">started</td>
-									<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
-									<td>
-										<a onclick="return askConfirmation()" th:href="${baseUrl + 'delete/'} + *{id} ">Delete</a> 
-									</td>
-									
-								</th:block>
+							
+								<form id="deleteForm" th:action="${baseUrl}+'delete/'" th:method="delete">
 								
-								
-							</tr>
-							
-							
-						</table>
+									<input th:id="idSelectedForDeletion" th:name="idSelectedForDeletion"  type="hidden" >
+									
+									
+										<th:block th:replace="secured/academics_list_fragment::academics_list_table(${academics}, ${baseUrl})"> </th:block>
+									
+<!-- 									<table th:if="${academics.size()} > 0"  class="responsive-table "> -->
+<!-- 										<thead> -->
+<!-- 											<tr> -->
+<!-- 												<th>Institution</th> -->
+<!-- 												<th>Degree type</th> -->
+<!-- 												<th>Degree name</th> -->
+<!-- 												<th>Started</th> -->
+<!-- 												<th>Finished</th> -->
+<!-- 												<th>Action</th> -->
+<!-- 											</tr> -->
+<!-- 										</thead> -->
+<!-- 										<tbody> -->
+<!-- 											<tr th:each="academicObj : ${academics}"  > -->
+												
+<!-- 												<th:block th:object="${academicObj}"> -->
+													
+<!-- 													<td> -->
+<!-- 														<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{institution}">Edit</a> -->
+<!-- 													</td> -->
+<!-- 													<td th:text="*{degreeType}">degreetype</td> -->
+<!-- 													<td th:text="*{degreeName}">degreename</td> -->
+<!-- 													<td th:text="*{started}  ">started</td> -->
+<!-- 													<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td> -->
+<!-- 													<td> -->
+														
+<!-- 														<a th:onclick="'return askConfirmation(' + ${'deleteForm'} +', baseUrl, ' + *{id} + '  )'" href="#">Delete</a>  -->
+<!-- 													</td> -->
+													
+<!-- 												</th:block> -->
+<!-- 											</tr> -->
+<!-- 										</tbody> -->
+<!-- 									</table> -->
+
+
+								</form>
+							</div>
+						</div>
+						
 						
 						
 						
 				</div>
-				
-				
 						
-			</div>
-									
-				
-				
-				
-		</div>	
-	
-	</div>
+			</div> <!-- applicant_academics_container -->
+		</th:block>
+	</div> <!-- main-content -->
 </body>
 </html>

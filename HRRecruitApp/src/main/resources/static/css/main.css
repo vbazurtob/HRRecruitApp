@@ -14,12 +14,12 @@ html, body{
 }
 
 #main-content{
-	height: 70%;
+/* 	height: 100%; */
 	padding-top: 0px;
 }
 
 .main-footer{
-	height: 90px;
+	height: 60px;
 	text-align: center;
 }
 
@@ -66,4 +66,8 @@ html, body{
 	padding-top: 15px;
 	padding-left: 25px;
 	padding-right: 10px;
+}
+
+.separator-line{
+	border-bottom: 1px solid #eeeeee;
 }
