@@ -1,25 +1,18 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
-import javax.json.JsonObject;
-import javax.persistence.EntityNotFoundException;
+
 import javax.validation.Valid;
 
-import org.eclipse.persistence.annotations.DeleteAll;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,17 +28,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.model.Applicant;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 import org.vbazurtob.HRRecruitApp.model.ApplicantProfileForm;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantWorkExpRepository;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantAcademicsService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantService;
+import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
 import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
 
@@ -58,6 +53,7 @@ public class PersonalProfileController {
 	private final static int RECORDS_PER_PAGE = 10;
 	
 	private final static String ACADEMICS_BASE_URL = "/academics/";
+	private final static String WORKEXP_BASE_URL = "/workexp/";
 	
 
 	@Autowired
@@ -66,6 +62,12 @@ public class PersonalProfileController {
 	@Autowired
 	private ApplicantService applicantService;
 	
+	
+	@Autowired
+	private ApplicantWorkExpService applicantWorkExpService;
+	
+	@Autowired
+	private ApplicantWorkExpRepository applicantWorkExpRepository;
 	
 	@Autowired
 	private CountryService countryService;
@@ -354,11 +356,86 @@ public class PersonalProfileController {
 		return new DeleteResponse(response);
 	}
 	
+
+	@RequestMapping(value = {  WORKEXP_BASE_URL , WORKEXP_BASE_URL + "{page}" } )
+	public String showWorkExperience(
+		Model model,
+		@PathVariable Optional<Integer> page
+	) {
 	
-	@RequestMapping("/workexp")
-	public String showWorkExperience() {
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
+		//TODO
+		username = "abc";
+		
+		// New blank record for adding new record
+		ApplicantWorkExperience newAppWorkexp = new ApplicantWorkExperience();
+		
+		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		newAppWorkexp.setApplicant(newApplicantQuery);
+		
+		// Pagination for listing
+		Page<ApplicantWorkExperience> workExpPageObj = applicantWorkExpService.getPaginatedRecords(username, page, RECORDS_PER_PAGE);
+		long previousPageNum = applicantWorkExpService.getPaginationNumbers(workExpPageObj)[0];
+		long nextPageNum = applicantWorkExpService.getPaginationNumbers(workExpPageObj)[1];
+	
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL);
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", workExpPageObj );
+		model.addAttribute("workexp", workExpPageObj.getContent());
+		model.addAttribute("workexpForm", newAppWorkexp);
+		model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+		model.addAttribute("workexpOptionSelected",true);
+				
+			
 		return "secured/workexp.html";
+	}
+	
+	
+	@PostMapping(value = {  WORKEXP_BASE_URL , WORKEXP_BASE_URL + "edit/{page}" } )
+	public String editAcademics( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model,
+			@PathVariable Long id) {
+		
+		System.out.println("EDIT ");;
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+		
+			// View attributes
+			model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL + "edit/" + id);
+			model.addAttribute("workexpForm", workexpForm);
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			model.addAttribute("workExperienceOptionSelected",true);
+						
+			return "secured/workexp.html";
+			
+		}
+		
+					
+		// Save the form data
+		applicantWorkExpService.saveWorkExpDetail( workexpForm, username );
+		redirectAttrs.addFlashAttribute("updated",true);
+		return "redirect:/cv/workexp/";
+	
 	}
 	
 	@ExceptionHandler(RecordNotFoundException.class)

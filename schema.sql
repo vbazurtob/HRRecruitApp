@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_work_experience(
     institution VARCHAR(255) NOT NULL,
     position VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
-    finished DATE NOT NULL
+    finished DATE NOT NULL,
+    in_progress CHAR(1) DEFAULT 'N'
 );
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_skills(
