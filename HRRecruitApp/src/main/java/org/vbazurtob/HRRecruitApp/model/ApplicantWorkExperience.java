@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDateToPresentNotNullConstraint;
 import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDatesConstraint;
 
 import java.util.Date;
@@ -20,11 +21,12 @@ import java.util.Date;
 @Table(name="applicant_work_experience")
 @NamedQuery(name="ApplicantWorkExperience.findAll", query="SELECT a FROM ApplicantWorkExperience a")
 @FormFieldsDatesConstraint(from= "started", to="finished", message="Dates contain errors, they have to follow these rules: Initial date cannot be blank. Initial date must be before the Final date")
+@FormFieldsDateToPresentNotNullConstraint(inProgress="inProgress", toDate="finished", message = "If the ''In Progress'' field hasn't been checked, a ''finished'' date must be specified " )
 public class ApplicantWorkExperience implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="APPLICANT_WORK_EXPERIENCE_ID_GENERATOR", sequenceName="APPLICANT_WORK_EXPERIENCE_ID")
+	@SequenceGenerator(name="APPLICANT_WORK_EXPERIENCE_ID_GENERATOR", sequenceName="applicant_work_experience_id_seq", initialValue=1, allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPLICANT_WORK_EXPERIENCE_ID_GENERATOR")
 	private Long id;
 

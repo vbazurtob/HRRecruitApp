@@ -4,12 +4,12 @@
 	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
 		<meta charset="UTF-8">
 		
-		<title>HRRecruitApp - Academics</title>
+		<title>HRRecruitApp - Work Experience</title>
 		<div id="scriptsjs">
 			<script src="/js/formHelpers.js"></script>
 		</div>
 		
-		<div th:replace="secured/academics_form_fragment::inlineJsFragment">
+		<div th:replace="secured/workexp_form_fragment.html::inlineJsFragment">
 		</div>
 	
 	</head>
@@ -21,13 +21,13 @@
 
 	<div id="main-content">
 
-		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
+		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_workexp_container} )">
 				
-			<div id="applicant_academics_container" >
+			<div id="applicant_workexp_container" >
 				
 				<h4> Edit information</h4>
-				<form th:id="input_form" id="input_form" th:action="${baseURL}"  th:object="${academicsForm}" th:method="post" >
-					<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl})">
+				<form th:id="input_form" id="input_form" th:action="${baseURL}"  th:object="${workexpForm}" th:method="post" >
+					<th:block th:replace="secured/workexp_form_fragment.html::form_workexp">
 					</th:block>
 					
 					<div class="row">
@@ -38,7 +38,7 @@
 						</div>
 					</div>
 				</form>
-			</div> <!--  applicantAcademic Container -->
+			</div> <!--  applicant_workexp_container Container -->
 									
 				
 				

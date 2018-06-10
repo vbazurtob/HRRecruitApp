@@ -393,21 +393,92 @@ public class PersonalProfileController {
 		model.addAttribute("workexp", workExpPageObj.getContent());
 		model.addAttribute("workexpForm", newAppWorkexp);
 		model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
-		model.addAttribute("workexpOptionSelected",true);
+		model.addAttribute("workExperienceOptionSelected",true);
 				
 			
 		return "secured/workexp.html";
 	}
 	
 	
-	@PostMapping(value = {  WORKEXP_BASE_URL , WORKEXP_BASE_URL + "edit/{page}" } )
-	public String editAcademics( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
+	@PostMapping(value = WORKEXP_BASE_URL  )
+	public String editWorkExp( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
-			Model model,
-			@PathVariable Long id) {
+			Model model) {
 		
-		System.out.println("EDIT ");;
+		
+		
+		
+		//Check if record already exists (DB validation)
+		if ( applicantWorkExpService.recordExists(
+				workexpForm.getApplicant().getUsername(), 
+				workexpForm.getStarted(), 
+				workexpForm.getFinished(), 
+				workexpForm.getPosition(),
+				workexpForm.getInstitution())  ){
+			
+			ObjectError errorDuplicateRecord = new ObjectError("WorkExpRecordDuplicate", "Records already exists in db!");
+			results.addError(errorDuplicateRecord);
+		}
+		
+		//Get Controller Name for url construction
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		// Set Applicant nested object for proper validation	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		workexpForm.setApplicant(newApplicantQuery);
+		
+		// Pagination for listing
+		Page<ApplicantWorkExperience> workexpPageObj = applicantWorkExpService.getPaginatedRecords(username, Optional.of( Integer.valueOf(0) )
+				, RECORDS_PER_PAGE);
+		long previousPageNum = applicantWorkExpService.getPaginationNumbers(workexpPageObj)[0];
+		long nextPageNum = applicantWorkExpService.getPaginationNumbers(workexpPageObj)[1];
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL);
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", workexpPageObj );
+		model.addAttribute("workexp", workexpPageObj.getContent() );	
+		model.addAttribute("workexpForm", workexpForm); // Pass the updated academicsForm to the UI
+		model.addAttribute("workExperienceOptionSelected",true);
+		// DEBUG form Validations
+		//		System.out.println("Errors? " + results.hasErrors() );
+		//		
+		//		List<ObjectError> oes = results.getAllErrors();
+		//		for( ObjectError oe: oes ) {
+		//			System.out.println(oe.toString());
+		//		}
+		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
+		
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			return "secured/workexp.html";
+		}
+		
+		// Save the form data
+		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
+		redirectAttrs.addFlashAttribute("saved",true);
+		return "redirect:/cv/workexp/";
+		
+		
+		
+	
+	}
+	
+	
+	@RequestMapping( WORKEXP_BASE_URL + "edit/{id}" )
+	public String editWorkExp(
+			Model model,
+			@PathVariable Long id
+			) {
 		
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
@@ -418,25 +489,85 @@ public class PersonalProfileController {
 		username = "abc";
 		
 		
-		if(results.hasErrors()) { // Reload the form with errors			
+		Optional<ApplicantWorkExperience> workexpOpt = applicantWorkExpRepository.findById(id);
 		
+		if(workexpOpt.isPresent()) {
+			ApplicantWorkExperience appWorkExpFormObj = workexpOpt.get();
+			
+			// View attributes
+			model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL + "edit/" + id);
+			model.addAttribute("workexpForm", appWorkExpFormObj);
+			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
+			model.addAttribute("workExperienceOptionSelected",true);
+					
+			return "secured/workexp_form_edit.html";
+			
+			
+		} else {
+			throw new RecordNotFoundException();
+		}
+	
+	}
+	
+	
+	@PostMapping( WORKEXP_BASE_URL + "edit/{id}" )
+	public String editWorkExp( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model,
+			@PathVariable Long id) {
+		
+				
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+		//TODO
+		username = "abc";
+							
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+			
 			// View attributes
 			model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL + "edit/" + id);
 			model.addAttribute("workexpForm", workexpForm);
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			model.addAttribute("workExperienceOptionSelected",true);
-						
-			return "secured/workexp.html";
+					
+			return "secured/workexp_form_edit.html";
 			
 		}
 		
 					
 		// Save the form data
-		applicantWorkExpService.saveWorkExpDetail( workexpForm, username );
+		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
 		redirectAttrs.addFlashAttribute("updated",true);
 		return "redirect:/cv/workexp/";
-	
+		
+		
+		
 	}
+	
+	
+	@DeleteMapping( value= WORKEXP_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@ResponseBody
+	public DeleteResponse deleteWorkExp( @PathVariable Long id ) {
+		
+		//System.out.println( " DELETE " + id);
+		String response="OK";
+		try {
+			applicantWorkExpRepository.deleteById(id);
+		}catch(Exception e) {
+			e.printStackTrace();
+			response="ERROR";
+		}
+		
+		return new DeleteResponse(response);
+	}
+	
+	
 	
 	@ExceptionHandler(RecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)

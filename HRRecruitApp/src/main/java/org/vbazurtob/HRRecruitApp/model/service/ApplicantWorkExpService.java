@@ -53,12 +53,19 @@ public class ApplicantWorkExpService {
 		Page<ApplicantWorkExperience> academicsPageObj = appWorkExpRepository.findByApplicantUsername(username, pageReqObj);
 		
 		
+		
 		return academicsPageObj;
 	}
 	
 	public long[] getPaginationNumbers(Page<ApplicantWorkExperience> academicsPageObj) {
 		int previousPageNum = academicsPageObj.isFirst() ? 0 : academicsPageObj.previousPageable().getPageNumber() ;
 		int nextPageNum = academicsPageObj.isLast() ? academicsPageObj.getTotalPages() - 1 : academicsPageObj.nextPageable().getPageNumber() ;
+		
+		if(nextPageNum < 0) {
+			nextPageNum = 0;
+		}
+		
+		
 		return  new  long[]{ previousPageNum, nextPageNum };
 	}
 	

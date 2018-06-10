@@ -77,7 +77,7 @@
 										<input  id="position" th:id="position" th:name="position" type="text" th:value="*{position}" class="validate" />
 										<div  class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Position name error</div>
 									</div>
-									
+									<div class="col s4">&nbsp;</div>
 										
 									
 								</div>
@@ -99,18 +99,18 @@
 											/>
 										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
 									</div>
-	
-									
-									
-								</div>
-								
-								<div class="col s4">
+									<div class="col s4">
 										<label for="inProgress">
 											<input th:id="inProgress" th:name="inProgress" th:value="*{inProgress}" type="checkbox" id="inProgress" onclick="enableDisableToDateInput(this, 'finished')"  th:checked="${workexpForm.inProgress == 'Y' }" >
 											<span>Present</span>
 										</label>
 										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">In Progress error</div>
+									</div>
+									
+									
 								</div>
+								
+								
 																
 							</div>
 </th:block>

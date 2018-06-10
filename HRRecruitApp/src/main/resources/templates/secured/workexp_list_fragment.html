@@ -75,9 +75,10 @@
 														<td>
 															<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{position}">Edit</a>
 														</td>
-														<td th:text="*{position}">institution</td>
+														<td th:text="*{institution}">institution</td>
 														<td th:text="*{started}  ">started</td>
-														<td th:text="*{finished}">finished</td>
+														
+														<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
 														
 														<td>
 															
