@@ -34,14 +34,18 @@ import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.model.Applicant;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 import org.vbazurtob.HRRecruitApp.model.ApplicantProfileForm;
+import org.vbazurtob.HRRecruitApp.model.ApplicantSkill;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantSkillRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantWorkExpRepository;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantAcademicsService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantService;
+import org.vbazurtob.HRRecruitApp.model.service.ApplicantSkillService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
+import org.vbazurtob.HRRecruitApp.model.service.ProficiencyService;
 import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
 
 
@@ -54,7 +58,7 @@ public class PersonalProfileController {
 	
 	private final static String ACADEMICS_BASE_URL = "/academics/";
 	private final static String WORKEXP_BASE_URL = "/workexp/";
-	
+	private final static String SKILLS_BASE_URL = "/skills/";
 
 	@Autowired
 	private ApplicantRepository applicantRepository;
@@ -70,8 +74,17 @@ public class PersonalProfileController {
 	private ApplicantWorkExpRepository applicantWorkExpRepository;
 	
 	@Autowired
+	private ApplicantSkillService applicantSkillService;
+	
+	@Autowired
+	private ApplicantSkillRepository applicantSkillRepository;
+	
+	
+	@Autowired
 	private CountryService countryService;
 	
+	@Autowired
+	private ProficiencyService proficiencyService;
 	
 	@Autowired
 	private ApplicantAcademicsService applicantAcademicsService;
@@ -565,6 +578,115 @@ public class PersonalProfileController {
 		}
 		
 		return new DeleteResponse(response);
+	}
+	
+	
+	
+	@RequestMapping(value = {  SKILLS_BASE_URL , SKILLS_BASE_URL + "{page}" } )
+	public String showSkills(
+			Model model,
+			@PathVariable Optional<Integer> page
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		// New blank record for adding new record
+		ApplicantSkill newAppSkill = new ApplicantSkill();
+		
+		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		newAppSkill.setApplicant(newApplicantQuery);
+		
+		// Pagination for listing
+		Page<ApplicantSkill> skillPageObj = applicantSkillService.getPaginatedRecords(username, page, RECORDS_PER_PAGE);
+		long previousPageNum = applicantSkillService.getPaginationNumbers(skillPageObj)[0];
+		long nextPageNum = applicantSkillService.getPaginationNumbers(skillPageObj)[1];
+
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL);
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", skillPageObj );
+		model.addAttribute("skills", skillPageObj.getContent());
+		model.addAttribute("skillsForm", newAppSkill);
+		model.addAttribute("skillsOptionSelected",true);
+		model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
+		
+		model.addAttribute("proficiencyService", proficiencyService);
+				
+		return "secured/skills.html";
+	}
+	
+	
+	@PostMapping(value= SKILLS_BASE_URL)
+	public String showSkills( @Valid @ModelAttribute("skillsForm") ApplicantSkill skillForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model ) {
+		
+		//Check if record already exists (DB validation)
+		if ( applicantSkillService.recordExists(skillForm.getApplicant().getUsername(), 
+				skillForm.getName(), 
+				skillForm.getProficiency())  ){
+			ObjectError errorDuplicateRecord = new ObjectError("SkillsRecordDuplicate", "Records already exists in db!");
+			results.addError(errorDuplicateRecord);
+		}
+		
+		//Get Controller Name for url construction
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		// Set Applicant nested object for proper validation	
+		Applicant newApplicantQuery = new Applicant();
+		newApplicantQuery = applicantRepository.findOneByUsername(username);
+		skillForm.setApplicant(newApplicantQuery);
+		
+		// Pagination for listing
+		Page<ApplicantSkill> skillPageObj = applicantSkillService.getPaginatedRecords(username, Optional.of( Integer.valueOf(0) )
+				, RECORDS_PER_PAGE);
+		long previousPageNum = applicantSkillService.getPaginationNumbers(skillPageObj)[0];
+		long nextPageNum = applicantSkillService.getPaginationNumbers(skillPageObj)[1];
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL);
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", skillPageObj );
+		model.addAttribute("skills", skillPageObj.getContent() );	
+		model.addAttribute("skillsForm", skillForm); // Pass the updated academicsForm to the UI
+		model.addAttribute("skillsOptionSelected",true);
+		model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
+		model.addAttribute("proficiencyService", proficiencyService);
+		// DEBUG form Validations
+		//		System.out.println("Errors? " + results.hasErrors() );
+		//		
+		//		List<ObjectError> oes = results.getAllErrors();
+		//		for( ObjectError oe: oes ) {
+		//			System.out.println(oe.toString());
+		//		}
+		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
+		
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+			return "secured/skills.html";
+		}
+		
+		// Save the form data
+		applicantSkillService.saveWorkExpDetail(skillForm, username);
+		redirectAttrs.addFlashAttribute("saved",true);
+		return "redirect:/cv/skills/";
 	}
 	
 	
