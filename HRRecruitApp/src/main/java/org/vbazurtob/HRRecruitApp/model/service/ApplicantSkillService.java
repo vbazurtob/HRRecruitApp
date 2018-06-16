@@ -25,7 +25,7 @@ public class ApplicantSkillService {
 	
 	}
 	
-	public void saveWorkExpDetail( ApplicantSkill applicantSkillForm, String applicantUsername ) {
+	public void saveSkill( ApplicantSkill applicantSkillForm, String applicantUsername ) {
 			
 		applicantSkillForm.setApplicant(applicantRepository.findOneByUsername( applicantUsername ));
 		// System.out.println("ToBeSaved " + applicantAcademicForm.toString());;

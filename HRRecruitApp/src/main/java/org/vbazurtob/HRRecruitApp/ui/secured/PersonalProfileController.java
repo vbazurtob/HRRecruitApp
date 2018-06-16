@@ -684,9 +684,110 @@ public class PersonalProfileController {
 		}
 		
 		// Save the form data
-		applicantSkillService.saveWorkExpDetail(skillForm, username);
+		applicantSkillService.saveSkill(skillForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
 		return "redirect:/cv/skills/";
+	}
+	
+	
+	@RequestMapping( SKILLS_BASE_URL + "edit/{id}" )
+	public String editSkills(
+			Model model,
+			@PathVariable Long id
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		
+		Optional<ApplicantSkill> applicantOpt = applicantSkillRepository.findById(id);
+		
+		if(applicantOpt.isPresent()) {
+			ApplicantSkill appSkillsFormObj = applicantOpt.get();
+			
+			
+			// View attributes
+			model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL + "edit/" + id);
+			model.addAttribute("skillsForm",  appSkillsFormObj);
+			model.addAttribute("skillsOptionSelected",true);
+			model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
+			
+			model.addAttribute("proficiencyService", proficiencyService);
+					
+			return "secured/skills_form_edit.html";
+			
+			
+		} else {
+			throw new RecordNotFoundException();
+		}
+	
+	}
+	
+	
+	
+	
+	@PostMapping( SKILLS_BASE_URL + "edit/{id}" )
+	public String editSkills( @Valid @ModelAttribute("skillsForm") ApplicantSkill skillsForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model,
+			@PathVariable Long id) {
+		
+				
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+		//TODO
+		username = "abc";
+							
+		
+		
+		if(results.hasErrors()) { // Reload the form with errors			
+			
+			
+			
+			model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL + "edit/" + id);
+			model.addAttribute("skillsForm",  skillsForm);
+			model.addAttribute("skillsOptionSelected",true);
+			model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
+			model.addAttribute("proficiencyService", proficiencyService);
+			
+					
+			return "secured/skills_form_edit.html";
+			
+		}
+		
+					
+		// Save the form data
+		applicantSkillService.saveSkill(skillsForm, username);
+		redirectAttrs.addFlashAttribute("updated",true);
+		return "redirect:/cv/skills/";
+		
+		
+		
+	}
+	
+	
+	@DeleteMapping( value= SKILLS_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@ResponseBody
+	public DeleteResponse deleteSkills( @PathVariable Long id ) {
+
+		String response="OK";
+		try {
+			applicantSkillRepository.deleteById(id);
+		}catch(Exception e) {
+			e.printStackTrace();
+			response="ERROR";
+		}
+		
+		return new DeleteResponse(response);
 	}
 	
 	
