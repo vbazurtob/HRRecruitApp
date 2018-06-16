@@ -8,7 +8,7 @@
 	<div th:fragment="profile_forms_layout(content)" class="row grey lighten-3 " style="height: 100%;">
 		<div id="profile_side_menu" class="col s2">
 			<div class="sidemenu-option" th:classappend="${userProfileOptionSelected} ? 'optionFormSelected' : ''">
-				<a title="Applicants profile" href="/profile.html" th:href="@{/cv/profile}">User Profile</a>
+				<a title="Applicants profile" href="/profile.html" th:href="@{/cv/profile/}">User Profile</a>
 			</div>
 			<div class="sidemenu-option" th:classappend="${academicsOptionSelected} ? 'optionFormSelected' : ''">
 				<a title="Academics" href="/academics.html" th:href="@{/cv/academics/}">Academics</a>

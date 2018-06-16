@@ -60,6 +60,9 @@ public class PersonalProfileController {
 	private final static String WORKEXP_BASE_URL = "/workexp/";
 	private final static String SKILLS_BASE_URL = "/skills/";
 
+	private final static String PROFILE_BASE_URL = "/profile/";
+	
+
 	@Autowired
 	private ApplicantRepository applicantRepository;
 	
@@ -106,10 +109,12 @@ public class PersonalProfileController {
 	}
 	
 
-	@RequestMapping("/profile")
+	@RequestMapping(PROFILE_BASE_URL)
 	public String showDetails(Model model) {
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		
 		//TODO
 		username = "abc";
@@ -121,12 +126,13 @@ public class PersonalProfileController {
 		model.addAttribute("userProfileOptionSelected",true);
 		model.addAttribute("applicant", applicantProfileForm);
 		model.addAttribute("countriesLst", countryService.getListCountries());
+		model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
 		
 		return "secured/profile.html";
 	}
 	
 	
-	@PostMapping("/profile")
+	@PostMapping(PROFILE_BASE_URL)
 	public String saveProfile(
 			
 			@Valid @ModelAttribute("applicant") ApplicantProfileForm applicant,
@@ -135,11 +141,59 @@ public class PersonalProfileController {
 			Model model) {
 		
 		//System.out.println("Count errors: " + results.getErrorCount());
-		
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		if(results.hasErrors()) {
 
 			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
+			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			
+			return "secured/profile.html";
+		}
+		
+//		String repassword = Arrays.toString( request.getParameterNames() );
+		//String repassword = applicant.getPasswordConfirmation();
+		
+		
+		//System.out.println(applicant.getAddress1());
+		
+		//System.out.println(applicant.getPassword() + " ========== " + repassword);
+		
+		//String flags = "saved=true";
+		redirectAttrs.addFlashAttribute("saved", true);
+		applicantService.updateApplicantProfile(applicant);
+		boolean isPwdChanged = applicantService.updatePassword(applicant.getUsername(), applicant.getPassword(), applicant.getPasswordConfirmation());
+		if( isPwdChanged ) {
+			//flags+="&pwdchanged=true";
+			redirectAttrs.addFlashAttribute("pwdchanged",true);
+		}else {
+			//results.addError(new ObjectError("passwordsNotEqual", "Passwords  don't match. No changes were made"));
+			System.out.println("No changed");
+			//annotation no error;
+		}
+		
+		
+		
+		return "redirect:/cv/profile/";
+	}
+	
+	
+	@PostMapping(PROFILE_BASE_URL + "update-password")
+	public String updatePassword(
+			
+			@Valid @ModelAttribute("applicant") ApplicantProfileForm applicant,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model) {
+		
+		//System.out.println("Count errors: " + results.getErrorCount());
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		if(results.hasErrors()) {
+
+			model.addAttribute("userProfileOptionSelected",true);
+			model.addAttribute("countriesLst", countryService.getListCountries());
+			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			
 			return "secured/profile.html";
 		}
 		
@@ -167,6 +221,8 @@ public class PersonalProfileController {
 		
 		
 		return "redirect:/cv/profile";
+		
+		
 	}
 	
 	

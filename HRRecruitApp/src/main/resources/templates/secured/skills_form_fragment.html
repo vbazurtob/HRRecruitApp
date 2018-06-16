@@ -34,6 +34,13 @@
 									
 								</ul>
 								
+								<ul th:if="${updated}==true" class="form-saved-message green lighten-4">
+									<li th:if="${updated}==true">
+										Record has been updated sucessfully!
+									</li>
+									
+								</ul>
+								
 								<div class="form-error-messages red lighten-4 " th:if="${#fields.hasErrors('global')}">
 									<ul class="general-errors ">
 										<li th:errors="*{global}">
