@@ -31,9 +31,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
-import org.vbazurtob.HRRecruitApp.model.Applicant;
+import org.vbazurtob.HRRecruitApp.lib.common.Utils;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithoutPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
-import org.vbazurtob.HRRecruitApp.model.ApplicantProfileForm;
+import org.vbazurtob.HRRecruitApp.model.ApplicantChangePasswordForm;
+import org.vbazurtob.HRRecruitApp.model.ApplicantBaseClass;
 import org.vbazurtob.HRRecruitApp.model.ApplicantSkill;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
@@ -47,6 +50,8 @@ import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
 import org.vbazurtob.HRRecruitApp.model.service.ProficiencyService;
 import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
+
+import ch.qos.logback.classic.pattern.Util;
 
 
 
@@ -119,14 +124,19 @@ public class PersonalProfileController {
 		//TODO
 		username = "abc";
 		
-		Applicant currentApplicant = applicantRepository.findOneByUsername(username);
-	
-		ApplicantProfileForm applicantProfileForm = new ApplicantProfileForm(currentApplicant);
+		ApplicantWithPassword currentApplicant = applicantRepository.findOneByUsername(username);		
+		
+//		System.out.println(currentApplicant);;
+		
+		ApplicantChangePasswordForm newChangePasswordObj = new ApplicantChangePasswordForm();
+		newChangePasswordObj.setUsernameChangePwdForm(username);
+		
 		
 		model.addAttribute("userProfileOptionSelected",true);
-		model.addAttribute("applicant", applicantProfileForm);
+		model.addAttribute("applicant", currentApplicant);
 		model.addAttribute("countriesLst", countryService.getListCountries());
 		model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+		model.addAttribute("changePwdForm", newChangePasswordObj );
 		
 		return "secured/profile.html";
 	}
@@ -134,93 +144,94 @@ public class PersonalProfileController {
 	
 	@PostMapping(PROFILE_BASE_URL)
 	public String saveProfile(
-			
-			@Valid @ModelAttribute("applicant") ApplicantProfileForm applicant,
+			@Valid @ModelAttribute("applicant") ApplicantWithoutPassword applicant,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
-			Model model) {
+			Model model ){
 		
-		//System.out.println("Count errors: " + results.getErrorCount());
+		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		
+		
+		// Change pwd form
+		ApplicantChangePasswordForm newChangePasswordObj = new ApplicantChangePasswordForm();		
+		newChangePasswordObj.setUsernameChangePwdForm(applicant.getUsername());
+		
+		
+		//DEBUG
+//		Utils.printFormErrors(results);
+		
+		
 		if(results.hasErrors()) {
-
+			
 			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
 			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			model.addAttribute("changePwdForm", newChangePasswordObj );
+			model.addAttribute("applicant", applicant);
 			
 			return "secured/profile.html";
 		}
 		
-//		String repassword = Arrays.toString( request.getParameterNames() );
-		//String repassword = applicant.getPasswordConfirmation();
-		
-		
-		//System.out.println(applicant.getAddress1());
-		
-		//System.out.println(applicant.getPassword() + " ========== " + repassword);
-		
-		//String flags = "saved=true";
+
 		redirectAttrs.addFlashAttribute("saved", true);
 		applicantService.updateApplicantProfile(applicant);
-		boolean isPwdChanged = applicantService.updatePassword(applicant.getUsername(), applicant.getPassword(), applicant.getPasswordConfirmation());
-		if( isPwdChanged ) {
-			//flags+="&pwdchanged=true";
-			redirectAttrs.addFlashAttribute("pwdchanged",true);
-		}else {
-			//results.addError(new ObjectError("passwordsNotEqual", "Passwords  don't match. No changes were made"));
-			System.out.println("No changed");
-			//annotation no error;
-		}
 		
 		
-		
-		return "redirect:/cv/profile/";
+		return "redirect:" + controllerMapping + PROFILE_BASE_URL;
 	}
 	
 	
 	@PostMapping(PROFILE_BASE_URL + "update-password")
 	public String updatePassword(
 			
-			@Valid @ModelAttribute("applicant") ApplicantProfileForm applicant,
+			@Valid @ModelAttribute("changePwdForm") ApplicantChangePasswordForm applicantChangePwdForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
 			Model model) {
 		
-		//System.out.println("Count errors: " + results.getErrorCount());
+		//Check current password		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-		if(results.hasErrors()) {
 
+		
+		// Current password validation doesn't match
+		if( !applicantService.currentApplicantPasswordMatch(applicantChangePwdForm.getUsernameChangePwdForm(), applicantChangePwdForm.getCurrentPassword() ) ) {
+			ObjectError errorCurrentPasswordIsNotValid = new ObjectError("CurrentPasswordIsNotValid", "Current password for applicant " + applicantChangePwdForm.getUsernameChangePwdForm() + " doesn't match with records");
+			results.addError(errorCurrentPasswordIsNotValid);
+		}
+		
+		
+//		DEBUG
+//		Utils.printFormErrors(results);
+		
+		if(results.hasErrors()) {
+			
+			
+			//In case of error set the data for the applicant profile data
+			ApplicantWithPassword currentApplicant = applicantRepository.findOneByUsername( applicantChangePwdForm.getUsernameChangePwdForm() );
+			
+			
+			
 			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
 			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			model.addAttribute("applicant", currentApplicant);
 			
 			return "secured/profile.html";
 		}
 		
-//		String repassword = Arrays.toString( request.getParameterNames() );
-		//String repassword = applicant.getPasswordConfirmation();
+
 		
-		
-		//System.out.println(applicant.getAddress1());
-		
-		//System.out.println(applicant.getPassword() + " ========== " + repassword);
-		
-		//String flags = "saved=true";
-		redirectAttrs.addFlashAttribute("saved", true);
-		applicantService.updateApplicantProfile(applicant);
-		boolean isPwdChanged = applicantService.updatePassword(applicant.getUsername(), applicant.getPassword(), applicant.getPasswordConfirmation());
+		boolean isPwdChanged = applicantService.updatePassword(applicantChangePwdForm.getUsernameChangePwdForm(), applicantChangePwdForm.getPassword(), applicantChangePwdForm.getPasswordConfirmation());
 		if( isPwdChanged ) {
-			//flags+="&pwdchanged=true";
 			redirectAttrs.addFlashAttribute("pwdchanged",true);
-		}else {
-			//results.addError(new ObjectError("passwordsNotEqual", "Passwords  don't match. No changes were made"));
-			System.out.println("No changed");
-			//annotation no error;
+		}else {	
+			redirectAttrs.addFlashAttribute("pwdchangedError",true);
+
 		}
 		
 		
-		
-		return "redirect:/cv/profile";
+		return "redirect:" + controllerMapping + PROFILE_BASE_URL;
 		
 		
 	}
@@ -246,7 +257,7 @@ public class PersonalProfileController {
 		newAppAcademic.setInProgress("N");
 		
 		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		newAppAcademic.setApplicant(newApplicantQuery);
 		
@@ -275,7 +286,7 @@ public class PersonalProfileController {
 			RedirectAttributes redirectAttrs,
 			Model model ) {
 		
-		//Check if record already exists (DB validation)
+//		Check if record already exists (DB validation)
 		if ( applicantAcademicsService.recordExists(academicsForm.getApplicant().getUsername(), 
 				academicsForm.getStarted(), 
 				academicsForm.getFinished(), 
@@ -294,7 +305,7 @@ public class PersonalProfileController {
 		username = "abc";
 		
 		// Set Applicant nested object for proper validation	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		academicsForm.setApplicant(newApplicantQuery);
 		
@@ -312,15 +323,6 @@ public class PersonalProfileController {
 		model.addAttribute("academics", academicsPageObj.getContent() );	
 		model.addAttribute("academicsForm", academicsForm); // Pass the updated academicsForm to the UI
 		model.addAttribute("academicsOptionSelected",true);
-		// DEBUG form Validations
-		//		System.out.println("Errors? " + results.hasErrors() );
-		//		
-		//		List<ObjectError> oes = results.getAllErrors();
-		//		for( ObjectError oe: oes ) {
-		//			System.out.println(oe.toString());
-		//		}
-		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
-		
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
@@ -331,7 +333,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantAcademicsService.saveAcademicDetail(academicsForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:/cv/academics/";
+		return "redirect:" + controllerMapping + ACADEMICS_BASE_URL;
 	}
 	
 	
@@ -444,7 +446,7 @@ public class PersonalProfileController {
 		ApplicantWorkExperience newAppWorkexp = new ApplicantWorkExperience();
 		
 		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		newAppWorkexp.setApplicant(newApplicantQuery);
 		
@@ -498,7 +500,7 @@ public class PersonalProfileController {
 		username = "abc";
 		
 		// Set Applicant nested object for proper validation	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		workexpForm.setApplicant(newApplicantQuery);
 		
@@ -516,15 +518,9 @@ public class PersonalProfileController {
 		model.addAttribute("workexp", workexpPageObj.getContent() );	
 		model.addAttribute("workexpForm", workexpForm); // Pass the updated academicsForm to the UI
 		model.addAttribute("workExperienceOptionSelected",true);
+
 		// DEBUG form Validations
-		//		System.out.println("Errors? " + results.hasErrors() );
-		//		
-		//		List<ObjectError> oes = results.getAllErrors();
-		//		for( ObjectError oe: oes ) {
-		//			System.out.println(oe.toString());
-		//		}
-		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
-		
+//		Utils.printFormErrors(results);
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
@@ -535,7 +531,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:/cv/workexp/";
+		return "redirect:" + controllerMapping + WORKEXP_BASE_URL;
 		
 		
 		
@@ -613,7 +609,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
 		redirectAttrs.addFlashAttribute("updated",true);
-		return "redirect:/cv/workexp/";
+		return "redirect:" + controllerMapping + WORKEXP_BASE_URL;
 		
 		
 		
@@ -656,7 +652,7 @@ public class PersonalProfileController {
 		ApplicantSkill newAppSkill = new ApplicantSkill();
 		
 		// Set Applicant nested object for proper validation, we need to pass in the post at least the applicant username	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		newAppSkill.setApplicant(newApplicantQuery);
 		
@@ -704,7 +700,7 @@ public class PersonalProfileController {
 		username = "abc";
 		
 		// Set Applicant nested object for proper validation	
-		Applicant newApplicantQuery = new Applicant();
+		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
 		skillForm.setApplicant(newApplicantQuery);
 		
@@ -725,14 +721,7 @@ public class PersonalProfileController {
 		model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
 		model.addAttribute("proficiencyService", proficiencyService);
 		// DEBUG form Validations
-		//		System.out.println("Errors? " + results.hasErrors() );
-		//		
-		//		List<ObjectError> oes = results.getAllErrors();
-		//		for( ObjectError oe: oes ) {
-		//			System.out.println(oe.toString());
-		//		}
-		// System.out.println( "Record exists?  " + applicantAcademicsService.recordExists(username, academicsForm) );
-		
+//		Utils.printFormErrors(results);
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
@@ -742,7 +731,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantSkillService.saveSkill(skillForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:/cv/skills/";
+		return "redirect:" + controllerMapping + SKILLS_BASE_URL;
 	}
 	
 	
@@ -824,7 +813,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantSkillService.saveSkill(skillsForm, username);
 		redirectAttrs.addFlashAttribute("updated",true);
-		return "redirect:/cv/skills/";
+		return "redirect:" + controllerMapping + SKILLS_BASE_URL;
 		
 		
 		

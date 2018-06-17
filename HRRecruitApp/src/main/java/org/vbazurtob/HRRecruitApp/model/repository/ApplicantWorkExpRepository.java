@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.vbazurtob.HRRecruitApp.model.Applicant;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 
 @Repository
@@ -17,7 +17,7 @@ public interface ApplicantWorkExpRepository extends CrudRepository<ApplicantWork
 	public Page<ApplicantWorkExperience> findAll(Pageable page);
 	
 	
-	public Page<ApplicantWorkExperience> findByApplicant(Applicant applicant, Pageable page);
+	public Page<ApplicantWorkExperience> findByApplicant(ApplicantWithPassword applicant, Pageable page);
 	
 	public Page<ApplicantWorkExperience> findByApplicantUsername(String username, Pageable page);
 	

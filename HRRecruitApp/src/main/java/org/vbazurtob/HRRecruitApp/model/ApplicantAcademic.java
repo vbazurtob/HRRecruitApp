@@ -64,7 +64,7 @@ public class ApplicantAcademic implements Serializable {
 	//bi-directional many-to-one association to Applicant
 	@ManyToOne
 	@JoinColumn(name="applicant_id")
-	private Applicant applicant;
+	private ApplicantWithPassword applicant;
 
 	public ApplicantAcademic() {
 	}
@@ -125,11 +125,11 @@ public class ApplicantAcademic implements Serializable {
 		this.started = started;
 	}
 
-	public Applicant getApplicant() {
+	public ApplicantWithPassword getApplicant() {
 		return this.applicant;
 	}
 
-	public void setApplicant(Applicant applicant) {
+	public void setApplicant(ApplicantWithPassword applicant) {
 		this.applicant = applicant;
 	}
 

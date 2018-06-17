@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.vbazurtob.HRRecruitApp.model.Applicant;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 
 
@@ -19,7 +19,7 @@ public interface ApplicantAcademicsRepository extends PagingAndSortingRepository
 	public Page<ApplicantAcademic> findAll(Pageable page);
 	
 	
-	public Page<ApplicantAcademic> findByApplicant(Applicant applicant, Pageable page);
+	public Page<ApplicantAcademic> findByApplicant(ApplicantWithPassword applicant, Pageable page);
 	
 	public Page<ApplicantAcademic> findByApplicantUsername(String username, Pageable page);
 	

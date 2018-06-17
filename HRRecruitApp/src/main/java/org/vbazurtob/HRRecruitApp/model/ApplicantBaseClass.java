@@ -1,29 +1,18 @@
 package org.vbazurtob.HRRecruitApp.model;
-
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
-/**
- * The persistent class for the applicant database table.
- * 
- */
-@Entity
-@Table(name="applicant")
-@NamedQuery(name="Applicant.findAll", query="SELECT a FROM Applicant a")
-public class Applicant implements Serializable {
-	private static final long serialVersionUID = 1L;
+@MappedSuperclass
+public class ApplicantBaseClass {
+
 
 	@Id
 	//@Size(min = 5, max = 35, message = "Username must be between 10 and 35 characters")
@@ -55,11 +44,6 @@ public class Applicant implements Serializable {
 	@NotEmpty(message = "Name(s) cannot be empty")
 	private String names;
 
-	@Size(message = "Password cannot exceed 128 characters", min= 8, max= 128)
-	@NotNull(message = "Password cannot be null")
-	@Pattern(message = "Password is too weak. It must include at least 1 number, 1 lowercase character, 1 uppercase character and 1 special character(@#$%^&+=)", regexp ="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
-	private String password;
-
 	@Size(message = "State cannot exceed 100 characters", max= 100)
 	@NotEmpty(message = "State cannot be empty")
 	private String state;
@@ -82,12 +66,12 @@ public class Applicant implements Serializable {
 	//bi-directional many-to-one association to JobApplicant
 	@OneToMany(mappedBy="applicant")
 	private List<JobApplicant> jobApplicants;
-
-	public Applicant() {
-	}
-
+	
+	
+	
+	
 	public String getUsername() {
-		return this.username;
+		return username;
 	}
 
 	public void setUsername(String username) {
@@ -95,7 +79,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getAddress1() {
-		return this.address1;
+		return address1;
 	}
 
 	public void setAddress1(String address1) {
@@ -103,7 +87,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getAddress2() {
-		return this.address2;
+		return address2;
 	}
 
 	public void setAddress2(String address2) {
@@ -111,7 +95,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getCountry() {
-		return this.country;
+		return country;
 	}
 
 	public void setCountry(String country) {
@@ -119,7 +103,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getEmail() {
-		return this.email;
+		return email;
 	}
 
 	public void setEmail(String email) {
@@ -127,7 +111,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getLastname() {
-		return this.lastname;
+		return lastname;
 	}
 
 	public void setLastname(String lastname) {
@@ -135,23 +119,15 @@ public class Applicant implements Serializable {
 	}
 
 	public String getNames() {
-		return this.names;
+		return names;
 	}
 
 	public void setNames(String names) {
 		this.names = names;
 	}
 
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getState() {
-		return this.state;
+		return state;
 	}
 
 	public void setState(String state) {
@@ -159,7 +135,7 @@ public class Applicant implements Serializable {
 	}
 
 	public String getZipcode() {
-		return this.zipcode;
+		return zipcode;
 	}
 
 	public void setZipcode(String zipcode) {
@@ -167,99 +143,138 @@ public class Applicant implements Serializable {
 	}
 
 	public List<ApplicantAcademic> getApplicantAcademics() {
-		return this.applicantAcademics;
+		return applicantAcademics;
 	}
 
 	public void setApplicantAcademics(List<ApplicantAcademic> applicantAcademics) {
 		this.applicantAcademics = applicantAcademics;
 	}
 
-	public ApplicantAcademic addApplicantAcademic(ApplicantAcademic applicantAcademic) {
-		getApplicantAcademics().add(applicantAcademic);
-		applicantAcademic.setApplicant(this);
-
-		return applicantAcademic;
-	}
-
-	public ApplicantAcademic removeApplicantAcademic(ApplicantAcademic applicantAcademic) {
-		getApplicantAcademics().remove(applicantAcademic);
-		applicantAcademic.setApplicant(null);
-
-		return applicantAcademic;
-	}
-
 	public List<ApplicantSkill> getApplicantSkills() {
-		return this.applicantSkills;
+		return applicantSkills;
 	}
 
 	public void setApplicantSkills(List<ApplicantSkill> applicantSkills) {
 		this.applicantSkills = applicantSkills;
 	}
 
-	public ApplicantSkill addApplicantSkill(ApplicantSkill applicantSkill) {
-		getApplicantSkills().add(applicantSkill);
-		applicantSkill.setApplicant(this);
-
-		return applicantSkill;
-	}
-
-	public ApplicantSkill removeApplicantSkill(ApplicantSkill applicantSkill) {
-		getApplicantSkills().remove(applicantSkill);
-		applicantSkill.setApplicant(null);
-
-		return applicantSkill;
-	}
-
 	public List<ApplicantWorkExperience> getApplicantWorkExperiences() {
-		return this.applicantWorkExperiences;
+		return applicantWorkExperiences;
 	}
 
 	public void setApplicantWorkExperiences(List<ApplicantWorkExperience> applicantWorkExperiences) {
 		this.applicantWorkExperiences = applicantWorkExperiences;
 	}
 
-	public ApplicantWorkExperience addApplicantWorkExperience(ApplicantWorkExperience applicantWorkExperience) {
-		getApplicantWorkExperiences().add(applicantWorkExperience);
-		applicantWorkExperience.setApplicant(this);
-
-		return applicantWorkExperience;
-	}
-
-	public ApplicantWorkExperience removeApplicantWorkExperience(ApplicantWorkExperience applicantWorkExperience) {
-		getApplicantWorkExperiences().remove(applicantWorkExperience);
-		applicantWorkExperience.setApplicant(null);
-
-		return applicantWorkExperience;
-	}
-
 	public List<JobApplicant> getJobApplicants() {
-		return this.jobApplicants;
+		return jobApplicants;
 	}
 
 	public void setJobApplicants(List<JobApplicant> jobApplicants) {
 		this.jobApplicants = jobApplicants;
 	}
 
-	public JobApplicant addJobApplicant(JobApplicant jobApplicant) {
-		getJobApplicants().add(jobApplicant);
-		jobApplicant.setApplicant(this);
-
-		return jobApplicant;
+	public ApplicantBaseClass() {
 	}
-
-	public JobApplicant removeJobApplicant(JobApplicant jobApplicant) {
-		getJobApplicants().remove(jobApplicant);
-		jobApplicant.setApplicant(null);
-
-		return jobApplicant;
-	}
+	
+//	public ApplicantProfileForm ( Applicant currentApplicant ) {
+//		
+//		// System.out.println("current " + currentApplicant);;
+//		
+//		this.setUsername(currentApplicant.getUsername());
+//		this.setAddress1(currentApplicant.getAddress1());
+//		this.setAddress2(currentApplicant.getAddress2());
+//		this.setCountry(currentApplicant.getCountry());
+//		this.setEmail(currentApplicant.getEmail());
+//		this.setState(currentApplicant.getState());
+//		this.setNames(currentApplicant.getNames());
+//		this.setLastname(currentApplicant.getLastname());
+//		this.setZipcode(currentApplicant.getZipcode());
+//	
+//		
+//	}
 
 	@Override
 	public String toString() {
-		return "Applicant [username=" + username + ", address1=" + address1 + ", address2=" + address2 + ", country="
-				+ country + ", email=" + email + ", lastname=" + lastname + ", names=" + names + ", state=" + state + ", zipcode=" + zipcode + "]";
+		return "ApplicantProfileForm [username=" + username + ", address1=" + address1 + ", address2=" + address2
+				+ ", country=" + country + ", email=" + email + ", lastname=" + lastname + ", names=" + names
+				+ ", state=" + state + ", zipcode=" + zipcode + "]";
 	}
-	
-	
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address1 == null) ? 0 : address1.hashCode());
+		result = prime * result + ((address2 == null) ? 0 : address2.hashCode());
+		result = prime * result + ((country == null) ? 0 : country.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((lastname == null) ? 0 : lastname.hashCode());
+		result = prime * result + ((names == null) ? 0 : names.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ApplicantBaseClass other = (ApplicantBaseClass) obj;
+		if (address1 == null) {
+			if (other.address1 != null)
+				return false;
+		} else if (!address1.equals(other.address1))
+			return false;
+		if (address2 == null) {
+			if (other.address2 != null)
+				return false;
+		} else if (!address2.equals(other.address2))
+			return false;
+		if (country == null) {
+			if (other.country != null)
+				return false;
+		} else if (!country.equals(other.country))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (lastname == null) {
+			if (other.lastname != null)
+				return false;
+		} else if (!lastname.equals(other.lastname))
+			return false;
+		if (names == null) {
+			if (other.names != null)
+				return false;
+		} else if (!names.equals(other.names))
+			return false;
+		if (state == null) {
+			if (other.state != null)
+				return false;
+		} else if (!state.equals(other.state))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		if (zipcode == null) {
+			if (other.zipcode != null)
+				return false;
+		} else if (!zipcode.equals(other.zipcode))
+			return false;
+		return true;
+	}
+
+
+	
+	
 }

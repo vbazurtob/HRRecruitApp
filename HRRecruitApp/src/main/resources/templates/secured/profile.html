@@ -25,44 +25,58 @@
 	<div id="main-content">
 			
 			
-			
-			
-			
-			<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#input_form} )">
 
+			
+			
+			<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#profile_content} )">
 
-				<form th:id="input_form" id="input_form" th:action="${baseUrl}+'update-password'" th:object="${applicant}" th:method="post" >
 				
-					<th:block th:replace="secured/profile_form_fragment.html::user_password_form"></th:block>
-					
-					<div class="row">
-						<div class="col s12">
-							<button title="Update password" type="submit" class="waves-effect waves-light btn-floating btn-large right">
-								<i class="material-icons right">save</i>
-							</button>		
+				<div id="profile_content">
+				
+				
+					<form th:id="changepwd_form" id="changepwd_form" th:action="${baseUrl}+'update-password'" th:object="${changePwdForm}" th:method="post" >
+				
+						<h5>Change password</h5>		
+							
+						<th:block th:replace="secured/profile_form_fragment.html::changepwd_form_messages"></th:block>
+						
+						<th:block th:replace="secured/profile_form_fragment.html::user_password_form"></th:block>
+						
+						<div class="row">
+							<div class="col s12">
+								<button title="Update password" type="submit" class="waves-effect waves-light btn-floating btn-large right">
+									<i class="material-icons right">save</i>
+								</button>		
+							</div>
 						</div>
-					</div>
 					
-				</form>
+					</form>
 				
-				<p class="separator"></p>
+					<p class="divider"></p>
 				
 				
-				<form th:action="${baseUrl}" th:id="input_form" id="input_form"  th:object="${applicant}" th:method="post" >				
-					
-					<input type="hidden" th:id="username" th:name="username" th:field="*{username}" >
-					<th:block th:replace="secured/profile_form_fragment.html::form_messages"></th:block>
-					
-					<th:block th:replace="secured/profile_form_fragment.html::profile_form"></th:block>
-					<div class="row">
-						<div class="col s12">
-							<button title="Update info" type="submit" class="waves-effect waves-light btn-floating btn-large right">
-								<i class="material-icons right">save</i>
-							</button>		
+					<form th:action="${baseUrl}" th:id="applicant_data_form" id="applicant_data_form"  th:object="${applicant}" th:method="post" >				
+						
+						<h5>Update profile information</h5>		
+												
+						<th:block th:replace="secured/profile_form_fragment.html::form_messages"></th:block>
+						
+						<th:block th:replace="secured/profile_form_fragment.html::profile_form"></th:block>
+						<div class="row">
+							<div class="col s12">
+								<button title="Update info" type="submit" class="waves-effect waves-light btn-floating btn-large right">
+									<i class="material-icons right">save</i>
+								</button>		
+							</div>
 						</div>
-					</div>
+	
+					</form>
+				
+				
+				</div>
 
-				</form>
+
+				
 			</div>
 			
 

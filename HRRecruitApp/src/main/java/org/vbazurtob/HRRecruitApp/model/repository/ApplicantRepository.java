@@ -2,12 +2,14 @@ package org.vbazurtob.HRRecruitApp.model.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import org.vbazurtob.HRRecruitApp.model.Applicant;
-import org.vbazurtob.HRRecruitApp.model.JobType;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
+
 
 @Repository
-public interface ApplicantRepository extends CrudRepository<Applicant, String> {
+public interface ApplicantRepository extends CrudRepository<ApplicantWithPassword, String> {
 
-	public Applicant findOneByUsername(String username);
+	public ApplicantWithPassword findOneByUsername(String username);
+	
+	public long countByUsernameAndPassword( String username, String password );
 	
 }

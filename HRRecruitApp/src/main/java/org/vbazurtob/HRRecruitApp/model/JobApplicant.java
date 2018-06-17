@@ -25,7 +25,7 @@ public class JobApplicant implements Serializable {
 	//bi-directional many-to-one association to Applicant
 	@ManyToOne
 	@JoinColumn(name="applicant_id" , insertable= false, updatable = false)
-	private Applicant applicant;
+	private ApplicantWithPassword applicant;
 
 	//bi-directional many-to-one association to Job
 	@ManyToOne
@@ -51,11 +51,11 @@ public class JobApplicant implements Serializable {
 		this.dateApplicationSent = dateApplicationSent;
 	}
 
-	public Applicant getApplicant() {
+	public ApplicantWithPassword getApplicant() {
 		return this.applicant;
 	}
 
-	public void setApplicant(Applicant applicant) {
+	public void setApplicant(ApplicantWithPassword applicant) {
 		this.applicant = applicant;
 	}
 
