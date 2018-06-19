@@ -12,9 +12,16 @@ INSERT INTO "vbazurtobPortfolio".job_type ("id", description) VALUES (DEFAULT, '
 
 
 
--- Demo User App
+-- Demo Applicant user
 INSERT INTO "vbazurtobPortfolio".applicant(
             username, password, names, lastname, address1, address2, country, 
             state, zipcode, email)
     VALUES ('abc', '$2b$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'ABC', 'Demo U.', 'St', '2005', 'NZ', 
             'RR', 'X45644', 'abc@abc.com');
+            
+            
+-- Demo HR user
+INSERT INTO "vbazurtobPortfolio".user(
+            username, password, names, lastname, email, role)
+    VALUES ('admin', '$2b$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'Admin HR', 'Demo User', 'abc@abc.com', 'HR_ADMIN');
+

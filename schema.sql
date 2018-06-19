@@ -3,11 +3,31 @@
 CREATE SCHEMA IF NOT EXISTS "vbazurtobPortfolio";
 
 
+
 CREATE DATABASE "HRRecruitApp";
+
+
+
+DO
+$body$
+BEGIN
+   IF NOT EXISTS (
+      SELECT
+      FROM   pg_catalog.pg_user
+      WHERE  usename = 'hrapp_demo') THEN
+
+      CREATE ROLE hrapp_demo LOGIN PASSWORD 'demo';
+   END IF;
+END
+$body$;
+
+-- REVOKE CONNECT ON DATABASE "HRRecruitApp" FROM PUBLIC;
+GRANT CONNECT ON DATABASE "HRRecruitApp" TO hrapp_demo;
+
 
 \c "HRRecruitApp";
 
-SET search_path TO "vbazurtobPortfolio,public";
+SET search_path TO "vbazurtobPortfolio";
 
 
 CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_type(
@@ -20,7 +40,9 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job(
     title VARCHAR(150),
     description TEXT,
     job_type_id INTEGER NOT NULL REFERENCES "vbazurtobPortfolio".job_type(id),
-    salary INTEGER 
+    salary INTEGER,
+    date_posted DATE,
+    status CHAR(1) -- O open, C closed
 );
 
 
@@ -72,4 +94,13 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_applicant(
     applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant (username),
     job_id BIGINT NOT NULL REFERENCES "vbazurtobPortfolio".job(id),
     date_application_sent TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".user(
+    username VARCHAR(35) PRIMARY KEY,
+    password VARCHAR(128),
+    names VARCHAR(100),
+    lastname VARCHAR(100),
+    email VARCHAR(45),
+    role VARCHAR(15)
 );

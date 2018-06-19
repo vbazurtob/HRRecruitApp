@@ -1,18 +1,4 @@
-DO
-$body$
-BEGIN
-   IF NOT EXISTS (
-      SELECT
-      FROM   pg_catalog.pg_user
-      WHERE  usename = 'hrapp_demo') THEN
 
-      CREATE ROLE hrapp_demo LOGIN PASSWORD 'demo';
-   END IF;
-END
-$body$;
-
--- REVOKE CONNECT ON DATABASE "HRRecruitApp" FROM PUBLIC;
-GRANT CONNECT ON DATABASE "HRRecruitApp" TO hrapp_demo;
 
 -- REVOKE ALL
 -- ON ALL TABLES IN SCHEMA public 

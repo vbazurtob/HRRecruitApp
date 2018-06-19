@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - Job ads management</title>
+	
+	
+	<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+	</div>
+		
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		
+		/*]]>*/
+	</script>
+		
+	
+	
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+			
+			
+		<th:block th:replace="secured/jobs_list_fragment.html::jobs_list" ></th:block>				
+								
+				
+				
+
+	</div>
+</body>
+</html>

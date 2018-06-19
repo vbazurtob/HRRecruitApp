@@ -2,6 +2,8 @@ package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +27,11 @@ public class Job implements Serializable {
 	private Integer salary;
 
 	private String title;
+	
+	@Column(name="date_posted")
+	private Date datePosted;
+	
+	private String status;
 
 	//bi-directional many-to-one association to JobType
 	@ManyToOne
@@ -84,6 +91,25 @@ public class Job implements Serializable {
 
 	public void setJobApplicants(List<JobApplicant> jobApplicants) {
 		this.jobApplicants = jobApplicants;
+	}
+
+	
+	
+	
+	public Date getDatePosted() {
+		return datePosted;
+	}
+
+	public void setDatePosted(Date datePosted) {
+		this.datePosted = datePosted;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public JobApplicant addJobApplicant(JobApplicant jobApplicant) {
