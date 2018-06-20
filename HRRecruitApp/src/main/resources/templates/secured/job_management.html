@@ -23,12 +23,19 @@
 <body th:replace="public/master::master_body(~{::#main-content})" >
 
 	<div id="main-content">
-			
+
+		<th:block th:replace="secured/job_form_fragment.html::form_messages">Messages</th:block>			
 			
 		<th:block th:replace="secured/jobs_list_fragment.html::jobs_list" ></th:block>				
 								
 				
-				
+		<div class="row">
+			<div class="col s12">
+				<button onclick="window.location= baseUrl + 'new'" type="button" title="Add new record" class="waves-effect waves-light btn-floating btn-large right">
+					<i class="material-icons right">add</i>
+				</button>		
+			</div>
+		</div>
 
 	</div>
 </body>

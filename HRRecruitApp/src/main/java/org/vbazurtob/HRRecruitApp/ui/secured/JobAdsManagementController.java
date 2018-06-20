@@ -1,7 +1,9 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -40,11 +42,13 @@ import org.vbazurtob.HRRecruitApp.model.ApplicantBaseClass;
 import org.vbazurtob.HRRecruitApp.model.ApplicantSkill;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.Job;
+import org.vbazurtob.HRRecruitApp.model.JobType;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantSkillRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantWorkExpRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
+import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantAcademicsService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantSkillService;
@@ -73,6 +77,8 @@ public class JobAdsManagementController {
 	@Autowired
 	private JobService jobService;
 	
+	@Autowired
+	private JobTypeRepository jobTypeRepository;
 	
 	@RequestMapping(DASHBOARD_JOB_MANAGEMENT_BASE_URL)
 	public String showDetails(@PathVariable Optional<Integer> page, Model model) {
@@ -93,6 +99,7 @@ public class JobAdsManagementController {
 		
 		// View attributes
 		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", jobPageObj );
@@ -100,6 +107,119 @@ public class JobAdsManagementController {
 		
 
 		return "secured/job_management.html";
+	}
+	
+	
+	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new" )
+	public String newJob(
+			Model model
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "admin";
+		
+		Job newJobObj = new Job();
+
+		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+		
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+		model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
+		
+		model.addAttribute("formTitle", "Create new job");
+		model.addAttribute("jobForm", newJobObj);
+		model.addAttribute("jobTypeList", jobTypeList );
+		
+		return "secured/job_create_edit.html";
+	}
+	
+	
+	
+	@PostMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new"  )
+	public String saveProfile(
+			@Valid @ModelAttribute("jobForm") Job jobForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model ){
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+		//TODO
+		username = "admin";
+		
+		System.out.println("description" +  jobForm.getJobType().getDescription() + " ID " + jobForm.getJobType().getId());
+		
+		if(results.hasErrors()) {
+			
+			ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+			model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
+			model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+			model.addAttribute("formTitle", "Create new job");
+			model.addAttribute("jobForm", jobForm);
+			model.addAttribute("jobTypeList", jobTypeList );
+			
+			return "secured/job_create_edit.html";
+		}
+		
+
+		redirectAttrs.addFlashAttribute("saved", true);
+		
+		//jobTypeRepository.
+		
+		Optional<JobType> jt = jobTypeRepository.findById( jobForm.getJobType().getId() );
+		
+		System.out.println("jobType found: " + jobForm.getJobType().getId() + "  obj " + jt );;
+		
+		
+		jobForm.setDatePosted(new Date());
+		jobForm.setStatus("O");
+		jobForm.setJobType( jt.get()   );
+		
+		jobService.saveJob(jobForm);
+		
+		
+		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+	}
+	
+	
+	
+	
+	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/{id}" )
+	public String editJob(
+			Model model,
+			@PathVariable Long id
+			) {
+		
+		//Get Controller Name
+				String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+				// Get logged username
+				String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+				//TODO
+				username = "admin";
+				
+				Job newJobObj = new Job();
+
+				ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+				
+				
+				// View attributes
+				model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+				model.addAttribute("formTitle", "Edit job");
+				model.addAttribute("jobForm", newJobObj);
+				model.addAttribute("jobTypeList", jobTypeList );
+				
+				return "secured/job_create_edit.html";
+	
 	}
 	
 	

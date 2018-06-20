@@ -20,7 +20,9 @@ public class JobService {
 
 	public void saveJob( Job jobForm ) {
 		
-//		applicantAcademicRepository.save(applicantAcademicForm);
+		System.out.println( jobForm);;
+		
+		jobRepository.save( jobForm );
 		
 	}
 	
