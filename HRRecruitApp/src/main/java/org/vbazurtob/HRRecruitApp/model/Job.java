@@ -60,7 +60,7 @@ public class Job implements Serializable {
 
 	
 	//bi-directional many-to-one association to JobApplicant
-	@OneToMany(mappedBy="job")
+	@OneToMany(mappedBy="job", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<JobApplicant> jobApplicants;
 
 	public Job() {

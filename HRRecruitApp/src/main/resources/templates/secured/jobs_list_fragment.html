@@ -6,6 +6,53 @@
 </head>
 <body>
 
+<div th:fragment="js_list_skills">
+	
+		<script>
+			
+			function ajaxDelete( actionUrl, id ){
+				$.ajax({
+				    url: actionUrl + id,
+				    type: 'DELETE',
+				    success: function(response) {
+						console.log(response.result);
+						if(response.result==='OK'){
+							alert("Record has been deleted!");
+							window.location = baseUrl;
+						}else {
+							console.log(response);
+							alert("Couldn't delete the selected record");
+						}
+						
+				    },
+				    data: {
+				    	id: id
+				    }
+				});
+				
+			}
+			
+			
+			function changePage(page, url){
+					window.location = baseUrl + (page);
+			}
+				
+			function askConfirmation(formDeleteId, actionUrl, id){
+					if ( window.confirm("Are you sure to delete this record?") == true ) {
+						ajaxDelete( actionUrl + 'delete/', id );
+						
+						return false;
+					} else {
+						
+						return false;
+					}
+			}
+				
+				
+			
+		</script>
+	
+</div>
 
 <th:block th:fragment="jobs_list">
 
@@ -17,6 +64,7 @@
 													<th>Description</th>
 													<th>Job Type</th>
 													<th>Monthly salary</th>
+													<th># applicants</th>
 													<th>Posted on</th>
 													<th>Status</th>
 													<th>Action</th>
@@ -33,6 +81,9 @@
 														<td th:text="   ${#strings.substring( jobObj.description , 0, 10) + ' ... ' }   ">description</td>
 														<td th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) ">jobType</td>
 														<td th:text="*{salary}">salary</td>
+														
+														<td th:text="${ jobObj.getJobApplicants().size() }">count</td>
+														
 														<td th:text="*{datePosted}">datePosted</td>
 														<td th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "></td>
 														<td>
