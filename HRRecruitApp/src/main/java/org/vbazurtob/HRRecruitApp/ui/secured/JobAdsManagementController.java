@@ -128,7 +128,7 @@ public class JobAdsManagementController {
 		username = "admin";
 		
 		// Pagination for listing
-		Page<Job> jobPageObj = jobService.getPaginatedRecords(page, RECORDS_PER_PAGE);
+		Page<Job> jobPageObj = jobService.getPaginatedRecords(jobFilterForm, page, RECORDS_PER_PAGE);
 		long previousPageNum = jobService.getPaginationNumbers(jobPageObj)[0];
 		long nextPageNum = jobService.getPaginationNumbers(jobPageObj)[1];
 
