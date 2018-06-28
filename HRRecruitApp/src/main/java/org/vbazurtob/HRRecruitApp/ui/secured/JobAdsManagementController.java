@@ -59,6 +59,7 @@ import org.vbazurtob.HRRecruitApp.model.service.ApplicantSkillService;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
+import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 import org.vbazurtob.HRRecruitApp.model.service.ProficiencyService;
 import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
 
@@ -75,6 +76,8 @@ public class JobAdsManagementController {
 	
 	private final static String FILTER_JOB_LIST = "/filter-jobs/";
 	
+	private final static String FILTER_JOB_CLEAR = "/clear-filter-jobs/";
+	
 	private final static int RECORDS_PER_PAGE = 10;
 	
 	@Autowired
@@ -85,6 +88,9 @@ public class JobAdsManagementController {
 	
 	@Autowired
 	private JobTypeRepository jobTypeRepository;
+	
+	@Autowired
+	private JobTypeService jobTypeService;
 	
 	private String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	private List<String> jobStatusListObj;
@@ -132,15 +138,27 @@ public class JobAdsManagementController {
 		long previousPageNum = jobService.getPaginationNumbers(jobPageObj)[0];
 		long nextPageNum = jobService.getPaginationNumbers(jobPageObj)[1];
 
-		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+//		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+//		
+//		JobType jtAll = new JobType();
+//		jtAll.setId(0);
+//		jtAll.setDescription("All");
+//		
+//		jobTypeList.add(jtAll);
+//		
+		List<JobType> jobTypeList = jobTypeService.getListJobTypeUI();
+		
 		
 		Job emptyFormFilter = new Job();
 		
 
 		// View attributes
 		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-		
 		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
+		
+		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		
+		
 		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
@@ -183,9 +201,40 @@ public class JobAdsManagementController {
 		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
 	}
 	
+	@PostMapping( FILTER_JOB_CLEAR  )
+	public String clearFilters(
+			
+			@ModelAttribute("filterJobForm") Job jobFilterForm,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model ,
+			HttpSession session,
+			SessionStatus sessionStatus
+			
+			
+			) {
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		
+		System.out.println("OBJ clear  " + jobFilterForm);;
+		
+		jobFilterForm.setTitle(null);
+		jobFilterForm.setJobType(null);
+		jobFilterForm.setStatus(null);
+		
+		JobType jt = new JobType();
+		
+		jt.setId(0);
+		jt.setDescription("All");
+		jobFilterForm.setJobType(jt);
+		
+		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+	}
+	
 	@ModelAttribute("filterJobForm")
 	public Job getFilterForm() {
 	
+		
 		return new Job();
 		
 	}

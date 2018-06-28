@@ -1,6 +1,7 @@
 package org.vbazurtob.HRRecruitApp.model.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -51,33 +52,13 @@ public class JobService {
 //		return  (count > 0) ;
 //	}
 	
+
+	
 	public Page<Job> getPaginatedRecords(Job criteriaFilter, Optional<Integer> page, int recordsPerPage) {
 		
-//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-//		
-//		CriteriaQuery<Job> query = cb.createQuery(Job.class);
-//		
-//		Root<Job> r = query.from(Job.class);
-		
-		//TODO
-		
-		
-		
 		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "datePosted", "status", "title" ); 
-//		Page<Job> jobPageObj = jobRepository.findAll(pageReqObj);
-		
 		Page<Job> jobPageObj = jobRepository.findAll(new JobSpecification(criteriaFilter), pageReqObj);
-				
-//				findAllByTitleContainingOrStatusOrJobTypeId(
-//				
-//				criteriaFilter.getTitle(),
-//				criteriaFilter.getStatus(),
-//				criteriaFilter.getJobType() == null ? 0 :  criteriaFilter.getJobType().getId(),
-//				
-//				pageReqObj
-//				);
-		
-		
+						
 		return jobPageObj;
 		
 	}

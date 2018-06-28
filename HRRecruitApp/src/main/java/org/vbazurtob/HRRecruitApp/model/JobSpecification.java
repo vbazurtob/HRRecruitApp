@@ -22,47 +22,61 @@ public class JobSpecification implements Specification<Job> {
 	public Predicate toPredicate(Root<Job> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
 
-		ArrayList<Predicate> predicates = new ArrayList<>();
-		
+
 		Predicate predicateReturn = cb.conjunction();
 		
-		Predicate titleP, statusP, jobTypeP, returnP;
-		if( criteriaFilterObj.getTitle() != null  ) {
+		if(criteriaFilterObj == null) {
+			return predicateReturn;
+		}
+
+		
+		
+		Predicate titleP, statusP, jobTypeP;
+		if( criteriaFilterObj.getTitle() != null && !criteriaFilterObj.getTitle().trim().isEmpty()  ) {
 			
 			System.out.println("Root " + root.get(Job_.title )  );;
 			
-			titleP =  cb.like(root.get(Job_.title ) , criteriaFilterObj.getTitle());
+			titleP =  cb.like(root.get(Job_.title ) , '%' + criteriaFilterObj.getTitle() + "%");
 //			predicates.add(titleP);
 		
-			predicateReturn = cb.or(predicateReturn, titleP);
+			predicateReturn = cb.and(predicateReturn, titleP);
 		}
 		
-		if( criteriaFilterObj.getJobType() != null  ) {			
-			jobTypeP = cb.equal(root.get(Job_.jobType) , criteriaFilterObj.getJobType());
-//			predicates.add(jobTypeP);
-			
-			predicateReturn = cb.or(predicateReturn, jobTypeP);
+		if( criteriaFilterObj.getJobType() != null ) { 
+			if (criteriaFilterObj.getJobType().getId() != null && criteriaFilterObj.getJobType().getId() > 0 ) {			
+		
+				jobTypeP = cb.equal(root.get(Job_.jobType) , criteriaFilterObj.getJobType());
+	//			predicates.add(jobTypeP);
+				
+				System.out.println("JobType " + root.get(Job_.jobType));;
+				
+				predicateReturn = cb.and(predicateReturn, jobTypeP);
+			}
 		}
 		
 		if(criteriaFilterObj.getStatus() != null) {
 			String status;
-			if( criteriaFilterObj.equals("Open") ) {
+			if( criteriaFilterObj.getStatus().equals("Open") ) {
 				status = "O";
-			}else if(criteriaFilterObj.equals("C")) {
+			}else if(criteriaFilterObj.getStatus().equals("Closed")) {
 				status = "C";
 			}else {
 				status = "A";
 			}
 			
 			if( !status.equals("A")) {
+				
+				System.out.println("status " + root.get(Job_.status) );;
+				
 				statusP = cb.equal(root.get(Job_.status), status);
 //				predicates.add(statusP);
-				predicateReturn = cb.or(predicateReturn, statusP);
+				predicateReturn = cb.and(predicateReturn, statusP);
 			}
 			
 		}
 		
-		System.out.println("Predicate : " + predicateReturn.toString());
+		
+		System.out.println("Predicate : " + predicateReturn.getExpressions() );
 		
 		return predicateReturn;
 		

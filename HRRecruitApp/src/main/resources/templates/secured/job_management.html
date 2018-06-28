@@ -34,14 +34,14 @@
 				<form th:action="${filterFormUrl}" th:object="${filterJobForm}" th:method="post">
 				
 					<div class="row">
-						<div class="col s4">
+						<div class="col s3">
 							
 								<label  for="title">Job Title</label>
 								<input id="title" th:id="title" th:name="title" type="text" th:value="*{title}" class="validate" />
 							
 						</div>
 						
-						<div class="col s4">
+						<div class="col s3">
 						
 							<label for="jobType">Job type</label>
 							<select id="jobType" th:name="jobType" th:field="*{jobType.id}" class="browser-default">
@@ -49,40 +49,41 @@
 							</select>
 						</div>
 						
-						<div class="col s4">
+						<div class="col s3">
 							<label for="status">Job status</label>
 							<select id="status" th:name="status" th:field="*{status}" class="browser-default">
 								<option th:each="jobStatusObj : ${jobStatusList}" th:value="${jobStatusObj}" th:text="${jobStatusObj}">Option1</option>
 							</select>
 						</div>
-					</div>
-
-					<div class="row">
-						<div class="col s4">
 						
-						
-						</div>
-						
-						<div class="col s4">
-						</div>
-						
-						<div class="col s4">
-						</div>
-					</div>
-
-
-					<div class="row">
-						<div class="col s12">
+						<div class="col s3">
 							<button type="submit" title="Search" class="waves-effect waves-light btn-floating btn-large right">
 								<i class="material-icons right">search</i>
 							</button>		
 						</div>
+						
+					</div>
+				</form>
+
+
+
+					<div class="row">
+						<div class="col s12">
+									<form th:action="${clearFilterFormUrl}" th:object="${filterJobForm}" th:method="post">
+										<div class="row">
+											<div class="col s12">
+												<button type="submit" title="Clear filters" class="waves-effect waves-light  btn ">
+													<i class="material-icons right">cancel</i><span th:text="'Clear filters'"></span>
+												</button>		
+											</div>
+										</div>
+									</form>
+						</div>
 					</div>
 									
-
-
-				</form>
 			
+			
+		
 				
 				
 			
