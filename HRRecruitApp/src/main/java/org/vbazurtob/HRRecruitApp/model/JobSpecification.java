@@ -1,17 +1,19 @@
 package org.vbazurtob.HRRecruitApp.model;
 
-import java.util.ArrayList;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
 
 import org.springframework.data.jpa.domain.Specification;
 
 public class JobSpecification implements Specification<Job> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Job criteriaFilterObj;
 	
 	public JobSpecification(Job c) {
@@ -29,16 +31,17 @@ public class JobSpecification implements Specification<Job> {
 			return predicateReturn;
 		}
 
+		//Avoid deleted records
+		Predicate avoidDeleted = cb.notEqual(root.get(Job_.status), "D");
+		predicateReturn = cb.and(predicateReturn, avoidDeleted );
 		
 		
 		Predicate titleP, statusP, jobTypeP;
 		if( criteriaFilterObj.getTitle() != null && !criteriaFilterObj.getTitle().trim().isEmpty()  ) {
 			
-			System.out.println("Root " + root.get(Job_.title )  );;
+	//			System.out.println("Root " + root.get(Job_.title )  );;
 			
 			titleP =  cb.like(root.get(Job_.title ) , '%' + criteriaFilterObj.getTitle() + "%");
-//			predicates.add(titleP);
-		
 			predicateReturn = cb.and(predicateReturn, titleP);
 		}
 		
@@ -46,10 +49,8 @@ public class JobSpecification implements Specification<Job> {
 			if (criteriaFilterObj.getJobType().getId() != null && criteriaFilterObj.getJobType().getId() > 0 ) {			
 		
 				jobTypeP = cb.equal(root.get(Job_.jobType) , criteriaFilterObj.getJobType());
-	//			predicates.add(jobTypeP);
-				
-				System.out.println("JobType " + root.get(Job_.jobType));;
-				
+
+//				System.out.println("JobType " + root.get(Job_.jobType));;
 				predicateReturn = cb.and(predicateReturn, jobTypeP);
 			}
 		}
@@ -66,21 +67,14 @@ public class JobSpecification implements Specification<Job> {
 			
 			if( !status.equals("A")) {
 				
-				System.out.println("status " + root.get(Job_.status) );;
-				
+//				System.out.println("status " + root.get(Job_.status) );
 				statusP = cb.equal(root.get(Job_.status), status);
-//				predicates.add(statusP);
 				predicateReturn = cb.and(predicateReturn, statusP);
 			}
 			
 		}
-		
-		
-		System.out.println("Predicate : " + predicateReturn.getExpressions() );
-		
+				
 		return predicateReturn;
-		
-//		return query.where( predicates.toArray(new Predicate[predicates.size()] )   );
 	}
 
 }

@@ -37,7 +37,7 @@
 					window.location = baseUrl + (page);
 			}
 				
-			function askConfirmation(formDeleteId, actionUrl, id){
+			function askConfirmation(actionUrl, id){
 					if ( window.confirm("Are you sure to delete this record?") == true ) {
 						ajaxDelete( actionUrl + 'delete/', id );
 						
@@ -82,13 +82,21 @@
 														<td th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) ">jobType</td>
 														<td th:text="*{salary}">salary</td>
 														
-														<td th:text="${ jobObj.getJobApplicants().size() }">count</td>
+														<td >
+															<div th:if=" ${ jobObj.getJobApplicants().size() > 0 } ">
+																<a th:href="${applicantsJobsUrl} + $jobObj.id " th:text="${ jobObj.getJobApplicants().size() }">
+																</a>
+															</div>
+															
+															<div  th:if=" ${ jobObj.getJobApplicants().size() == 0 } " th:text="${ jobObj.getJobApplicants().size() } "></div>
+														
+														</td>
 														
 														<td th:text="*{datePosted}">datePosted</td>
 														<td th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "></td>
 														<td>
 															
-															<a th:onclick="'return askConfirmation(' + ${'deleteForm'} +', baseUrl, ' + *{id} + '  )'" href="#">Delete</a> 
+															<a th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'" href="#">Delete</a> 
 														</td>
 														
 													</th:block>

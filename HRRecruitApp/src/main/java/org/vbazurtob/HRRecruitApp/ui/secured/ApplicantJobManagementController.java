@@ -69,8 +69,8 @@ import javafx.concurrent.WorkerStateEvent;
 
 @SessionAttributes("filterJobForm")
 @Controller
-@RequestMapping("/jobs")
-public class JobAdsManagementController {
+@RequestMapping("/offers")
+public class ApplicantJobManagementController {
 	
 	private final static String  DASHBOARD_JOB_MANAGEMENT_BASE_URL = "/management/";
 	
