@@ -6,5 +6,93 @@
 </head>
 <body>
 
+<th:block th:fragment="list_job_search_result">
+
+	<th:block th:each="jobObj, iter : ${jobsList}" class="card" >
+		<th:block th:object="${jobObj}" >
+			
+			
+			<th:block th:if="${iter.index}==0">
+						<div class="row">					
+			</th:block>
+			
+							<div th:replace="secured/job_card_fragment.html::job_card">
+							</div>
+							
+
+			<th:block th:if="${iter.index} == 0 and ${iter.size}==1">
+						</div>
+			</th:block>			
+
+							
+			<th:block th:if=" ${iter.index + 1}   % ${colPerRow} == 0 and ${iter.index}!=0">
+						</div>
+						<div class="row">
+						
+			</th:block>			
+						
+
+			
+
+		</th:block>
+	
+	</th:block>
+	
+
+</th:block>
+
+
+
+
 </body>
 </html>
+
+<!-- 			<div class="row"></div> -->
+
+	
+<!-- 	<table th:if="${jobsList.size()} > 0"  class="responsive-table "> -->
+<!-- 											<thead> -->
+<!-- 												<tr> -->
+<!-- 													<th>Title</th> -->
+<!-- 													<th>Description</th> -->
+<!-- 													<th>Job Type</th> -->
+<!-- 													<th>Monthly salary</th> -->
+<!-- 													<th># applicants</th> -->
+<!-- 													<th>Posted on</th> -->
+<!-- 													<th>Status</th> -->
+<!-- 													<th>Action</th> -->
+<!-- 												</tr> -->
+<!-- 											</thead> -->
+<!-- 											<tbody> -->
+<!-- 												<tr th:each="jobObj : ${jobsList}"  > -->
+													
+<!-- 													<th:block th:object="${jobObj}"> -->
+														
+<!-- 														<td> -->
+<!-- 															<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{title}">Edit</a> -->
+<!-- 														</td> -->
+<!-- 														<td th:text="   ${#strings.substring( jobObj.description , 0, 10) + ' ... ' }   ">description</td> -->
+<!-- 														<td th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) ">jobType</td> -->
+<!-- 														<td th:text="*{salary}">salary</td> -->
+														
+<!-- 														<td > -->
+<!-- 															<div th:if=" ${ jobObj.getJobApplicants().size() > 0 } "> -->
+<!-- 																<a th:href="${applicantsJobsUrl} + $jobObj.id " th:text="${ jobObj.getJobApplicants().size() }"> -->
+<!-- 																</a> -->
+<!-- 															</div> -->
+															
+<!-- 															<div  th:if=" ${ jobObj.getJobApplicants().size() == 0 } " th:text="${ jobObj.getJobApplicants().size() } "></div> -->
+														
+<!-- 														</td> -->
+														
+<!-- 														<td th:text="*{datePosted}">datePosted</td> -->
+<!-- 														<td th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "></td> -->
+<!-- 														<td> -->
+															
+<!-- 															<a th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'" href="#">Delete</a>  -->
+<!-- 														</td> -->
+														
+<!-- 													</th:block> -->
+<!-- 												</tr> -->
+<!-- 											</tbody> -->
+<!-- 		</table> -->

@@ -20,6 +20,17 @@
 	<th:block th:replace="secured/jobs_list_fragment.html::js_list_skills">
 	</th:block>
 		
+	<style>
+	
+	
+		.jobcard{
+		
+			margin-left: 10px;
+			margin-right: 10px;
+		
+		}
+	
+	</style>
 	
 </head>
 <body th:replace="public/master::master_body(~{::#main-content})" >
@@ -27,60 +38,60 @@
 	<div id="main-content">
 
 
-		<div class="jobs-filter">
+<!-- 		<div class="jobs-filter"> -->
 		
-			<div class="card">
+<!-- 			<div class="card"> -->
 			
-				<form th:action="${filterFormUrl}" th:object="${filterJobForm}" th:method="post">
+<!-- 				<form th:action="${filterFormUrl}" th:object="${filterJobForm}" th:method="post"> -->
 				
-					<div class="row">
-						<div class="col s3">
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col s3"> -->
 							
-								<label  for="title">Job Title</label>
-								<input id="title" th:id="title" th:name="title" type="text" th:value="*{title}" class="validate" />
+<!-- 								<label  for="title">Job Title</label> -->
+<!-- 								<input id="title" th:id="title" th:name="title" type="text" th:value="*{title}" class="validate" /> -->
 							
-						</div>
+<!-- 						</div> -->
 						
-						<div class="col s3">
+<!-- 						<div class="col s3"> -->
 						
-							<label for="jobType">Job type</label>
-							<select id="jobType" th:name="jobType" th:field="*{jobType.id}" class="browser-default">
-								<option th:each="jobTypeObj : ${jobTypeList}" th:value="${jobTypeObj.id}" th:text="${jobTypeObj.description}">Option1</option>
-							</select>
-						</div>
+<!-- 							<label for="jobType">Job type</label> -->
+<!-- 							<select id="jobType" th:name="jobType" th:field="*{jobType.id}" class="browser-default"> -->
+<!-- 								<option th:each="jobTypeObj : ${jobTypeList}" th:value="${jobTypeObj.id}" th:text="${jobTypeObj.description}">Option1</option> -->
+<!-- 							</select> -->
+<!-- 						</div> -->
 						
-						<div class="col s3">
-							<label for="status">Job status</label>
-							<select id="status" th:name="status" th:field="*{status}" class="browser-default">
-								<option th:each="jobStatusObj : ${jobStatusList}" th:value="${jobStatusObj}" th:text="${jobStatusObj}">Option1</option>
-							</select>
-						</div>
+<!-- 						<div class="col s3"> -->
+<!-- 							<label for="status">Job status</label> -->
+<!-- 							<select id="status" th:name="status" th:field="*{status}" class="browser-default"> -->
+<!-- 								<option th:each="jobStatusObj : ${jobStatusList}" th:value="${jobStatusObj}" th:text="${jobStatusObj}">Option1</option> -->
+<!-- 							</select> -->
+<!-- 						</div> -->
 						
-						<div class="col s3">
-							<div>&nbsp;</div>
-							<button type="submit" title="Search" class="waves-effect waves-light  btn">
-								<i class="material-icons right">search</i>
-							</button>		
-						</div>
+<!-- 						<div class="col s3"> -->
+<!-- 							<div>&nbsp;</div> -->
+<!-- 							<button type="submit" title="Search" class="waves-effect waves-light  btn"> -->
+<!-- 								<i class="material-icons right">search</i> -->
+<!-- 							</button>		 -->
+<!-- 						</div> -->
 						
-					</div>
-				</form>
+<!-- 					</div> -->
+<!-- 				</form> -->
 
 
 
-					<div class="row">
-						<div class="col s12">
-									<form th:action="${clearFilterFormUrl}" th:object="${filterJobForm}" th:method="post">
-										<div class="row">
-											<div class="col s12">
-												<button type="submit" title="Clear filters" class="waves-effect waves-light  btn ">
-													<i class="material-icons right">cancel</i><span th:text="'Clear filters'"></span>
-												</button>		
-											</div>
-										</div>
-									</form>
-						</div>
-					</div>
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col s12"> -->
+<!-- 									<form th:action="${clearFilterFormUrl}" th:object="${filterJobForm}" th:method="post"> -->
+<!-- 										<div class="row"> -->
+<!-- 											<div class="col s12"> -->
+<!-- 												<button type="submit" title="Clear filters" class="waves-effect waves-light  btn "> -->
+<!-- 													<i class="material-icons right">cancel</i><span th:text="'Clear filters'"></span> -->
+<!-- 												</button>		 -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</form> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
 									
 			
 			
@@ -88,12 +99,12 @@
 				
 				
 			
-			</div>
+<!-- 			</div> -->
 			
 			
 			
 		
-		</div>
+<!-- 		</div> -->
 		
 
 		<div class="jobs-list">
@@ -102,7 +113,7 @@
 		
 			<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber}  )"></th:block>
 				
-			<th:block th:replace="secured/jobs_list_fragment.html::jobs_list" ></th:block>				
+			<th:block th:replace="secured/applicant_job_search_list.html::list_job_search_result" ></th:block>				
 												
 		
 		</div>

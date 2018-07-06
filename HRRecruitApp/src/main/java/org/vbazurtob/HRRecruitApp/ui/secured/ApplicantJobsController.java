@@ -57,7 +57,11 @@ public class ApplicantJobsController {
 	
 	private final static String JOB_SEARCH = "/search/";
 	
+	private final static String VIEW_JOB_DETAIL = "/view/";
+	
 	private final static int RECORDS_PER_PAGE = 10;
+	
+	private final static int RECORDS_PER_COLUMN = 4;
 	
 	@Autowired
 	private JobRepository jobRepository;
@@ -123,9 +127,11 @@ public class ApplicantJobsController {
 		
 
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + JOB_SEARCH);
+		
 		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
 		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		
 		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
@@ -136,10 +142,15 @@ public class ApplicantJobsController {
 		model.addAttribute("jobStatusList", jobStatusListObj );
 		model.addAttribute("filterJobForm", jobFilterForm);
 		
+		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );
+		
+		
 		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
 
 		
-		return "secured/job_management.html";
+		model.addAttribute("colPerRow", RECORDS_PER_COLUMN);
+		
+		return "secured/applicant_job_search.html";
 	}
 	
 	
