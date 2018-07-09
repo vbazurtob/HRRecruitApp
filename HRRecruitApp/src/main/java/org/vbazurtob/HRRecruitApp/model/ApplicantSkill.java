@@ -21,7 +21,7 @@ public class ApplicantSkill implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="APPLICANT_SKILLS_ID_GENERATOR", sequenceName="applicant_skills_id_seq")
+	@SequenceGenerator(name="APPLICANT_SKILLS_ID_GENERATOR", sequenceName="applicant_skills_id_seq", initialValue=1, allocationSize = 1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="APPLICANT_SKILLS_ID_GENERATOR")
 	private Long id;
 

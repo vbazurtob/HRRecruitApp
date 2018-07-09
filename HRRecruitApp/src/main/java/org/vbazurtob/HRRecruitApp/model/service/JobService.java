@@ -28,40 +28,34 @@ public class JobService {
 	@Autowired
 	private JobRepository jobRepository;
 	
-
-	public void saveJob( Job jobForm ) {
-		
-		System.out.println( jobForm);;
-		
+	@Autowired
+	private JobSearchFiltersService jobSearchFilterSvc;
+	
+	public void saveJob( Job jobForm ) {		
 		jobRepository.save( jobForm );
 		
 	}
-	
-//	public boolean recordExists(
-//			String username ,
-//			Date started,
-//			Date finished,
-//			String degreeName,
-//			String degreeType,
-//			String institution
-//			
-//			) {
-//		
-//		long count = applicantAcademicRepository.countByApplicantUsernameAndStartedAndFinishedAndDegreeNameAndDegreeTypeAndInstitution(
-//				username, started, finished, degreeName, degreeType, institution);
-//		return  (count > 0) ;
-//	}
 	
 
 	
 	public Page<Job> getPaginatedRecords(Job criteriaFilter, Optional<Integer> page, int recordsPerPage) {
 		
 		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "datePosted", "status", "title" ); 
-		Page<Job> jobPageObj = jobRepository.findAll(new JobSpecification(criteriaFilter), pageReqObj);
+		Page<Job> jobPageObj = jobRepository.findAll(
+				new JobSpecification( 
+						
+						criteriaFilter,
+						jobSearchFilterSvc
+				
+						)
+		
+				, pageReqObj);
 						
 		return jobPageObj;
 		
 	}
+	
+
 	
 	public long[] getPaginationNumbers(Page<Job> jobPageObj) {
 		int previousPageNum = jobPageObj.isFirst() ? 0 : jobPageObj.previousPageable().getPageNumber() ;

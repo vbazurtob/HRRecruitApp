@@ -11,7 +11,7 @@
 	<div class="col s2 card jobcard">
 		<div class="row job-title">
 			<div class="col s12">
-				<a th:text="*{title}" th:href="${jobDetailUrl}+'id/' + *{id}"></a>
+				<a th:text="*{title}" th:href="${jobDetailUrl} + *{id}"></a>
 			</div>
 		</div>
 		

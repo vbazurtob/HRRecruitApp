@@ -4,8 +4,10 @@ package org.vbazurtob.HRRecruitApp.ui.secured;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -35,9 +37,13 @@ import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
 import org.vbazurtob.HRRecruitApp.model.Job;
+import org.vbazurtob.HRRecruitApp.model.JobSearchFilter;
 import org.vbazurtob.HRRecruitApp.model.JobType;
+import org.vbazurtob.HRRecruitApp.model.SalaryRangeOption;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
+import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
+import org.vbazurtob.HRRecruitApp.model.service.JobSearchFiltersService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
 import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 
@@ -47,9 +53,8 @@ import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 @RequestMapping("/jobs")
 public class ApplicantJobsController {
 	
-	private final static String  DASHBOARD_JOB_MANAGEMENT_BASE_URL = "/management/";
 	
-	private final static String FILTER_JOB_LIST = "/filter-jobs/";
+	private final static String FILTER_JOB_LIST = "/filter-search/";
 	
 	private final static String FILTER_JOB_CLEAR = "/clear-filter-jobs/";
 	
@@ -73,12 +78,18 @@ public class ApplicantJobsController {
 	private JobTypeRepository jobTypeRepository;
 	
 	@Autowired
+	private JobApplicantService jobApplicantService;
+	
+	@Autowired
 	private JobTypeService jobTypeService;
 	
-	private String[] arrStatus = new String[]{ "All", "Open", "Closed" };
-	private List<String> jobStatusListObj;
+	@Autowired
+	private JobSearchFiltersService jobSearchFiltersService;
 	
 	
+	private HashMap<Integer, String> jobDatePostedOptions;
+	
+	private HashMap<Integer, SalaryRangeOption> salaryRangeListObj;
 	
 	
 	public ApplicantJobsController() {
@@ -87,17 +98,15 @@ public class ApplicantJobsController {
 
 	@PostConstruct
 	private void init() {
-
-		jobStatusListObj =  Arrays.asList( arrStatus );
-
-		
+		jobDatePostedOptions = jobSearchFiltersService.getDatePostedFilterOptions();
+		salaryRangeListObj = jobSearchFiltersService.getSalaryFilterOptions();		
 	}
 	
 	
 	@RequestMapping(value= { JOB_SEARCH , JOB_SEARCH + "/{page}"  })
 	public String searchJobs(
 			
-			@ModelAttribute("filterJobForm") Job jobFilterForm,
+			@ModelAttribute("filterJobSearch") JobSearchFilter filterJobSearch,
 			@PathVariable Optional<Integer> page, 
 			Model model,
 			
@@ -115,7 +124,7 @@ public class ApplicantJobsController {
 		username = "admin";
 		
 		// Pagination for listing
-		Page<Job> jobPageObj = jobService.getPaginatedRecords(jobFilterForm, page, RECORDS_PER_PAGE);
+		Page<Job> jobPageObj = jobService.getPaginatedRecords(filterJobSearch, page, RECORDS_PER_PAGE);
 		long previousPageNum = jobService.getPaginationNumbers(jobPageObj)[0];
 		long nextPageNum = jobService.getPaginationNumbers(jobPageObj)[1];
 
@@ -137,15 +146,24 @@ public class ApplicantJobsController {
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", jobPageObj );
 		model.addAttribute("jobsList", jobPageObj.getContent());
-		model.addAttribute("jobForm", emptyFormFilter);
+		
+		//model.addAttribute("jobForm", emptyFormFilter);
+		
 		model.addAttribute("jobTypeList", jobTypeList );
-		model.addAttribute("jobStatusList", jobStatusListObj );
-		model.addAttribute("filterJobForm", jobFilterForm);
+		//model.addAttribute("jobStatusList", jobStatusListObj );
+		
+		
+		model.addAttribute("filterJobSearch", filterJobSearch);
+		model.addAttribute("salaryRangeListObj", salaryRangeListObj);
+		
+		model.addAttribute("jobDatePostedOptions", jobDatePostedOptions);
+		
+//		jobDatePostedOptions.keySet().iterator().next().intValue()
 		
 		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );
 		
 		
-		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
+		//model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
 
 		
 		model.addAttribute("colPerRow", RECORDS_PER_COLUMN);
@@ -156,8 +174,8 @@ public class ApplicantJobsController {
 	
 	@PostMapping( FILTER_JOB_LIST  )
 	public String filterJobs(
-			@ModelAttribute("filterJobForm") Job jobFilterForm,
-			@Valid @ModelAttribute("jobForm") Job jobForm,
+			@ModelAttribute("filterJobSearch") JobSearchFilter jobFilterForm,
+			@Valid @ModelAttribute("jobForm") JobSearchFilter jobForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
 			Model model ,
@@ -171,16 +189,22 @@ public class ApplicantJobsController {
 		
 		
 		jobFilterForm.setTitle(jobForm.getTitle());
-		jobFilterForm.setStatus(jobForm.getStatus());
+		jobFilterForm.setStatus("Open");
 		jobFilterForm.setJobType(jobForm.getJobType());
-
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		
+		System.out.println("ON FILTER object created " + jobForm.getSalaryRangeSearchIndex());;
+		
+	
+		
+		System.out.println("OBJ filter  " + jobFilterForm);;
+		
+		return "redirect:" + controllerMapping + JOB_SEARCH;
 	}
 	
 	@PostMapping( FILTER_JOB_CLEAR  )
 	public String clearFilters(
 			
-			@ModelAttribute("filterJobForm") Job jobFilterForm,
+			@ModelAttribute("filterJobSearch") JobSearchFilter jobFilterForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
 			Model model ,
@@ -194,9 +218,17 @@ public class ApplicantJobsController {
 		
 		System.out.println("OBJ clear  " + jobFilterForm);;
 		
+		
 		jobFilterForm.setTitle(null);
 		jobFilterForm.setJobType(null);
 		jobFilterForm.setStatus(null);
+		
+		jobFilterForm.setSalaryRangeSearchIndex( 0 ); // <- BUG find the elem in arraylist with 0 index
+		
+		System.out.println("======= " + salaryRangeListObj.get(0));;
+		
+		
+		jobFilterForm.setJobPostedTimeIndex(0);
 		
 		JobType jt = new JobType();
 		
@@ -204,13 +236,74 @@ public class ApplicantJobsController {
 		jt.setDescription("All");
 		jobFilterForm.setJobType(jt);
 		
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		System.out.println("AFTER OBJ clear  " + jobFilterForm );;
+		
+		return "redirect:" + controllerMapping + JOB_SEARCH;
 	}
 	
-	@ModelAttribute("filterJobForm")
+	@ModelAttribute("filterJobSearch")
 	public Job getFilterForm() {	
-		return new Job();
+		return new JobSearchFilter();
 	}
+	
+	
+	
+	@RequestMapping( VIEW_JOB_DETAIL + "{id}" )
+	public String viewJobDetails(
+			Model model,
+			@PathVariable Long id
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+		
+				
+		Job jobDetailObj =  jobRepository.findById( id ).get() ;
+				
+		// View
+
+		model.addAttribute("formActionUrl", controllerMapping + VIEW_JOB_DETAIL  + id);
+		model.addAttribute("baseUrl", controllerMapping + VIEW_JOB_DETAIL);
+		model.addAttribute("formTitle", "View job details");
+		model.addAttribute("jobDetails", jobDetailObj);
+//		model.addAttribute("jobTypeList", jobTypeList );
+		
+		return "secured/job_detail_view_apply.html";
+	
+	}
+	
+	
+	@PostMapping( VIEW_JOB_DETAIL + "{id}" )
+	public String applyJob(
+			@Valid @ModelAttribute("jobDetails") Job jobDetails,
+			BindingResult results, 
+			RedirectAttributes redirectAttrs,
+			Model model ){
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+				
+
+		//TODO
+		username="abc";
+		
+		jobApplicantService.saveApplicantForJob(jobDetails, username);
+		
+		
+		
+//		redirectAttrs.addFlashAttribute("applied", true);
+		
+		// In template add check if exist in db of applied
+		
+		
+		return "redirect:" + controllerMapping + VIEW_JOB_DETAIL + jobDetails.getId();
+	}
+	
 	
 	
 //	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new" )

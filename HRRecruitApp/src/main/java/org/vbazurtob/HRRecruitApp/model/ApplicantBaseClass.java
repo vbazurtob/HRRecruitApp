@@ -177,22 +177,6 @@ public class ApplicantBaseClass {
 	public ApplicantBaseClass() {
 	}
 	
-//	public ApplicantProfileForm ( Applicant currentApplicant ) {
-//		
-//		// System.out.println("current " + currentApplicant);;
-//		
-//		this.setUsername(currentApplicant.getUsername());
-//		this.setAddress1(currentApplicant.getAddress1());
-//		this.setAddress2(currentApplicant.getAddress2());
-//		this.setCountry(currentApplicant.getCountry());
-//		this.setEmail(currentApplicant.getEmail());
-//		this.setState(currentApplicant.getState());
-//		this.setNames(currentApplicant.getNames());
-//		this.setLastname(currentApplicant.getLastname());
-//		this.setZipcode(currentApplicant.getZipcode());
-//	
-//		
-//	}
 
 	@Override
 	public String toString() {
