@@ -85,9 +85,15 @@
 					
 					
 					<div class="row">
-						<div class="col offset-s6 s6 left">
-							<button title="Apply Job and Send CV" type="submit" class="waves-effect waves-light btn center">
+						<div th:if="${alreadyApply} == false" class="col offset-s5 s2 center-align">
+							<button  title="Apply Job and Send CV" type="submit" class="waves-effect waves-light btn center">
 								<i class="material-icons">send</i> Send CV
+							</button>
+						</div>
+						
+						<div th:if="${alreadyApply} == true" class="col offset-s3 s6 center-align">
+							<button class="disabled btn-large ">
+								You already applied to this job on <span th:if="${dateApplied}" th:text="${#dates.format(dateApplied, 'dd-MM-yyyy HH:mm')} "> </span>
 							</button>		
 						</div>
 					</div>

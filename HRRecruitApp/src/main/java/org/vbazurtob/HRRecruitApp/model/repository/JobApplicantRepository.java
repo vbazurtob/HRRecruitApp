@@ -1,5 +1,7 @@
 package org.vbazurtob.HRRecruitApp.model.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
@@ -19,6 +21,8 @@ public interface JobApplicantRepository extends CrudRepository<JobApplicant, Lon
 	public Page<JobApplicant> findByApplicant(ApplicantWithPassword applicant, Pageable page);
 	
 	public Page<JobApplicant> findByApplicantUsername(String username, Pageable page);
+	
+	public List<JobApplicant> findByApplicantUsernameAndJobId(String username, Long id);
 	
 	public long countByApplicantUsernameAndJobId(
 			String username, 

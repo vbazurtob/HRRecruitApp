@@ -2,6 +2,9 @@ package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -21,6 +24,7 @@ public class JobApplicant implements Serializable {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="JOB_APPLICANT_ID_GENERATOR")
 	private Long id;
 
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="date_application_sent")
 	private Date dateApplicationSent;

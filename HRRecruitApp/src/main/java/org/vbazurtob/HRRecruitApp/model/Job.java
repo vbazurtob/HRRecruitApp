@@ -150,8 +150,7 @@ public class Job implements Serializable {
 	@Override
 	public String toString() {
 		return "Job [id=" + id + ", description=" + description + ", salary=" + salary + ", title=" + title
-				+ ", datePosted=" + datePosted + ", status=" + status + ", jobType=" + ((jobType == null) ? null: jobType.getId() ) + ", jobApplicants="
-				+ jobApplicants + "]";
+				+ ", datePosted=" + datePosted + ", status=" + status + ", jobType=" + ((jobType == null) ? null: jobType.getId() ) + "]";
 	}
 
 	@Override

@@ -55,6 +55,27 @@ public class JobApplicantService {
 		
 				
 	}
+	
+	public Page<JobApplicant> getPaginatedRecords(String username, Optional<Integer> page, int recordsPerPage) {
+		
+		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "dateApplicationSent", "job.datePosted" ); 
+		Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByApplicantUsername(username, pageReqObj);
+						
+		return jobApplicantPageObj;
+		
+	}
+	
+
+	
+	public long[] getPaginationNumbers(Page<JobApplicant> jobPageObj) {
+		int previousPageNum = jobPageObj.isFirst() ? 0 : jobPageObj.previousPageable().getPageNumber() ;
+		int nextPageNum = jobPageObj.isLast() ?   jobPageObj.getTotalPages() - 1 : jobPageObj.nextPageable().getPageNumber() ;
+		if(nextPageNum < 0) {
+			nextPageNum = 0;
+		}
+		
+		return  new  long[]{ previousPageNum, nextPageNum };
+	}
 		
 
 }

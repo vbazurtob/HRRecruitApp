@@ -37,9 +37,11 @@ import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
 import org.vbazurtob.HRRecruitApp.model.Job;
+import org.vbazurtob.HRRecruitApp.model.JobApplicant;
 import org.vbazurtob.HRRecruitApp.model.JobSearchFilter;
 import org.vbazurtob.HRRecruitApp.model.JobType;
 import org.vbazurtob.HRRecruitApp.model.SalaryRangeOption;
+import org.vbazurtob.HRRecruitApp.model.repository.JobApplicantRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
 import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
@@ -58,7 +60,7 @@ public class ApplicantJobsController {
 	
 	private final static String FILTER_JOB_CLEAR = "/clear-filter-jobs/";
 	
-	private final static String APPLICANTS_JOB = "/applicants-job/";
+	private final static String APPLICANTS_JOBS_APPLIED = "/my-applications/";
 	
 	private final static String JOB_SEARCH = "/search/";
 	
@@ -75,7 +77,7 @@ public class ApplicantJobsController {
 	private JobService jobService;
 	
 	@Autowired
-	private JobTypeRepository jobTypeRepository;
+	private JobApplicantRepository jobApplicantRepository;
 	
 	@Autowired
 	private JobApplicantService jobApplicantService;
@@ -132,9 +134,6 @@ public class ApplicantJobsController {
 		List<JobType> jobTypeList = jobTypeService.getListJobTypeUI();
 		
 		
-		Job emptyFormFilter = new Job();
-		
-
 		// View attributes
 		model.addAttribute("baseUrl", controllerMapping + JOB_SEARCH);
 		
@@ -147,25 +146,13 @@ public class ApplicantJobsController {
 		model.addAttribute("pageObj", jobPageObj );
 		model.addAttribute("jobsList", jobPageObj.getContent());
 		
-		//model.addAttribute("jobForm", emptyFormFilter);
 		
 		model.addAttribute("jobTypeList", jobTypeList );
-		//model.addAttribute("jobStatusList", jobStatusListObj );
-		
 		
 		model.addAttribute("filterJobSearch", filterJobSearch);
 		model.addAttribute("salaryRangeListObj", salaryRangeListObj);
-		
 		model.addAttribute("jobDatePostedOptions", jobDatePostedOptions);
-		
-//		jobDatePostedOptions.keySet().iterator().next().intValue()
-		
-		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );
-		
-		
-		//model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
-
-		
+		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );		
 		model.addAttribute("colPerRow", RECORDS_PER_COLUMN);
 		
 		return "secured/applicant_job_search.html";
@@ -258,7 +245,21 @@ public class ApplicantJobsController {
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-				
+		
+		//TODO
+		username = "abc";
+		System.out.println("username " + username);;
+		
+		boolean alreadyApplied = jobApplicantRepository.countByApplicantUsernameAndJobId(username, id) > 0 ? true : false;
+		
+		
+		System.out.println("applied? " + alreadyApplied);;
+		if(alreadyApplied == true) {
+			
+			JobApplicant jaDetails = jobApplicantRepository.findByApplicantUsernameAndJobId(username, id).get(0);
+			model.addAttribute("dateApplied", jaDetails.getDateApplicationSent() );
+			
+		}
 		
 				
 		Job jobDetailObj =  jobRepository.findById( id ).get() ;
@@ -269,7 +270,7 @@ public class ApplicantJobsController {
 		model.addAttribute("baseUrl", controllerMapping + VIEW_JOB_DETAIL);
 		model.addAttribute("formTitle", "View job details");
 		model.addAttribute("jobDetails", jobDetailObj);
-//		model.addAttribute("jobTypeList", jobTypeList );
+		model.addAttribute("alreadyApply", alreadyApplied );
 		
 		return "secured/job_detail_view_apply.html";
 	
@@ -304,6 +305,63 @@ public class ApplicantJobsController {
 		return "redirect:" + controllerMapping + VIEW_JOB_DETAIL + jobDetails.getId();
 	}
 	
+	
+	
+	
+	@RequestMapping(value= { APPLICANTS_JOBS_APPLIED , APPLICANTS_JOBS_APPLIED + "/{page}"  })
+	public String myAppliedJobs(
+			
+			@ModelAttribute("filterMyJobsApplied") JobSearchFilter filterJobSearch,
+			@PathVariable Optional<Integer> page, 
+			Model model,
+			
+			 SessionStatus sessionStatus
+		
+			) {
+		
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "abc";
+		
+		// Pagination for listing
+		Page<JobApplicant> jobAppliedPageObj = jobApplicantService.getPaginatedRecords(username, page, RECORDS_PER_PAGE);
+		long previousPageNum = jobApplicantService.getPaginationNumbers(jobAppliedPageObj)[0];
+		long nextPageNum = jobApplicantService.getPaginationNumbers(jobAppliedPageObj)[1];
+
+
+//		List<JobType> jobTypeList = jobTypeService.getListJobTypeUI();
+		
+		
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + APPLICANTS_JOBS_APPLIED);
+		
+//		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
+//		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		
+		
+//		System.out.println(jobAppliedPageObj.getContent().size());;
+		
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", jobAppliedPageObj );
+		model.addAttribute("jobsAppliedList", jobAppliedPageObj.getContent());
+		
+		
+//		model.addAttribute("jobTypeList", jobTypeList );
+		
+		model.addAttribute("filterJobSearch", filterJobSearch);
+		model.addAttribute("salaryRangeListObj", salaryRangeListObj);
+		model.addAttribute("jobDatePostedOptions", jobDatePostedOptions);
+//		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );		
+//		model.addAttribute("colPerRow", RECORDS_PER_COLUMN);
+		
+		return "secured/applicant_applied_jobs.html";
+	}
 	
 	
 //	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new" )
