@@ -84,7 +84,8 @@
 														
 														<td >
 															<div th:if=" ${ jobObj.getJobApplicants().size() > 0 } ">
-																<a th:href="${applicantsJobsUrl} + $jobObj.id " th:text="${ jobObj.getJobApplicants().size() }">
+
+																<a th:href="${applicantsJobsUrl} + ${jobObj.id} " th:text="${ jobObj.getJobApplicants().size() }">
 																</a>
 															</div>
 															

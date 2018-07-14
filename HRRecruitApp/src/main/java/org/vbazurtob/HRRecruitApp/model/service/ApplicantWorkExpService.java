@@ -1,6 +1,7 @@
 package org.vbazurtob.HRRecruitApp.model.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,11 @@ public class ApplicantWorkExpService {
 		
 		
 		return  new  long[]{ previousPageNum, nextPageNum };
+	}
+	
+	public List<ApplicantWorkExperience> get3MostRecentExperience(String username) {
+		PageRequest pageReqObj = PageRequest.of( 0 , 3, Direction.DESC, "finished", "started" ); 
+		return appWorkExpRepository.findByApplicantUsername(username, pageReqObj).getContent();
 	}
 	
 }

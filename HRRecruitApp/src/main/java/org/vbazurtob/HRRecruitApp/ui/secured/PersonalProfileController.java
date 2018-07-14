@@ -67,6 +67,7 @@ public class PersonalProfileController {
 
 	private final static String PROFILE_BASE_URL = "/profile/";
 	
+	private final static String VIEW_CV = "/view/";
 
 	@Autowired
 	private ApplicantRepository applicantRepository;
@@ -86,6 +87,9 @@ public class PersonalProfileController {
 	
 	@Autowired
 	private ApplicantSkillRepository applicantSkillRepository;
+	
+	@Autowired
+	private ApplicantAcademicsRepository applicantAcademicRepository;
 	
 	
 	@Autowired
@@ -835,6 +839,33 @@ public class PersonalProfileController {
 		return new DeleteResponse(response);
 	}
 	
+	
+	@RequestMapping( VIEW_CV  )
+	public String viewMyCV(
+			
+			Model model
+			
+			) {
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+						
+		//TODO
+		username = "abc";
+		
+		ApplicantWithPassword applicant = applicantRepository.findOneByUsername(username);
+		
+		model.addAttribute("applicant", applicant);
+		
+		model.addAttribute("workexpLst", applicantWorkExpRepository.findByApplicantUsernameOrderByStartedDescFinishedDesc(username) );
+		
+		model.addAttribute("educationLst", applicantAcademicRepository.findByApplicantUsernameOrderByStartedDescFinishedDesc(username) );
+
+		return "secured/view_my_cv.html";
+		
+	}
 	
 	
 	@ExceptionHandler(RecordNotFoundException.class)

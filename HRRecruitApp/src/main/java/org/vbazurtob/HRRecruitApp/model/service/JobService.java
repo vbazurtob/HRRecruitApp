@@ -67,5 +67,17 @@ public class JobService {
 		return  new  long[]{ previousPageNum, nextPageNum };
 	}
 	
+//	public void getPaginatedApplicantsJob(long jobId) {
+//		
+//		Job jobFound = jobRepository.findById(jobId).get();
+//		
+//		if(jobFound != null) {
+//			
+//			jobFound.getJobApplicants()
+//			
+//		}
+//		
+//	}
+	
 
 }

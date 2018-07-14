@@ -76,6 +76,15 @@ public class JobApplicantService {
 		
 		return  new  long[]{ previousPageNum, nextPageNum };
 	}
+	
+	public Page<JobApplicant> getPaginatedApplicantsFromJob(long jobId, Optional<Integer> page, int recordsPerPage) {
+		
+		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "dateApplicationSent", "job.datePosted" ); 
+		Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByJobId( jobId, pageReqObj );
+						
+		return jobApplicantPageObj;
+		
+	}
 		
 
 }

@@ -34,10 +34,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.Job;
+import org.vbazurtob.HRRecruitApp.model.JobApplicant;
 import org.vbazurtob.HRRecruitApp.model.JobType;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantWorkExpRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
+import org.vbazurtob.HRRecruitApp.model.service.ApplicantAcademicsService;
+import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
+import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
 import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 
@@ -69,6 +75,18 @@ public class JobAdsManagementController {
 	
 	@Autowired
 	private JobTypeService jobTypeService;
+	
+	@Autowired
+	private JobApplicantService jobApplicantService;
+	
+	@Autowired
+	private ApplicantWorkExpRepository applicantWorkExpRepository;
+	
+	@Autowired
+	private ApplicantWorkExpService applicantWorkExpService;
+	
+	@Autowired
+	private ApplicantAcademicsService applicantAcademicService;
 	
 	private String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	private List<String> jobStatusListObj;
@@ -385,6 +403,78 @@ public class JobAdsManagementController {
 		}
 		
 		return new DeleteResponse(response);
+	}
+	
+	
+	
+	@RequestMapping(value= { APPLICANTS_JOB + "{index}" , APPLICANTS_JOB + "{index}/{page}"  })
+	public String viewApplicantsForJob(
+			
+			//@ModelAttribute("filterJobForm") Job jobFilterForm,
+			@PathVariable long index, 
+			@PathVariable Optional<Integer> page, 
+			Model model,
+			
+			 SessionStatus sessionStatus
+		
+			) {
+		
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		// Get logged username
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		//TODO
+		username = "admin";
+		
+		// Pagination for listing
+		Page<JobApplicant> applicantsJobObj = jobApplicantService.getPaginatedApplicantsFromJob(index, page, RECORDS_PER_PAGE);
+		long previousPageNum = jobApplicantService.getPaginationNumbers(applicantsJobObj)[0];
+		long nextPageNum = jobApplicantService.getPaginationNumbers(applicantsJobObj)[1];
+
+
+		//applicantWorkExperiences
+		
+//		Page<ApplicantWorkExperience> applicantsExpObj = applicantWorkExpRepository.findByApplicantUsername(username, page);// (index, page, RECORDS_PER_PAGE);
+		
+		
+//		List<JobType> jobTypeList = jobTypeService.getListJobTypeUI();
+		
+		
+		//System.out.println("ABC " + applicantsJobObj.getContent().get(0).getApplicant() .getApplicantWorkExperiences().get(0));
+		
+		Job emptyFormFilter = new Job();
+		
+
+		// View attributes
+		model.addAttribute("baseUrl", controllerMapping + APPLICANTS_JOB + index + '/' + page.orElse(0));
+//		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
+//		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		
+		model.addAttribute("prevPage", previousPageNum);
+		model.addAttribute("nextPage", nextPageNum);
+		model.addAttribute("pageObj", applicantsJobObj );
+		model.addAttribute("applicantsJobList", applicantsJobObj.getContent());
+//		model.addAttribute("jobForm", emptyFormFilter);
+//		model.addAttribute("jobTypeList", jobTypeList );
+//		model.addAttribute("jobStatusList", jobStatusListObj );
+		
+		
+		
+//		model.addAttribute("filterJobForm", jobFilterForm);
+		
+		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
+
+
+		model.addAttribute("jobObj", applicantsJobObj.getContent().size() > 0 ? applicantsJobObj.getContent().get(0).getJob() : null );
+		
+		model.addAttribute("applicantWorkExpService",  applicantWorkExpService );
+		model.addAttribute("applicantAcademicService",  applicantAcademicService );
+		
+		model.addAttribute("viewCVUrl", "");
+
+		return "secured/job_mgmt_view_applicants.html";
 	}
 	
 	

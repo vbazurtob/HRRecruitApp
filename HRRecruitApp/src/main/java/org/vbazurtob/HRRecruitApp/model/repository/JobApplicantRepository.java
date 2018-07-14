@@ -24,6 +24,9 @@ public interface JobApplicantRepository extends CrudRepository<JobApplicant, Lon
 	
 	public List<JobApplicant> findByApplicantUsernameAndJobId(String username, Long id);
 	
+	public Page<JobApplicant> findByJobId(long jobId, Pageable page);
+
+	
 	public long countByApplicantUsernameAndJobId(
 			String username, 
 			Long id

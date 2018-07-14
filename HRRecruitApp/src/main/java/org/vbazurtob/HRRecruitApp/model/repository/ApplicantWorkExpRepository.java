@@ -1,6 +1,7 @@
 package org.vbazurtob.HRRecruitApp.model.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,8 @@ public interface ApplicantWorkExpRepository extends CrudRepository<ApplicantWork
 	
 	public Page<ApplicantWorkExperience> findByApplicantUsername(String username, Pageable page);
 	
+	public List<ApplicantWorkExperience> findByApplicantUsernameOrderByStartedDescFinishedDesc(String username);
+	
 	public long countByApplicantUsernameAndStartedAndFinishedAndPositionAndInstitution(
 			String username, 
 			Date started, 
@@ -29,7 +32,8 @@ public interface ApplicantWorkExpRepository extends CrudRepository<ApplicantWork
 			String institution
 	);
 	
-	
+//	public List<ApplicantWorkExperience> findByApplicantUsernameOrderByStartedFinished(String username);
+//	
 	
 	
 }
