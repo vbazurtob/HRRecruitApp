@@ -12,4 +12,6 @@ public interface ApplicantRepository extends CrudRepository<ApplicantWithPasswor
 	
 	public long countByUsernameAndPassword( String username, String password );
 	
+	public long countByUsername( String username );
+	
 }

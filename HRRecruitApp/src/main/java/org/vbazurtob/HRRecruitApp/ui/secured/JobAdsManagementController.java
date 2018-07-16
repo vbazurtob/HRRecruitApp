@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,10 +35,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
+import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.Job;
 import org.vbazurtob.HRRecruitApp.model.JobApplicant;
 import org.vbazurtob.HRRecruitApp.model.JobType;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
+import org.vbazurtob.HRRecruitApp.model.repository.ApplicantSkillRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantWorkExpRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
 import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
@@ -61,6 +66,8 @@ public class JobAdsManagementController {
 	private final static String FILTER_JOB_CLEAR = "/clear-filter-jobs/";
 	
 	private final static String APPLICANTS_JOB = "/view-applicants/";
+	
+	private final static String VIEW_APPLICANT_CV = "/view-applicant-cv/";
 	
 	private final static int RECORDS_PER_PAGE = 10;
 	
@@ -87,6 +94,16 @@ public class JobAdsManagementController {
 	
 	@Autowired
 	private ApplicantAcademicsService applicantAcademicService;
+	
+	@Autowired
+	private ApplicantRepository applicantRepository;
+	
+	@Autowired
+	private ApplicantSkillRepository applicantSkillRepository;
+	
+	@Autowired
+	private ApplicantAcademicsRepository applicantAcademicRepository;
+	
 	
 	private String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	private List<String> jobStatusListObj;
@@ -406,6 +423,27 @@ public class JobAdsManagementController {
 	}
 	
 	
+	@PutMapping( value= DASHBOARD_JOB_MANAGEMENT_BASE_URL + "close/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@ResponseBody
+	public DeleteResponse closeJobOffer( @PathVariable Long id ) {
+
+		String response="OK";
+		try {
+
+		 Job jobDb = jobRepository.findById(id).get();
+		 
+		 
+		 jobDb.setStatus("C");// Closed. 
+		 jobRepository.save(jobDb);
+		 
+		}catch(Exception e) {
+			e.printStackTrace();
+			response="ERROR";
+		}
+		
+		return new DeleteResponse(response);
+	}
+	
 	
 	@RequestMapping(value= { APPLICANTS_JOB + "{index}" , APPLICANTS_JOB + "{index}/{page}"  })
 	public String viewApplicantsForJob(
@@ -434,48 +472,63 @@ public class JobAdsManagementController {
 		long nextPageNum = jobApplicantService.getPaginationNumbers(applicantsJobObj)[1];
 
 
-		//applicantWorkExperiences
-		
-//		Page<ApplicantWorkExperience> applicantsExpObj = applicantWorkExpRepository.findByApplicantUsername(username, page);// (index, page, RECORDS_PER_PAGE);
-		
-		
-//		List<JobType> jobTypeList = jobTypeService.getListJobTypeUI();
-		
-		
-		//System.out.println("ABC " + applicantsJobObj.getContent().get(0).getApplicant() .getApplicantWorkExperiences().get(0));
-		
-		Job emptyFormFilter = new Job();
 		
 
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + APPLICANTS_JOB + index + '/' + page.orElse(0));
-//		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
-//		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANTS_JOB + index + '/' );
 		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", applicantsJobObj );
 		model.addAttribute("applicantsJobList", applicantsJobObj.getContent());
-//		model.addAttribute("jobForm", emptyFormFilter);
-//		model.addAttribute("jobTypeList", jobTypeList );
-//		model.addAttribute("jobStatusList", jobStatusListObj );
-		
-		
-		
-//		model.addAttribute("filterJobForm", jobFilterForm);
+
 		
 		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
-
-
 		model.addAttribute("jobObj", applicantsJobObj.getContent().size() > 0 ? applicantsJobObj.getContent().get(0).getJob() : null );
 		
 		model.addAttribute("applicantWorkExpService",  applicantWorkExpService );
 		model.addAttribute("applicantAcademicService",  applicantAcademicService );
 		
-		model.addAttribute("viewCVUrl", "");
+		model.addAttribute("viewCVUrl", controllerMapping + VIEW_APPLICANT_CV + 
+				 (applicantsJobObj.getContent().size() > 0 ? applicantsJobObj.getContent().get(0).getApplicant().getUsername() : null ) );
 
 		return "secured/job_mgmt_view_applicants.html";
 	}
+	
+	
+	@RequestMapping( VIEW_APPLICANT_CV + "{username}" )
+	public String viewApplicantCV(
+			
+			
+			@PathVariable String username,
+			Model model
+			
+			) {
+		
+		if(username == null || username.equals("null")) {
+			System.out.println("Username not found");
+			throw new RecordNotFoundException();
+			
+		}
+		
+		//Get Controller Name
+		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+						
+		
+		ApplicantWithPassword applicant = applicantRepository.findOneByUsername(username);
+		
+		model.addAttribute("applicant", applicant);
+		
+		model.addAttribute("workexpLst", applicantWorkExpRepository.findByApplicantUsernameOrderByStartedDescFinishedDesc(username) );
+		
+		model.addAttribute("educationLst", applicantAcademicRepository.findByApplicantUsernameOrderByStartedDescFinishedDesc(username) );
+
+		model.addAttribute("skillsLst", applicantSkillRepository.findByApplicantUsernameOrderByProficiencyDescNameDesc(username) );
+		
+		return "secured/view_applicant_cv.html";
+		
+	}
+	
 	
 	
 	@ExceptionHandler(RecordNotFoundException.class)

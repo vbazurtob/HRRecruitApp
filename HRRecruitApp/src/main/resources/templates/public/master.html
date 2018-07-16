@@ -14,7 +14,7 @@
 	
 	<!-- Basic css -->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" ></link>
-	
+	<link rel="stylesheet" type="text/css" th:href="@{/css/app-materialize.css}" ></link>
 	
 	<!-- Additional scripts -->
 	<th:block th:replace="${links}" />
@@ -25,7 +25,11 @@
 	
 </head>
 <body th:fragment="master_body(bodycontent)">
-	<nav th:fragment="header" class="main-header navbar-wrapper">HRRecruitApp
+	<nav th:fragment="header" class="main-header navbar-wrapper">
+		<span class="app-title">
+			<a th:href="@{/}">HRRecruitApp</a>
+		</span>
+		
 		<div id="main_menu"  sec:authorize="isAuthenticated()">
 			<div class="user-info">
 				<!--/* 
@@ -48,11 +52,8 @@
 	<div class="main-content" th:replace="${bodycontent}">Content is here</div>
 	
 	
-	<footer th:fragment="footer" class="row main-footer red darken-2">
-		<div class="col s12">
-			Created by Voltaire Bazurto Blacio - 2018
-		</div>
-	</footer>
+	 <th:block th:replace="public/footer.html::footer"></th:block>
+
 	 <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
 	 
 	 <!-- Basic required scripts -->

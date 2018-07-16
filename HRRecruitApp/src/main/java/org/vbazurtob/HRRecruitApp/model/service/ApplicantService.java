@@ -37,7 +37,22 @@ public class ApplicantService {
 		
 	}
 	
-	
+	public void createNewApplicantInDB( String username, String password, String email ) {
+		
+		ApplicantWithPassword newApplicantToSave = new ApplicantWithPassword();
+		newApplicantToSave.setUsername( username );
+		newApplicantToSave.setPassword(bcryptEncoder.encode(password) );
+		newApplicantToSave.setNames(username);
+		newApplicantToSave.setLastname(".");
+		newApplicantToSave.setAddress1(".");
+		newApplicantToSave.setAddress2(".");
+		newApplicantToSave.setCountry(".");
+		newApplicantToSave.setState(".");
+		newApplicantToSave.setEmail(email);
+		newApplicantToSave.setZipcode(".");
+		
+		applicantRepository.save(newApplicantToSave);
+	}
 	
 	
 	public boolean updatePassword(String applicantUsername, String password, String passwordConfirmation) {
@@ -61,6 +76,10 @@ public class ApplicantService {
 		
 		ApplicantWithPassword applicantWithPassword = applicantRepository.findOneByUsername(username);
 		return bcryptEncoder.matches(rawPassword, applicantWithPassword.getPassword());
+	}
+	
+	public boolean usernameExists(String username) {
+		return applicantRepository.countByUsername(username) > 0;
 	}
 	
 

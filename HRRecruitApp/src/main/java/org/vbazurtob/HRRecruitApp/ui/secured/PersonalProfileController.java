@@ -863,6 +863,8 @@ public class PersonalProfileController {
 		
 		model.addAttribute("educationLst", applicantAcademicRepository.findByApplicantUsernameOrderByStartedDescFinishedDesc(username) );
 
+		model.addAttribute("skillsLst", applicantSkillRepository.findByApplicantUsernameOrderByProficiencyDescNameDesc(username) );
+		
 		return "secured/view_my_cv.html";
 		
 	}

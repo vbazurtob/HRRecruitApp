@@ -32,6 +32,28 @@
 				
 			}
 			
+			function ajaxPut( actionUrl, id ){
+				$.ajax({
+				    url: actionUrl + id,
+				    type: 'PUT',
+				    success: function(response) {
+						console.log(response.result);
+						if(response.result==='OK'){
+							alert("Job offer has been closed!");
+							window.location = baseUrl;
+						}else {
+							console.log(response);
+							alert("Couldn't closed selected job offer");
+						}
+						
+				    },
+				    data: {
+				    	id: id
+				    }
+				});
+				
+			}
+			
 			
 			function changePage(page, url){
 					window.location = baseUrl + (page);
@@ -46,6 +68,17 @@
 						
 						return false;
 					}
+			}
+			
+			function closeJobConfirmation(actionUrl, id){
+				if ( window.confirm("Are you sure you want to close this job offer?") == true ) {
+					ajaxPut( actionUrl + 'close/', id );
+					
+					return false;
+				} else {
+					
+					return false;
+				}
 			}
 				
 				
@@ -98,6 +131,9 @@
 														<td>
 															
 															<a th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'" href="#">Delete</a> 
+															&nbsp;
+															
+															<a th:onclick="'return closeJobConfirmation( baseUrl, ' + *{id} + '  )'" href="#">CloseOffer</a> 
 														</td>
 														
 													</th:block>

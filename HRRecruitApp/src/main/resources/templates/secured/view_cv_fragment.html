@@ -36,18 +36,9 @@
 			<ul>
 				<li th:each="wexpDetail : ${workexpLst}" th:object="${wexpDetail}">
 					<div class="row" >
-						<div th:text="*{position}" class=" col s6 left-align">
-						
-						</div>
-						
-						<div th:text="'at ' + *{institution}" class="col s6 right-align">
-						</div>
+						<div th:text="*{position} + ' at ' + *{institution}" class=" col s6 left-align"></div> 
+						<div class="col s4 left-align offset-s2" th:text=" *{started} + '  to  ' + ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " ></div>
 					</div>
-					<div class="row">
-						<div class="col s12 left-align" th:text=" *{started} + ' - ' +  ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " >
-						</div>
-					</div>
-					
 				<li>
 			</ul>
 		</div>
@@ -67,24 +58,48 @@
 			<ul>
 				<li th:each="academicDetail : ${educationLst}" th:object="${academicDetail}">
 					<div class="row" >
-						<div th:text="*{degreeType} + ' ' +*{degreeName}" class=" col s6 left-align">
-						
-						</div>
-						
-						<div th:text="'at ' + *{institution}" class="col s6 right-align">
-						</div>
+						<div th:text="*{degreeName} + ' at ' +  *{institution}" class=" col s6 left-align"></div>
+						<div class="col s4 leftt-align offset-s2" th:text=" *{started} + ' to ' + ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " ></div>
 					</div>
 					<div class="row">
-						<div class="col s12 left-align" th:text=" *{started} + ' - ' +  ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " >
-						</div>
-					</div>
-					
+						<div class="col s12 left-align " th:text="'&nbsp;&nbsp;  Degree type: ' + *{degreeType} " ></div>
+					</div>					
 				<li>
 			</ul>
 		</div>
 	</div>
 	
 
+</th:block>
+
+
+<th:block th:fragment="skills" th:object="${skillsLst}">
+	<div class="row">
+		<div class="col s12">
+			<span class="section-title" th:text="'Skills'">Skills</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s12">
+			<ul>
+				
+				<li th:each="skillDetail : ${skillsLst}" th:object="${skillDetail}">
+					<div class="row"  th:object="${skillDetail}">
+						<span th:text="*{name}" class=" col s6 left-align">						
+						</span>
+						
+						<span class="col s4 offset-s2 left-align">
+							<th:block th:each="i : ${ #numbers.sequence( 1, skillDetail.proficiency  )  }">
+								<span class="" th:text="'&#9733;'">	&#9733; </span>
+							</th:block>
+						</span>
+						
+						
+					</div>
+				<li>
+			</ul>
+		</div>
+	</div>
 </th:block>
 
 </body>

@@ -79,6 +79,8 @@ public class JobApplicantService {
 	
 	public Page<JobApplicant> getPaginatedApplicantsFromJob(long jobId, Optional<Integer> page, int recordsPerPage) {
 		
+		System.out.println( "Optional page  " +  page.toString() );;
+		
 		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "dateApplicationSent", "job.datePosted" ); 
 		Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByJobId( jobId, pageReqObj );
 						
