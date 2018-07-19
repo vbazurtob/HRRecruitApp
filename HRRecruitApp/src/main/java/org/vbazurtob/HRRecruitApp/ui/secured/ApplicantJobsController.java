@@ -296,12 +296,7 @@ public class ApplicantJobsController {
 		jobApplicantService.saveApplicantForJob(jobDetails, username);
 		
 		
-		
-//		redirectAttrs.addFlashAttribute("applied", true);
-		
 		// In template add check if exist in db of applied
-		
-		
 		return "redirect:" + controllerMapping + VIEW_JOB_DETAIL + jobDetails.getId();
 	}
 	
@@ -364,12 +359,6 @@ public class ApplicantJobsController {
 	
 	
 	
-	@RequestMapping("/summary")	
-	public String summaryController() {
-		
-		
-		return "secured/summary";
-	}
 
 	
 	

@@ -39,7 +39,7 @@ public class PublicController implements ControllerEndpoints{
 		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		model.addAttribute("applicantSignupUrl", controllerMapping + CREATE_NEW_APPLICANT_PAGE );
-		model.addAttribute("postFormUrl", controllerMapping + APPLICANT_LOGIN_PAGE );
+		model.addAttribute("postFormUrl",  APPLICANT_CV_CNTROLLER + APPLICANT_LOGIN_PAGE ); // APPLICANT_LOGIN_PAGE
 		
 		return "public/login";
 	}
@@ -102,9 +102,8 @@ public class PublicController implements ControllerEndpoints{
 		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		
-		model.addAttribute("loginHrUrl", controllerMapping + HR_MEMBER_LOGIN_PAGE );
-		model.addAttribute("postFormUrl", controllerMapping + HR_MEMBER_LOGIN_PAGE );
-		
+		model.addAttribute("loginHrUrl", JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGIN_PAGE );
+	
 		return "public/admin_login";
 	}
 	

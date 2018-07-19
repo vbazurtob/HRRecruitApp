@@ -1,6 +1,8 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -10,9 +12,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -868,6 +872,22 @@ public class PersonalProfileController {
 		return "secured/view_my_cv.html";
 		
 	}
+	
+	
+	@RequestMapping("/summary")	
+	public String summaryController( Principal p ) {
+		
+		System.out.println( p.getName() );;
+		
+		System.out.println( p.getName() );;
+		
+		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		
+		System.out.println( authorities );
+		
+		return "secured/summary";
+	}
+
 	
 	
 	@ExceptionHandler(RecordNotFoundException.class)

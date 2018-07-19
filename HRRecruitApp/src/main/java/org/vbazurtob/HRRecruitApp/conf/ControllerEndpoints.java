@@ -8,6 +8,10 @@ public interface ControllerEndpoints {
 	final static String JOBS_ADS_MANAGEMENT_CNTROLLER = "/job-vacancies";
 	final static String APPLICANT_CV_CNTROLLER = "/cv";
 	
+	final static String CSS_FOLDER = "/css/";
+	final static String JS_FOLDER = "/js/";
+	final static String IMG_FOLDER = "/img/";
+	
 	// Pages in public
 	final static  String APPLICANT_LOGIN_PAGE = "/login-applicant";
 	final static  String HR_MEMBER_LOGIN_PAGE = "/login-hr";
