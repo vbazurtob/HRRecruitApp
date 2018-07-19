@@ -2,11 +2,13 @@ package org.vbazurtob.HRRecruitApp.model;
 
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public class UserBaseClass {
 
 	@Id
+	@NotNull
 	private String username;
 
 	private String email;

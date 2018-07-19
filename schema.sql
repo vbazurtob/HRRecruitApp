@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_applicant(
     date_application_sent TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".user(
+CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".hr_user(
     username VARCHAR(35) PRIMARY KEY,
     password VARCHAR(128),
     names VARCHAR(100),

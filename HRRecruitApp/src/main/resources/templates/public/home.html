@@ -53,22 +53,22 @@
 				<div class="row">
 					<div class="col s6">
 					
-						<a th:href="@{/login}">
+						<a th:href="${applicantLoginUrl}">
 							<img class="responsive-img" th:src="@{/img/career-3478983_1920.jpg}">
 						</a>
 						<div class="center-align">
 							For job seekers!
-							<a th:href="@{/login}">Click here</a>
+							<a th:href="${applicantLoginUrl}">Click here</a>
 						</div>
 					</div>
 					<div class="col s6">
 						
-						<a th:href="@{/admin/login}">
+						<a th:href="${hrMemberLoginUrl}">
 							<img class="responsive-img" th:src="@{/img/opportunity-3185099_1920.jpg}">
 						</a>
 						<div class="center-align">
 							For job recruiters!
-							<a th:href="@{/admin/login}">Click here</a>
+							<a th:href="${hrMemberLoginUrl}">Click here</a>
 						</div>
 						
 					</div>

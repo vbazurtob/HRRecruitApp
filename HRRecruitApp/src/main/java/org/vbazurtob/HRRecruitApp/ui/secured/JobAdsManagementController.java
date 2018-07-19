@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
-import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.Job;
 import org.vbazurtob.HRRecruitApp.model.JobApplicant;
 import org.vbazurtob.HRRecruitApp.model.JobType;
@@ -52,12 +52,12 @@ import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
 import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 
-
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
 @SessionAttributes("filterJobForm")
 @Controller
-@RequestMapping("/job-vacancies")
-public class JobAdsManagementController {
+@RequestMapping( JOBS_ADS_MANAGEMENT_CNTROLLER )
+public class JobAdsManagementController implements ControllerEndpoints {
 	
 	private final static String  DASHBOARD_JOB_MANAGEMENT_BASE_URL = "/manage/";
 	
@@ -121,6 +121,11 @@ public class JobAdsManagementController {
 		jobStatusListObj =  Arrays.asList( arrStatus );
 
 		
+	}
+	
+	@RequestMapping(HR_MEMBER_SUMMARY_PAGE)
+	public String hrMemberSummary() {
+		return "secured/summary-hr";
 	}
 	
 	

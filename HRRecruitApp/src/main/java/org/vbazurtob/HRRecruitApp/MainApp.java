@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.vbazurtob.HRRecruitApp.conf.WebMvcConfig;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
-import org.vbazurtob.HRRecruitApp.ui.pubweb.HomeController;
+import org.vbazurtob.HRRecruitApp.ui.pubweb.PublicController;
 
 @SpringBootApplication
 public class MainApp{

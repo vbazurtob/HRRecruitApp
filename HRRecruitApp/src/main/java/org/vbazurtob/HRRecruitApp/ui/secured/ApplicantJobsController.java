@@ -357,198 +357,20 @@ public class ApplicantJobsController {
 		model.addAttribute("filterJobSearch", filterJobSearch);
 		model.addAttribute("salaryRangeListObj", salaryRangeListObj);
 		model.addAttribute("jobDatePostedOptions", jobDatePostedOptions);
-//		model.addAttribute("jobDetailUrl", controllerMapping + VIEW_JOB_DETAIL );		
-//		model.addAttribute("colPerRow", RECORDS_PER_COLUMN);
+
 		
 		return "secured/applicant_applied_jobs.html";
 	}
 	
 	
-//	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new" )
-//	public String newJob(
-//			Model model
-//			) {
-//		
-//		//Get Controller Name
-//		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-//		// Get logged username
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//		
-//		//TODO
-//		username = "admin";
-//		
-//		Job newJobObj = new Job();
-//
-//		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-//		
-//		
-//		// View attributes
-//		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-//		model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
-//		
-//		model.addAttribute("formTitle", "Create new job");
-//		model.addAttribute("jobForm", newJobObj);
-//		model.addAttribute("jobTypeList", jobTypeList );
-//		
-//		return "secured/job_create_edit.html";
-//	}
-//	
-//	
-//	
-//	@PostMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new"  )
-//	public String saveProfile(
-//			@Valid @ModelAttribute("jobForm") Job jobForm,
-//			BindingResult results, 
-//			RedirectAttributes redirectAttrs,
-//			Model model ){
-//		
-//		//Get Controller Name
-//		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-//		// Get logged username
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//				
-//		//TODO
-//		username = "admin";
-//		
-////		System.out.println("description" +  jobForm.getJobType().getDescription() + " ID " + jobForm.getJobType().getId());
-//		
-//		if(results.hasErrors()) {
-//			
-//			ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-//			model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
-//			model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-//			model.addAttribute("formTitle", "Create new job");
-//			model.addAttribute("jobForm", jobForm);
-//			model.addAttribute("jobTypeList", jobTypeList );
-//			
-//			return "secured/job_create_edit.html";
-//		}
-//		
-//
-//		redirectAttrs.addFlashAttribute("saved", true);
-//		
-//
-//		
-//		Optional<JobType> jt = jobTypeRepository.findById( jobForm.getJobType().getId() );
-//		
-//
-//		jobForm.setDatePosted(new Date());
-//		jobForm.setStatus("O");
-//		jobForm.setJobType( jt.get()   );
-//		
-//		jobService.saveJob(jobForm);
-//		
-//		
-//		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
-//	}
-//	
-//	
-//	
-//	
-//	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/{id}" )
-//	public String editJob(
-//			Model model,
-//			@PathVariable Long id
-//			) {
-//		
-//		//Get Controller Name
-//		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-//		// Get logged username
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//				
-//		//TODO
-//		username = "admin";
-//				
-//		Job jobFormObj =  jobRepository.findById( id ).get() ;
-//				
-//		// View
-//		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-//		model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/" + id);
-//		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-//		model.addAttribute("formTitle", "Edit job");
-//		model.addAttribute("jobForm", jobFormObj);
-//		model.addAttribute("jobTypeList", jobTypeList );
-//		
-//		return "secured/job_create_edit.html";
-//	
-//	}
-//	
-//	
-//	@PostMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/{id}"   )
-//	public String editJob(
-//			@Valid @ModelAttribute("jobForm") Job jobForm,
-//			BindingResult results, 
-//			RedirectAttributes redirectAttrs,
-//			Model model ){
-//		
-//		//Get Controller Name
-//		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-//		// Get logged username
-//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-//				
-//		//TODO
-//		username = "admin";
-//		
-////		System.out.println("description" +  jobForm.getJobType().getDescription() + " ID " + jobForm.getJobType().getId());
-//		
-//		
-//		// DEBUG
-//		Utils.printFormErrors(results);
-//		
-//		
-//		if(results.hasErrors()) {
-//			
-//			ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-//			model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/" + jobForm.getId());
-//			model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-//			model.addAttribute("formTitle", "Edit new job");
-//			model.addAttribute("jobForm", jobForm);
-//			model.addAttribute("jobTypeList", jobTypeList );
-//			
-//			return "secured/job_create_edit.html";
-//		}
-//		
-//
-//	
-//
-//		
-//		Optional<Job> jobDbObj = jobRepository.findById(jobForm.getId());
-//		jobForm.setStatus( jobDbObj.get().getStatus() );
-//		jobForm.setDatePosted( jobDbObj.get().getDatePosted()  );
-//		
-//		
-//		
-//		
-//		Optional<JobType> jt = jobTypeRepository.findById( jobForm.getJobType().getId() );
-//		jobForm.setJobType( jt.get()   );
-//		
-//		
-//		jobService.saveJob(jobForm);
-//		
-//		redirectAttrs.addFlashAttribute("saved", true);
-//		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
-//	}
-//	
-//	@DeleteMapping( value= DASHBOARD_JOB_MANAGEMENT_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
-//	@ResponseBody
-//	public DeleteResponse deleteSkills( @PathVariable Long id ) {
-//
-//		String response="OK";
-//		try {
-//
-//		 Job jobDb = jobRepository.findById(id).get();
-//		 
-//		 
-//		 jobDb.setStatus("D");// Deleted. In this version, no validation is made regarding if there might be or not already applicants or this job.
-//		 jobRepository.save(jobDb);
-//		 
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			response="ERROR";
-//		}
-//		
-//		return new DeleteResponse(response);
-//	}
+	
+	@RequestMapping("/summary")	
+	public String summaryController() {
+		
+		
+		return "secured/summary";
+	}
+
 	
 	
 	@ExceptionHandler(RecordNotFoundException.class)

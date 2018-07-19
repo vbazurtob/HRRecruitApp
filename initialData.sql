@@ -21,7 +21,7 @@ INSERT INTO "vbazurtobPortfolio".applicant(
             
             
 -- Demo HR user
-INSERT INTO "vbazurtobPortfolio".user(
+INSERT INTO "vbazurtobPortfolio".hr_user(
             username, password, names, lastname, email, role)
-    VALUES ('admin', '$2b$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'Admin HR', 'Demo User', 'abc@abc.com', 'HR_ADMIN');
+    VALUES ('admin', '$2a$10$RCUBOckyEHolcG1iMLegIeeoQuWO70gKjiQxGWy39RK7T2.D9jufC', 'Admin HR', 'Demo User', 'abc@abc.com', 'HR_ADMIN');
 

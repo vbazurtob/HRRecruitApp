@@ -67,8 +67,8 @@
 													
 												</ul>
 										</div>
-										<div class="form-error-messages center-align" th:if="${param.error}">Bad login or password.</div> 
-								    	<div class="form-saved-message center-align" th:if="${param.logout}">Log out successful.</div>
+										<div class="form-error-messages red lighten-4 center-align" th:if="${param.error}">Bad login or password.</div> 
+								    	<div class="form-saved-message green lighten-4 center-align" th:if="${param.logout}">Log out successful.</div>
 								    	
 								    	<ul th:if="${saved}==true" class="form-saved-message green lighten-4">
 											<li th:if="${saved}==true">
