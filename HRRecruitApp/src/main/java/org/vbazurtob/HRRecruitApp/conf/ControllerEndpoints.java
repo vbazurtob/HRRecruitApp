@@ -24,6 +24,12 @@ public interface ControllerEndpoints {
 	
 	// Pages for Job Ads Management
 	final static  String HR_MEMBER_SUMMARY_PAGE = "/summary-hr";
+	final static  String HR_MEMBER_JOBS_MANAGEMENT_PAGE = "/manage/";
+	final static  String HR_MEMBER_FILTER_JOB_LIST = "/filter-jobs/";
+	final static  String HR_MEMBER_FILTER_JOB_CLEAR = "/clear-filter-jobs/";
+	final static  String HR_MEMBER_APPLICANTS_JOB = "/view-applicants/";
+	final static  String HR_MEMBER_VIEW_APPLICANT_CV = "/view-applicant-cv/";
+	
 	
 	// Pages for Applicant CV profile
 	final static  String APPLICANT_SUMMARY_PAGE = "/summary";
@@ -34,7 +40,11 @@ public interface ControllerEndpoints {
 	final static  String VIEW_CV = "/view/";
 	
 	// Pages for Jobs search
-	final static  String APPLICANT_JOB_SEARCH_PAGE = "/search/";
+	final static String APPLICANT_JOB_SEARCH_PAGE = "/search/";
+	final static String APPLICANT_JOB_POST_FILTER_JOB_LIST = "/filter-search/";
+	final static String APPLICANT_JOB_POST_FILTER_JOB_CLEAR = "/clear-filter-jobs/";
+	final static String APPLICANT_JOB_VIEW_JOB_DETAIL = "/view/";
+	final static String APPLICANT_JOB_APPLICANTS_JOBS_APPLIED = "/my-applications/";
 
 
 	// Logout pages

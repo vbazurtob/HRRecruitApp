@@ -12,7 +12,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,12 +34,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.vbazurtob.HRRecruitApp.lib.common.DeleteResponse;
 import org.vbazurtob.HRRecruitApp.lib.common.RecordNotFoundException;
-import org.vbazurtob.HRRecruitApp.lib.common.Utils;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWithoutPassword;
 import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 import org.vbazurtob.HRRecruitApp.model.ApplicantChangePasswordForm;
-import org.vbazurtob.HRRecruitApp.model.ApplicantBaseClass;
 import org.vbazurtob.HRRecruitApp.model.ApplicantSkill;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWorkExperience;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantAcademicsRepository;
@@ -54,24 +51,21 @@ import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.CountryService;
 import org.vbazurtob.HRRecruitApp.model.service.ProficiencyService;
 import org.vbazurtob.HRRecruitApp.model.service.TypeDegreeService;
-
-import ch.qos.logback.classic.pattern.Util;
-
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
 
+/**
+ * @author Voltaire Bazurto Blacio
+ * 
+ * All rights reserved
+ *
+ * Controller for all operations related to the applicant cv and personal profile
+ */
 @Controller
-@RequestMapping("/cv")
+@RequestMapping(APPLICANT_CV_CNTROLLER)
 public class PersonalProfileController {
 	
 	private final static int RECORDS_PER_PAGE = 10;
-	
-	private final static String ACADEMICS_BASE_URL = "/academics/";
-	private final static String WORKEXP_BASE_URL = "/workexp/";
-	private final static String SKILLS_BASE_URL = "/skills/";
-
-	private final static String PROFILE_BASE_URL = "/profile/";
-	
-	private final static String VIEW_CV = "/view/";
 
 	@Autowired
 	private ApplicantRepository applicantRepository;
@@ -122,19 +116,14 @@ public class PersonalProfileController {
 	}
 	
 
-	@RequestMapping(PROFILE_BASE_URL)
+	@RequestMapping(APPLICANT_PROFILE_PAGE)
 	public String showDetails(Model model) {
 		
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		
-		//TODO
-		username = "abc";
-		
 		ApplicantWithPassword currentApplicant = applicantRepository.findOneByUsername(username);		
-		
-//		System.out.println(currentApplicant);;
 		
 		ApplicantChangePasswordForm newChangePasswordObj = new ApplicantChangePasswordForm();
 		newChangePasswordObj.setUsernameChangePwdForm(username);
@@ -143,14 +132,14 @@ public class PersonalProfileController {
 		model.addAttribute("userProfileOptionSelected",true);
 		model.addAttribute("applicant", currentApplicant);
 		model.addAttribute("countriesLst", countryService.getListCountries());
-		model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_PROFILE_PAGE);
 		model.addAttribute("changePwdForm", newChangePasswordObj );
 		
 		return "secured/profile.html";
 	}
 	
 	
-	@PostMapping(PROFILE_BASE_URL)
+	@PostMapping(APPLICANT_PROFILE_PAGE)
 	public String saveProfile(
 			@Valid @ModelAttribute("applicant") ApplicantWithoutPassword applicant,
 			BindingResult results, 
@@ -166,15 +155,11 @@ public class PersonalProfileController {
 		newChangePasswordObj.setUsernameChangePwdForm(applicant.getUsername());
 		
 		
-		//DEBUG
-//		Utils.printFormErrors(results);
-		
-		
 		if(results.hasErrors()) {
 			
 			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
-			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_PROFILE_PAGE);
 			model.addAttribute("changePwdForm", newChangePasswordObj );
 			model.addAttribute("applicant", applicant);
 			
@@ -186,11 +171,11 @@ public class PersonalProfileController {
 		applicantService.updateApplicantProfile(applicant);
 		
 		
-		return "redirect:" + controllerMapping + PROFILE_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_PROFILE_PAGE;
 	}
 	
 	
-	@PostMapping(PROFILE_BASE_URL + "update-password")
+	@PostMapping(APPLICANT_PROFILE_PAGE + "update-password")
 	public String updatePassword(
 			
 			@Valid @ModelAttribute("changePwdForm") ApplicantChangePasswordForm applicantChangePwdForm,
@@ -222,7 +207,7 @@ public class PersonalProfileController {
 			
 			model.addAttribute("userProfileOptionSelected",true);
 			model.addAttribute("countriesLst", countryService.getListCountries());
-			model.addAttribute("baseUrl", controllerMapping + PROFILE_BASE_URL);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_PROFILE_PAGE);
 			model.addAttribute("applicant", currentApplicant);
 			
 			return "secured/profile.html";
@@ -239,14 +224,14 @@ public class PersonalProfileController {
 		}
 		
 		
-		return "redirect:" + controllerMapping + PROFILE_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_PROFILE_PAGE;
 		
 		
 	}
 	
 	
 
-	@RequestMapping(value = {  ACADEMICS_BASE_URL , ACADEMICS_BASE_URL + "{page}" } )
+	@RequestMapping(value = {  APPLICANT_ACADEMICS_PAGE , APPLICANT_ACADEMICS_PAGE + "{page}" } )
 	public String showAcademics(
 			Model model,
 			@PathVariable Optional<Integer> page
@@ -257,9 +242,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// New blank record for adding new record
 		ApplicantAcademic newAppAcademic = new ApplicantAcademic();
 		newAppAcademic.setInProgress("N");
@@ -276,7 +259,7 @@ public class PersonalProfileController {
 
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_ACADEMICS_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", academicsPageObj );
@@ -288,7 +271,7 @@ public class PersonalProfileController {
 		return "secured/academics_form.html";
 	}
 	
-	@PostMapping(value= ACADEMICS_BASE_URL)
+	@PostMapping(value= APPLICANT_ACADEMICS_PAGE)
 	public String showAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademic academicsForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -309,9 +292,7 @@ public class PersonalProfileController {
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// Set Applicant nested object for proper validation	
 		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
@@ -324,7 +305,7 @@ public class PersonalProfileController {
 		long nextPageNum = applicantAcademicsService.getPaginationNumbers(academicsPageObj)[1];
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_ACADEMICS_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", academicsPageObj );
@@ -341,11 +322,11 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantAcademicsService.saveAcademicDetail(academicsForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:" + controllerMapping + ACADEMICS_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_ACADEMICS_PAGE;
 	}
 	
 	
-	@RequestMapping( ACADEMICS_BASE_URL + "edit/{id}" )
+	@RequestMapping( APPLICANT_ACADEMICS_PAGE + "edit/{id}" )
 	public String editAcademics(
 			Model model,
 			@PathVariable Long id
@@ -356,9 +337,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		
 		Optional<ApplicantAcademic> academicsOpt = appAcademicsRepository.findById(id);
 		
@@ -366,7 +345,7 @@ public class PersonalProfileController {
 			ApplicantAcademic appAcademicsFormObj = academicsOpt.get();
 			
 			// View attributes
-			model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_ACADEMICS_PAGE + "edit/" + id);
 			model.addAttribute("academicsForm", appAcademicsFormObj);
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			model.addAttribute("academicsOptionSelected",true);
@@ -381,7 +360,7 @@ public class PersonalProfileController {
 	}
 	
 	
-	@PostMapping( ACADEMICS_BASE_URL + "edit/{id}" )
+	@PostMapping( APPLICANT_ACADEMICS_PAGE + "edit/{id}" )
 	public String editAcademics( @Valid @ModelAttribute("academicsForm") ApplicantAcademic academicsForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -395,14 +374,12 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		
 		if(results.hasErrors()) { // Reload the form with errors			
 		
 			// View attributes
-			model.addAttribute("baseUrl", controllerMapping + ACADEMICS_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_ACADEMICS_PAGE + "edit/" + id);
 			model.addAttribute("academicsForm", academicsForm);
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			model.addAttribute("academicsOptionSelected",true);
@@ -419,7 +396,7 @@ public class PersonalProfileController {
 	
 	}
 	
-	@DeleteMapping( value= ACADEMICS_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@DeleteMapping( value= APPLICANT_ACADEMICS_PAGE + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
 	@ResponseBody
 	public DeleteResponse deleteAcademics( @PathVariable Long id ) {
 		
@@ -436,7 +413,7 @@ public class PersonalProfileController {
 	}
 	
 
-	@RequestMapping(value = {  WORKEXP_BASE_URL , WORKEXP_BASE_URL + "{page}" } )
+	@RequestMapping(value = {  APPLICANT_WORKEXP_PAGE , APPLICANT_WORKEXP_PAGE + "{page}" } )
 	public String showWorkExperience(
 		Model model,
 		@PathVariable Optional<Integer> page
@@ -447,9 +424,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// New blank record for adding new record
 		ApplicantWorkExperience newAppWorkexp = new ApplicantWorkExperience();
 		
@@ -465,7 +440,7 @@ public class PersonalProfileController {
 	
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_WORKEXP_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", workExpPageObj );
@@ -479,7 +454,7 @@ public class PersonalProfileController {
 	}
 	
 	
-	@PostMapping(value = WORKEXP_BASE_URL  )
+	@PostMapping(value = APPLICANT_WORKEXP_PAGE  )
 	public String editWorkExp( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -504,9 +479,7 @@ public class PersonalProfileController {
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// Set Applicant nested object for proper validation	
 		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
@@ -519,7 +492,7 @@ public class PersonalProfileController {
 		long nextPageNum = applicantWorkExpService.getPaginationNumbers(workexpPageObj)[1];
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_WORKEXP_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", workexpPageObj );
@@ -539,7 +512,7 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:" + controllerMapping + WORKEXP_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_WORKEXP_PAGE;
 		
 		
 		
@@ -547,7 +520,7 @@ public class PersonalProfileController {
 	}
 	
 	
-	@RequestMapping( WORKEXP_BASE_URL + "edit/{id}" )
+	@RequestMapping( APPLICANT_WORKEXP_PAGE + "edit/{id}" )
 	public String editWorkExp(
 			Model model,
 			@PathVariable Long id
@@ -558,9 +531,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		
 		Optional<ApplicantWorkExperience> workexpOpt = applicantWorkExpRepository.findById(id);
 		
@@ -568,7 +539,7 @@ public class PersonalProfileController {
 			ApplicantWorkExperience appWorkExpFormObj = workexpOpt.get();
 			
 			// View attributes
-			model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_WORKEXP_PAGE + "edit/" + id);
 			model.addAttribute("workexpForm", appWorkExpFormObj);
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			model.addAttribute("workExperienceOptionSelected",true);
@@ -583,7 +554,7 @@ public class PersonalProfileController {
 	}
 	
 	
-	@PostMapping( WORKEXP_BASE_URL + "edit/{id}" )
+	@PostMapping( APPLICANT_WORKEXP_PAGE + "edit/{id}" )
 	public String editWorkExp( @Valid @ModelAttribute("workexpForm") ApplicantWorkExperience workexpForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -596,15 +567,13 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 				
-		//TODO
-		username = "abc";
-							
+									
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
 			
 			// View attributes
-			model.addAttribute("baseUrl", controllerMapping + WORKEXP_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_WORKEXP_PAGE + "edit/" + id);
 			model.addAttribute("workexpForm", workexpForm);
 			model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());
 			model.addAttribute("workExperienceOptionSelected",true);
@@ -617,14 +586,14 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantWorkExpService.saveWorkExpDetail(workexpForm, username);
 		redirectAttrs.addFlashAttribute("updated",true);
-		return "redirect:" + controllerMapping + WORKEXP_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_WORKEXP_PAGE;
 		
 		
 		
 	}
 	
 	
-	@DeleteMapping( value= WORKEXP_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@DeleteMapping( value= APPLICANT_WORKEXP_PAGE + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
 	@ResponseBody
 	public DeleteResponse deleteWorkExp( @PathVariable Long id ) {
 		
@@ -642,7 +611,7 @@ public class PersonalProfileController {
 	
 	
 	
-	@RequestMapping(value = {  SKILLS_BASE_URL , SKILLS_BASE_URL + "{page}" } )
+	@RequestMapping(value = {  APPLICANT_SKILLS_PAGE , APPLICANT_SKILLS_PAGE + "{page}" } )
 	public String showSkills(
 			Model model,
 			@PathVariable Optional<Integer> page
@@ -653,9 +622,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// New blank record for adding new record
 		ApplicantSkill newAppSkill = new ApplicantSkill();
 		
@@ -671,7 +638,7 @@ public class PersonalProfileController {
 
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_SKILLS_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", skillPageObj );
@@ -686,7 +653,7 @@ public class PersonalProfileController {
 	}
 	
 	
-	@PostMapping(value= SKILLS_BASE_URL)
+	@PostMapping(value= APPLICANT_SKILLS_PAGE)
 	public String showSkills( @Valid @ModelAttribute("skillsForm") ApplicantSkill skillForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -704,9 +671,7 @@ public class PersonalProfileController {
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		// Set Applicant nested object for proper validation	
 		ApplicantWithPassword newApplicantQuery = new ApplicantWithPassword();
 		newApplicantQuery = applicantRepository.findOneByUsername(username);
@@ -719,7 +684,7 @@ public class PersonalProfileController {
 		long nextPageNum = applicantSkillService.getPaginationNumbers(skillPageObj)[1];
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL);
+		model.addAttribute("baseUrl", controllerMapping + APPLICANT_SKILLS_PAGE);
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", skillPageObj );
@@ -739,11 +704,11 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantSkillService.saveSkill(skillForm, username);
 		redirectAttrs.addFlashAttribute("saved",true);
-		return "redirect:" + controllerMapping + SKILLS_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_SKILLS_PAGE;
 	}
 	
 	
-	@RequestMapping( SKILLS_BASE_URL + "edit/{id}" )
+	@RequestMapping( APPLICANT_SKILLS_PAGE + "edit/{id}" )
 	public String editSkills(
 			Model model,
 			@PathVariable Long id
@@ -754,9 +719,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "abc";
-		
+				
 		
 		Optional<ApplicantSkill> applicantOpt = applicantSkillRepository.findById(id);
 		
@@ -765,7 +728,7 @@ public class PersonalProfileController {
 			
 			
 			// View attributes
-			model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_SKILLS_PAGE + "edit/" + id);
 			model.addAttribute("skillsForm",  appSkillsFormObj);
 			model.addAttribute("skillsOptionSelected",true);
 			model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
@@ -784,7 +747,7 @@ public class PersonalProfileController {
 	
 	
 	
-	@PostMapping( SKILLS_BASE_URL + "edit/{id}" )
+	@PostMapping( APPLICANT_SKILLS_PAGE + "edit/{id}" )
 	public String editSkills( @Valid @ModelAttribute("skillsForm") ApplicantSkill skillsForm,
 			BindingResult results, 
 			RedirectAttributes redirectAttrs,
@@ -797,16 +760,13 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 				
-		//TODO
-		username = "abc";
-							
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
 			
 			
 			
-			model.addAttribute("baseUrl", controllerMapping + SKILLS_BASE_URL + "edit/" + id);
+			model.addAttribute("baseUrl", controllerMapping + APPLICANT_SKILLS_PAGE + "edit/" + id);
 			model.addAttribute("skillsForm",  skillsForm);
 			model.addAttribute("skillsOptionSelected",true);
 			model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
@@ -821,14 +781,14 @@ public class PersonalProfileController {
 		// Save the form data
 		applicantSkillService.saveSkill(skillsForm, username);
 		redirectAttrs.addFlashAttribute("updated",true);
-		return "redirect:" + controllerMapping + SKILLS_BASE_URL;
+		return "redirect:" + controllerMapping + APPLICANT_SKILLS_PAGE;
 		
 		
 		
 	}
 	
 	
-	@DeleteMapping( value= SKILLS_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@DeleteMapping( value= APPLICANT_SKILLS_PAGE + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
 	@ResponseBody
 	public DeleteResponse deleteSkills( @PathVariable Long id ) {
 
@@ -856,8 +816,7 @@ public class PersonalProfileController {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 						
-		//TODO
-		username = "abc";
+		
 		
 		ApplicantWithPassword applicant = applicantRepository.findOneByUsername(username);
 		

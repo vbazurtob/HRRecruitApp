@@ -17,6 +17,14 @@ import org.vbazurtob.HRRecruitApp.model.NewApplicantForm;
 import org.vbazurtob.HRRecruitApp.model.service.ApplicantService;
 import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
+/**
+ * @author Voltaire Bazurto Blacio
+ * 
+ * All rights reserved
+ *
+ * Controller for all the public pages
+ *
+ */
 @Controller
 @RequestMapping(PUBLIC_CNTROLLER)
 public class PublicController implements ControllerEndpoints{
@@ -110,12 +118,7 @@ public class PublicController implements ControllerEndpoints{
 
 	@RequestMapping( NOT_AUTHORIZED_PAGE )	
 	public String NotAuthorizedToViewController( Model model ) {
-		
-		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-		
-
-		
 		return "403";
 	}
 	

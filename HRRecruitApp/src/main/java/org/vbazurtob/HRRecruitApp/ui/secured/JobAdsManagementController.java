@@ -54,20 +54,19 @@ import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
 
 import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
+/**
+ * @author Voltaire Bazurto Blacio
+ * 
+ * All rights reserved
+ *
+ * Controller for all operations related to manage job advertisements that will be posted by an hr department member of the company
+ *
+ */
 @SessionAttributes("filterJobForm")
 @Controller
 @RequestMapping( JOBS_ADS_MANAGEMENT_CNTROLLER )
 public class JobAdsManagementController implements ControllerEndpoints {
 	
-	private final static String  DASHBOARD_JOB_MANAGEMENT_BASE_URL = "/manage/";
-	
-	private final static String FILTER_JOB_LIST = "/filter-jobs/";
-	
-	private final static String FILTER_JOB_CLEAR = "/clear-filter-jobs/";
-	
-	private final static String APPLICANTS_JOB = "/view-applicants/";
-	
-	private final static String VIEW_APPLICANT_CV = "/view-applicant-cv/";
 	
 	private final static int RECORDS_PER_PAGE = 10;
 	
@@ -129,7 +128,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	}
 	
 	
-	@RequestMapping(value= { DASHBOARD_JOB_MANAGEMENT_BASE_URL , DASHBOARD_JOB_MANAGEMENT_BASE_URL + "/{page}"  })
+	@RequestMapping(value= { HR_MEMBER_JOBS_MANAGEMENT_PAGE , HR_MEMBER_JOBS_MANAGEMENT_PAGE + "/{page}"  })
 	public String listJobs(
 			
 			@ModelAttribute("filterJobForm") Job jobFilterForm,
@@ -146,8 +145,6 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "admin";
 		
 		// Pagination for listing
 		Page<Job> jobPageObj = jobService.getPaginatedRecords(jobFilterForm, page, RECORDS_PER_PAGE);
@@ -162,9 +159,9 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		
 
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-		model.addAttribute("filterFormUrl", controllerMapping + FILTER_JOB_LIST);
-		model.addAttribute("clearFilterFormUrl", controllerMapping + FILTER_JOB_CLEAR);
+		model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE);
+		model.addAttribute("filterFormUrl", controllerMapping + HR_MEMBER_FILTER_JOB_LIST);
+		model.addAttribute("clearFilterFormUrl", controllerMapping + HR_MEMBER_FILTER_JOB_CLEAR);
 		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
@@ -175,14 +172,14 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		model.addAttribute("jobStatusList", jobStatusListObj );
 		model.addAttribute("filterJobForm", jobFilterForm);
 		
-		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
+		model.addAttribute("applicantsJobsUrl", controllerMapping + HR_MEMBER_APPLICANTS_JOB);
 
 		
 		return "secured/job_management.html";
 	}
 	
 	
-	@PostMapping( FILTER_JOB_LIST  )
+	@PostMapping( HR_MEMBER_FILTER_JOB_LIST  )
 	public String filterJobs(
 			@ModelAttribute("filterJobForm") Job jobFilterForm,
 			@Valid @ModelAttribute("jobForm") Job jobForm,
@@ -202,10 +199,10 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		jobFilterForm.setStatus(jobForm.getStatus());
 		jobFilterForm.setJobType(jobForm.getJobType());
 
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		return "redirect:" + controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE;
 	}
 	
-	@PostMapping( FILTER_JOB_CLEAR  )
+	@PostMapping( HR_MEMBER_FILTER_JOB_CLEAR  )
 	public String clearFilters(
 			
 			@ModelAttribute("filterJobForm") Job jobFilterForm,
@@ -232,7 +229,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		jt.setDescription("All");
 		jobFilterForm.setJobType(jt);
 		
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		return "redirect:" + controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE;
 	}
 	
 	@ModelAttribute("filterJobForm")
@@ -241,7 +238,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	}
 	
 	
-	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new" )
+	@RequestMapping( HR_MEMBER_JOBS_MANAGEMENT_PAGE + "new" )
 	public String newJob(
 			Model model
 			) {
@@ -251,17 +248,14 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "admin";
-		
 		Job newJobObj = new Job();
 
 		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
 		
 		
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
-		model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
+		model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE);
+		model.addAttribute("formActionUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE + "new");
 		
 		model.addAttribute("formTitle", "Create new job");
 		model.addAttribute("jobForm", newJobObj);
@@ -272,7 +266,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	
 	
 	
-	@PostMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new"  )
+	@PostMapping( HR_MEMBER_JOBS_MANAGEMENT_PAGE + "new"  )
 	public String saveProfile(
 			@Valid @ModelAttribute("jobForm") Job jobForm,
 			BindingResult results, 
@@ -284,16 +278,12 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 				
-		//TODO
-		username = "admin";
-		
-//		System.out.println("description" +  jobForm.getJobType().getDescription() + " ID " + jobForm.getJobType().getId());
 		
 		if(results.hasErrors()) {
 			
 			ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-			model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "new");
-			model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+			model.addAttribute("formActionUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE + "new");
+			model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE);
 			model.addAttribute("formTitle", "Create new job");
 			model.addAttribute("jobForm", jobForm);
 			model.addAttribute("jobTypeList", jobTypeList );
@@ -316,13 +306,13 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		jobService.saveJob(jobForm);
 		
 		
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		return "redirect:" + controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE;
 	}
 	
 	
 	
 	
-	@RequestMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/{id}" )
+	@RequestMapping( HR_MEMBER_JOBS_MANAGEMENT_PAGE + "edit/{id}" )
 	public String editJob(
 			Model model,
 			@PathVariable Long id
@@ -333,15 +323,13 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 				
-		//TODO
-		username = "admin";
 				
 		Job jobFormObj =  jobRepository.findById( id ).get() ;
 				
 		// View
 		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-		model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/" + id);
-		model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+		model.addAttribute("formActionUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE + "edit/" + id);
+		model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE);
 		model.addAttribute("formTitle", "Edit job");
 		model.addAttribute("jobForm", jobFormObj);
 		model.addAttribute("jobTypeList", jobTypeList );
@@ -351,7 +339,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	}
 	
 	
-	@PostMapping( DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/{id}"   )
+	@PostMapping( HR_MEMBER_JOBS_MANAGEMENT_PAGE + "edit/{id}"   )
 	public String editJob(
 			@Valid @ModelAttribute("jobForm") Job jobForm,
 			BindingResult results, 
@@ -362,11 +350,6 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-				
-		//TODO
-		username = "admin";
-		
-//		System.out.println("description" +  jobForm.getJobType().getDescription() + " ID " + jobForm.getJobType().getId());
 		
 		
 		// DEBUG
@@ -376,8 +359,8 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		if(results.hasErrors()) {
 			
 			ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-			model.addAttribute("formActionUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL + "edit/" + jobForm.getId());
-			model.addAttribute("baseUrl", controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL);
+			model.addAttribute("formActionUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE + "edit/" + jobForm.getId());
+			model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE);
 			model.addAttribute("formTitle", "Edit new job");
 			model.addAttribute("jobForm", jobForm);
 			model.addAttribute("jobTypeList", jobTypeList );
@@ -403,10 +386,10 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		jobService.saveJob(jobForm);
 		
 		redirectAttrs.addFlashAttribute("saved", true);
-		return "redirect:" + controllerMapping + DASHBOARD_JOB_MANAGEMENT_BASE_URL;
+		return "redirect:" + controllerMapping + HR_MEMBER_JOBS_MANAGEMENT_PAGE;
 	}
 	
-	@DeleteMapping( value= DASHBOARD_JOB_MANAGEMENT_BASE_URL + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@DeleteMapping( value= HR_MEMBER_JOBS_MANAGEMENT_PAGE + "delete/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
 	@ResponseBody
 	public DeleteResponse deleteSkills( @PathVariable Long id ) {
 
@@ -428,7 +411,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	}
 	
 	
-	@PutMapping( value= DASHBOARD_JOB_MANAGEMENT_BASE_URL + "close/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
+	@PutMapping( value= HR_MEMBER_JOBS_MANAGEMENT_PAGE + "close/{id}", produces= { MediaType.APPLICATION_JSON_VALUE } )
 	@ResponseBody
 	public DeleteResponse closeJobOffer( @PathVariable Long id ) {
 
@@ -450,7 +433,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	}
 	
 	
-	@RequestMapping(value= { APPLICANTS_JOB + "{index}" , APPLICANTS_JOB + "{index}/{page}"  })
+	@RequestMapping(value= { HR_MEMBER_APPLICANTS_JOB + "{index}" , HR_MEMBER_APPLICANTS_JOB + "{index}/{page}"  })
 	public String viewApplicantsForJob(
 			
 			//@ModelAttribute("filterJobForm") Job jobFilterForm,
@@ -468,8 +451,6 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
-		//TODO
-		username = "admin";
 		
 		// Pagination for listing
 		Page<JobApplicant> applicantsJobObj = jobApplicantService.getPaginatedApplicantsFromJob(index, page, RECORDS_PER_PAGE);
@@ -480,7 +461,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		
 
 		// View attributes
-		model.addAttribute("baseUrl", controllerMapping + APPLICANTS_JOB + index + '/' );
+		model.addAttribute("baseUrl", controllerMapping + HR_MEMBER_APPLICANTS_JOB + index + '/' );
 		
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
@@ -488,20 +469,20 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		model.addAttribute("applicantsJobList", applicantsJobObj.getContent());
 
 		
-		model.addAttribute("applicantsJobsUrl", controllerMapping + APPLICANTS_JOB);
+		model.addAttribute("applicantsJobsUrl", controllerMapping + HR_MEMBER_APPLICANTS_JOB);
 		model.addAttribute("jobObj", applicantsJobObj.getContent().size() > 0 ? applicantsJobObj.getContent().get(0).getJob() : null );
 		
 		model.addAttribute("applicantWorkExpService",  applicantWorkExpService );
 		model.addAttribute("applicantAcademicService",  applicantAcademicService );
 		
-		model.addAttribute("viewCVUrl", controllerMapping + VIEW_APPLICANT_CV + 
+		model.addAttribute("viewCVUrl", controllerMapping + HR_MEMBER_VIEW_APPLICANT_CV + 
 				 (applicantsJobObj.getContent().size() > 0 ? applicantsJobObj.getContent().get(0).getApplicant().getUsername() : null ) );
 
 		return "secured/job_mgmt_view_applicants.html";
 	}
 	
 	
-	@RequestMapping( VIEW_APPLICANT_CV + "{username}" )
+	@RequestMapping( HR_MEMBER_VIEW_APPLICANT_CV + "{username}" )
 	public String viewApplicantCV(
 			
 			

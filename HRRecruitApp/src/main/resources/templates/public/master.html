@@ -26,13 +26,13 @@
 	
 	
 </head>
+
 <body th:fragment="master_body(bodycontent)">
+
+<!--	Navbar	-->
 	<nav th:fragment="header" class="main-header">
 		<div class="navbar-wrapper">
-		
-<!-- 			<span class="col s2 app-title"> -->
-				<a th:href="@{/}">HRRecruitApp</a>
-<!-- 			</span> -->
+			<a th:href="@{/}">HRRecruitApp</a>
 			
 			<ul sec:authorize="isAuthenticated()" class="right">
 				<div class="" th:replace="secured/menu-bar.html::menu_bar_li">
@@ -40,39 +40,14 @@
  				<div class="" th:replace="secured/menu-bar.html::dropdown_system_user">
  				</div>
 			</ul>
-			
-<!-- 			<div id="main_menu" class="col s10  row"  sec:authorize="isAuthenticated()"> -->
-			
-<!-- 				<div class="col s9" th:insert="secured/menu-bar.html::menu_bar"> -->
-<!-- 				</div> -->
-			
-<!-- 				<div class="user-info col s3"> -->
-					
-<!-- 					Hi <span sec:authentication="name">TestUser</span> -->
-<!-- 				</div> -->
-				
-<!-- 			</div> -->
-					
-		
 		</div>
-		
 	</nav>
 	
-	<!--/* 
-						
-						Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows 
-						access to the spring security module from thymeleaf templates.
-						
-						This can also be achieved without this module by accessing the #request object utility
-						in thymeleaf
-						[[${#request.getUserPrincipal().getName()}]]  
-					
-					*/-->
 	
-	
+<!-- 	Main content -->
 	<div class="main-content" th:replace="${bodycontent}">Content is here</div>
 	
-	
+<!-- 	Footer -->
 	 <th:block th:replace="public/footer.html::footer"></th:block>
 
 	
