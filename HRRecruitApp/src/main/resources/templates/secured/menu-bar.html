@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Menu Bar</title>
+</head>
+<body>
+
+<th:block th:fragment="menu_bar">
+	<div class="row" th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE}">
+				 <i class="material-icons" style="display:inline;">home</i>Home
+			</a>
+		</div>
+		
+<!-- 		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')"> -->
+<!-- 			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE } "> -->
+<!-- 				<i class="material-icons" style="display:inline;"></i>My Info -->
+<!-- 			</a> -->
+<!-- 		</div> -->
+		
+		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE } ">
+				<i class="material-icons" style="display:inline;">next_week</i>Jobs
+			</a>
+		</div>
+		
+		
+		
+		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + VIEW_CV } ">
+				<i class="material-icons" style="display:inline;">description</i>My CV
+			</a>
+		</div>
+	</div>
+</th:block>
+
+
+
+<th:block th:fragment="menu_bar_li">
+	<th:block  th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE}">
+				 <i class="material-icons" style="display:inline;">home</i>Home
+			</a>
+		</li>
+		
+<!-- 		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')"> -->
+<!-- 			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE } "> -->
+<!-- 				<i class="material-icons" style="display:inline;"></i>My Info -->
+<!-- 			</a> -->
+<!-- 		</div> -->
+		
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ JOBS_CNTROLLER + APPLICANT_JOB_SEARCH_PAGE } ">
+				<i class="material-icons" style="display:inline;">next_week</i>Jobs
+			</a>
+		</li>
+		
+		
+		
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + VIEW_CV } ">
+				<i class="material-icons" style="display:inline;">description</i>My CV
+			</a>
+		</li>
+		
+<!-- 		<li  sec:authorize="hasAuthority('APPLICANT')"> -->
+<!-- 			<a th:href="*{ APPLICANT_CV_CNTROLLER + VIEW_CV } "> -->
+<!-- 				<i class="material-icons" style="display:inline;">description</i>My CV -->
+<!-- 			</a> -->
+<!-- 		</li> -->
+		
+		<li>
+			<a class="dropdown-trigger" href="#!" data-target="dropdown-system-user"><i class="material-icons left">account_circle</i><span sec:authentication="name">User</span><i class="material-icons right">arrow_drop_down</i></a>
+		</li>
+		
+	</th:block>
+</th:block>
+
+<th:block th:fragment="dropdown_system_user">
+	<ul id="dropdown-system-user" class="dropdown-content" th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+	  <li sec:authorize="hasAuthority('APPLICANT')">
+	  	<a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE}">My profile</a>
+	  </li>
+	  
+<!-- 	  <li><a href="#!">two</a></li> -->
+	  
+	  <li class="divider"></li>
+	  
+<!-- 	  Logout -->
+
+	  <li sec:authorize="hasAuthority('HR_ADMIN')">
+	  	<a th:href="*{JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT}">Logout</a>
+	  </li>
+	  <li sec:authorize="hasAuthority('APPLICANT')">
+	  	<a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT}">Logout</a>
+	  </li>
+	</ul>
+	
+<!-- 	JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT -->
+<!-- APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT -->
+</th:block>
+
+</body>
+</html>

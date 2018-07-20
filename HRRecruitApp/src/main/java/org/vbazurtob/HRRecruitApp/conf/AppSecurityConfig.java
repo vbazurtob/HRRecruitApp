@@ -2,9 +2,7 @@ package org.vbazurtob.HRRecruitApp.conf;
 
 import javax.sql.DataSource;
 
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,41 +17,33 @@ import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
  * @author voltaire
  *
  */
-//@Configuration
+
 @EnableWebSecurity
 public class AppSecurityConfig  {
 
 	@Autowired
 	protected DataSource datasource;
-	
-//	@Autowired
-//	protected static BCryptPasswordEncoder bcryptEncoder;
-	
+		
 	public AppSecurityConfig() {		
 	}
 	
 	@Configuration
-	@Order(1)
 	public static class PublicSecurityConfig extends WebSecurityConfigurerAdapter {
+		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception{
 			
 			http
-		
-			.antMatcher( ROOT_PAGE + "/**" )
 			.authorizeRequests()
+			.antMatchers(ROOT_PAGE).  permitAll()
 			.antMatchers(INDEX_PAGE, PUBLIC_CNTROLLER  +  "/home", PUBLIC_CNTROLLER  +  "/**").  permitAll()
 			.antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**").permitAll()
+			.anyRequest().authenticated()
 			
 			.and().csrf().disable()
 			;
-			
 						
-			System.out.println("Public endpoints " + PUBLIC_CNTROLLER + "*");;
-		}
-
-				
-		
+		}		
 	}
 	
 	
@@ -61,22 +51,19 @@ public class AppSecurityConfig  {
 	@Configuration
 	@Order(2)
 	public static class ApplicantSecurityConfig extends WebSecurityConfigurerAdapter {
-
-		
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception{
 			
-			http
-			.antMatcher( APPLICANT_CV_CNTROLLER +  "/**" ) // <-- Root antMatcher /cv/**
-			.authorizeRequests()
-//				.antMatchers( APPLICANT_CV_CNTROLLER +  "/*")
-//				.authenticated()
-				.anyRequest()
-				.hasAuthority("APPLICANT")
-			
-			
-			
+			http			
+			.requestMatchers()
+				.antMatchers( APPLICANT_CV_CNTROLLER +  "/**", JOBS_CNTROLLER + "/**") // <- automatic redirection not working.. maybe implement another class???
+			.and()
+				.authorizeRequests().anyRequest().authenticated()
+			.and()
+				.authorizeRequests().anyRequest()
+					.hasAuthority("APPLICANT")
+								
 			.and()
 			.formLogin()
 				.loginPage(PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE)
@@ -88,7 +75,7 @@ public class AppSecurityConfig  {
 				
 			.and()
 			.logout()
-				.logoutUrl(APPLICANT_CV_CNTROLLER + "/logout") // <--
+				.logoutUrl(APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT) // <-- logout
 				.logoutSuccessUrl( PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE + "?logout")
 				.deleteCookies("JSESSIONID")
 				.permitAll()
@@ -106,9 +93,6 @@ public class AppSecurityConfig  {
 		
 		@Autowired
 		public void configureGlobal(AuthenticationManagerBuilder auth, BCryptPasswordEncoder bcryptEncoder,  DataSource datasource) throws Exception {
-			
-			
-			
 			
 			auth.jdbcAuthentication().dataSource(datasource)
 			.passwordEncoder(bcryptEncoder)
@@ -129,7 +113,7 @@ public class AppSecurityConfig  {
 	}
 	
 	@Configuration
-	@Order(3)
+	@Order(1)
 	public static class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		
@@ -160,7 +144,7 @@ public class AppSecurityConfig  {
 				.permitAll()
 			.and()
 			.logout()
-				.logoutUrl(JOBS_ADS_MANAGEMENT_CNTROLLER + "/logout-hr")
+				.logoutUrl(JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT)
 				.logoutSuccessUrl(PUBLIC_CNTROLLER +"/login-hr?logout") // <-- post login url must match root ant patter
 				.deleteCookies("JSESSIONID")
 				.permitAll()
@@ -179,9 +163,7 @@ public class AppSecurityConfig  {
 		
 		@Autowired
 		public void configureGlobal(AuthenticationManagerBuilder auth, BCryptPasswordEncoder bcryptEncoder  , DataSource datasource ) throws Exception {
-			
-//			System.out.println("=============  admin " +  bcryptEncoder.encode("admin") );
-			
+						
 			auth.jdbcAuthentication().dataSource(datasource)
 			.passwordEncoder(bcryptEncoder)
 			

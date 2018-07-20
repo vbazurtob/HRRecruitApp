@@ -27,6 +27,19 @@ public interface ControllerEndpoints {
 	
 	// Pages for Applicant CV profile
 	final static  String APPLICANT_SUMMARY_PAGE = "/summary";
+	final static  String APPLICANT_PROFILE_PAGE = "/profile/";
+	final static  String APPLICANT_WORKEXP_PAGE = "/workexp/";
+	final static  String APPLICANT_SKILLS_PAGE = "/skills/";
+	final static  String APPLICANT_ACADEMICS_PAGE = "/academics/";
+	final static  String VIEW_CV = "/view/";
 	
+	// Pages for Jobs search
+	final static  String APPLICANT_JOB_SEARCH_PAGE = "/search/";
+
+
+	// Logout pages
+	
+	final static  String APPLICANT_LOGOUT = "/logout/";
+	final static  String HR_MEMBER_LOGOUT = "/logout-hr/";
 	
 }

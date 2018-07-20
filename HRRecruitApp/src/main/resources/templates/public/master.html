@@ -9,6 +9,8 @@
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
 
+
+
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	
@@ -25,28 +27,47 @@
 	
 </head>
 <body th:fragment="master_body(bodycontent)">
-	<nav th:fragment="header" class="main-header navbar-wrapper">
-		<span class="app-title">
-			<a th:href="@{/}">HRRecruitApp</a>
-		</span>
+	<nav th:fragment="header" class="main-header">
+		<div class="navbar-wrapper">
 		
-		<div id="main_menu"  sec:authorize="isAuthenticated()">
-			<div class="user-info">
-				<!--/* 
+<!-- 			<span class="col s2 app-title"> -->
+				<a th:href="@{/}">HRRecruitApp</a>
+<!-- 			</span> -->
+			
+			<ul sec:authorize="isAuthenticated()" class="right">
+				<div class="" th:replace="secured/menu-bar.html::menu_bar_li">
+ 				</div>
+ 				<div class="" th:replace="secured/menu-bar.html::dropdown_system_user">
+ 				</div>
+			</ul>
+			
+<!-- 			<div id="main_menu" class="col s10  row"  sec:authorize="isAuthenticated()"> -->
+			
+<!-- 				<div class="col s9" th:insert="secured/menu-bar.html::menu_bar"> -->
+<!-- 				</div> -->
+			
+<!-- 				<div class="user-info col s3"> -->
 					
-					Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows 
-					access to the spring security module from thymeleaf templates.
-					
-					This can also be achieved without this module by accessing the #request object utility
-					in thymeleaf
-					[[${#request.getUserPrincipal().getName()}]]  
+<!-- 					Hi <span sec:authentication="name">TestUser</span> -->
+<!-- 				</div> -->
 				
-				*/-->
-				Hi <span sec:authentication="name">TestUser</span>
-			</div>
-			<div  th:replace="public/logout::post_logout"></div>
+<!-- 			</div> -->
+					
+		
 		</div>
+		
 	</nav>
+	
+	<!--/* 
+						
+						Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows 
+						access to the spring security module from thymeleaf templates.
+						
+						This can also be achieved without this module by accessing the #request object utility
+						in thymeleaf
+						[[${#request.getUserPrincipal().getName()}]]  
+					
+					*/-->
 	
 	
 	<div class="main-content" th:replace="${bodycontent}">Content is here</div>
@@ -54,13 +75,17 @@
 	
 	 <th:block th:replace="public/footer.html::footer"></th:block>
 
-	 <script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+	
 	 
 	 <!-- Basic required scripts -->
 	
 	<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>	 
+	  src="https://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>	 
+	 
+	<script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  
+  	<script type="text/javascript" th:src="@{/js/main-app.js}"></script>
 </body>
 </html>

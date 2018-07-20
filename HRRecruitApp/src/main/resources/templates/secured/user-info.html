@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>User Info</title>
+</head>
+<body>
+
+<th:block th:fragment="user_info">
+	<div class="user-info col s3">
+				<!--/* 
+					
+					Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows 
+					access to the spring security module from thymeleaf templates.
+					
+					This can also be achieved without this module by accessing the #request object utility
+					in thymeleaf
+					[[${#request.getUserPrincipal().getName()}]]  
+				
+				*/-->
+				Hi <span sec:authentication="name">TestUser</span>
+	</div>
+	
+</th:block>
+
+</body>
+</html>
