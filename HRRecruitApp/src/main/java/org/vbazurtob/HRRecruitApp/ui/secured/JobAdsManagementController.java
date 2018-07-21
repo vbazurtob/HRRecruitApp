@@ -217,7 +217,6 @@ public class JobAdsManagementController implements ControllerEndpoints {
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		
-		System.out.println("OBJ clear  " + jobFilterForm);;
 		
 		jobFilterForm.setTitle(null);
 		jobFilterForm.setJobType(null);

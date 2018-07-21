@@ -29,7 +29,6 @@ public class ApplicantWorkExpService {
 	public void saveWorkExpDetail( ApplicantWorkExperience applicantWorkExperienceForm, String applicantUsername ) {
 			
 		applicantWorkExperienceForm.setApplicant(applicantRepository.findOneByUsername( applicantUsername ));
-		// System.out.println("ToBeSaved " + applicantAcademicForm.toString());;
 		appWorkExpRepository.save(applicantWorkExperienceForm);
 		
 	}

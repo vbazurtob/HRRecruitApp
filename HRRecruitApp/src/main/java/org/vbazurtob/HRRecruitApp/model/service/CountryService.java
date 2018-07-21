@@ -37,7 +37,6 @@ public class CountryService {
 	public void init() throws IOException{
 		Resource resource = resourceloader.getResource("classpath:/list_countries.csv");
 		
-		//System.out.println("-----------------------" + resource.getURI().toString());
 
 		try (
 				

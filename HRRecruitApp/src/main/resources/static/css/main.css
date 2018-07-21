@@ -6,6 +6,12 @@ html, body{
 	height: 100%;
 }
 
+.logo-text{
+	font-size: 1.3em;
+	padding-top: 15px;
+	padding-left:15px;
+}
+
 .main-header{
 	height: 90px;
 }

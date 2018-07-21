@@ -18,6 +18,15 @@
 	</script>
 		
 	
+	<style>
+				#main-content{
+					height: 80vh;
+				}
+				#profile_form_container{
+					height: 100%;
+				}
+	</style>
+	
 	
 </head>
 <body th:replace="public/master::master_body(~{::#main-content})" >
@@ -44,8 +53,8 @@
 						
 						<div class="row">
 							<div class="col s12">
-								<button title="Update password" type="submit" class="waves-effect waves-light btn-floating btn-large right">
-									<i class="material-icons right">save</i>
+								<button title="Update password" type="submit" class="waves-effect waves-light  btn right">
+									<i class="material-icons right">save</i> Save
 								</button>		
 							</div>
 						</div>
@@ -64,8 +73,8 @@
 						<th:block th:replace="secured/profile_form_fragment.html::profile_form"></th:block>
 						<div class="row">
 							<div class="col s12">
-								<button title="Update info" type="submit" class="waves-effect waves-light btn-floating btn-large right">
-									<i class="material-icons right">save</i>
+								<button title="Update info" type="submit" class="waves-effect waves-light  btn right">
+									<i class="material-icons right">save</i> Save
 								</button>		
 							</div>
 						</div>

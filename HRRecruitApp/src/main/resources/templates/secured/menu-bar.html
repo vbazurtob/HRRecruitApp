@@ -6,36 +6,6 @@
 </head>
 <body>
 
-<th:block th:fragment="menu_bar">
-	<div class="row" th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
-		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
-			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE}">
-				 <i class="material-icons" style="display:inline;">home</i>Home
-			</a>
-		</div>
-		
-<!-- 		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')"> -->
-<!-- 			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE } "> -->
-<!-- 				<i class="material-icons" style="display:inline;"></i>My Info -->
-<!-- 			</a> -->
-<!-- 		</div> -->
-		
-		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
-			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE } ">
-				<i class="material-icons" style="display:inline;">next_week</i>Jobs
-			</a>
-		</div>
-		
-		
-		
-		<div class="col s2" sec:authorize="hasAuthority('APPLICANT')">
-			<a th:href="*{ APPLICANT_CV_CNTROLLER + VIEW_CV } ">
-				<i class="material-icons" style="display:inline;">description</i>My CV
-			</a>
-		</div>
-	</div>
-</th:block>
-
 
 
 <th:block th:fragment="menu_bar_li">

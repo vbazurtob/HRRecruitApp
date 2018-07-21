@@ -25,7 +25,6 @@ public class FormFieldsMatchValidator implements ConstraintValidator<FormFieldsM
 		Object fieldValueMatch = new BeanWrapperImpl(value).getPropertyValue(fieldMatch);
 		
 		if(fieldValue != null) {
-			//System.out.println("[*]  " + fieldValue + "  ----  " +fieldValueMatch);
 			return fieldValue.equals(fieldValueMatch);
 		}else {
 			return fieldValue == null;

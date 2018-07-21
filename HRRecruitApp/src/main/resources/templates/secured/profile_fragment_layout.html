@@ -5,7 +5,18 @@
 	<title>Fragment Profile Forms Layout</title>
 </head>
 <body>
-	<div th:fragment="profile_forms_layout(content)" class="row grey lighten-3 " style="height: 100%;">
+	<div id="container_two_columns" th:fragment="profile_forms_layout(content)" class="row grey lighten-3 " style="height: 100%;">
+	
+		<style>
+			#container_two_columns{
+				margin-bottom: 0px;
+			}
+			
+			#main-content{
+				margin-bottom: 0px;
+			}
+		</style>
+	
 		<div id="profile_side_menu" class="col s2">
 			<div class="sidemenu-option" th:classappend="${userProfileOptionSelected} ? 'optionFormSelected' : ''">
 				<a title="Applicants profile" href="/profile.html" th:href="@{/cv/profile/}">User Profile</a>

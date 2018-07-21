@@ -2,7 +2,6 @@ package org.vbazurtob.HRRecruitApp.ui.secured;
 
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -15,7 +14,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -334,8 +332,9 @@ public class PersonalProfileController {
 		
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		
 		// Get logged username
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 				
 		
@@ -367,7 +366,6 @@ public class PersonalProfileController {
 			Model model,
 			@PathVariable Long id) {
 		
-		System.out.println("EDIT ");;
 		
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
@@ -400,7 +398,7 @@ public class PersonalProfileController {
 	@ResponseBody
 	public DeleteResponse deleteAcademics( @PathVariable Long id ) {
 		
-		//System.out.println( " DELETE " + id);
+
 		String response="OK";
 		try {
 			appAcademicsRepository.deleteById(id);
@@ -528,8 +526,9 @@ public class PersonalProfileController {
 		
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		
 		// Get logged username
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 				
 		
@@ -597,7 +596,7 @@ public class PersonalProfileController {
 	@ResponseBody
 	public DeleteResponse deleteWorkExp( @PathVariable Long id ) {
 		
-		//System.out.println( " DELETE " + id);
+
 		String response="OK";
 		try {
 			applicantWorkExpRepository.deleteById(id);
@@ -693,8 +692,7 @@ public class PersonalProfileController {
 		model.addAttribute("skillsOptionSelected",true);
 		model.addAttribute("proficiencyLst", proficiencyService.getListProficiencies());
 		model.addAttribute("proficiencyService", proficiencyService);
-		// DEBUG form Validations
-//		Utils.printFormErrors(results);
+		
 		
 		
 		if(results.hasErrors()) { // Reload the form with errors			
@@ -717,7 +715,7 @@ public class PersonalProfileController {
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		// Get logged username
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		//		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 				
 		
@@ -812,7 +810,8 @@ public class PersonalProfileController {
 			) {
 		
 		//Get Controller Name
-		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		//		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+
 		// Get logged username
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 						
@@ -836,13 +835,9 @@ public class PersonalProfileController {
 	@RequestMapping("/summary")	
 	public String summaryController( Principal p ) {
 		
-		System.out.println( p.getName() );;
 		
-		System.out.println( p.getName() );;
+//		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		
-		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-		
-		System.out.println( authorities );
 		
 		return "secured/summary";
 	}

@@ -33,7 +33,6 @@ public class ApplicantAcademicsService {
 		}
 		
 		applicantAcademicForm.setApplicant(applicantRepository.findOneByUsername( applicantUsername ));
-		// System.out.println("ToBeSaved " + applicantAcademicForm.toString());;
 		applicantAcademicRepository.save(applicantAcademicForm);
 		
 	}

@@ -29,6 +29,15 @@
 			margin-right: 10px;
 		
 		}
+		
+		.first-top-elem{
+			padding-top: 20px;
+			height: 100%;
+		}
+		
+		#main-content{
+			height: 80vh;
+		}
 	
 	</style>
 	
@@ -40,7 +49,7 @@
 		
 			<div id="main-content">
 			
-				<div class="row">
+				<div class="row first-top-elem">
 					<div class="col s3">
 						
 						<div class="row">
@@ -110,7 +119,7 @@
 					</div>
 					
 					<div class="col s9">
-						<div class="jobs-list">
+						<div class="jobs-list ">
 				
 							<th:block th:replace="secured/job_form_fragment.html::form_messages">Messages</th:block>			
 						

@@ -16,7 +16,14 @@ INSERT INTO "vbazurtobPortfolio".job_type ("id", description) VALUES (DEFAULT, '
 INSERT INTO "vbazurtobPortfolio".applicant(
             username, password, names, lastname, address1, address2, country, 
             state, zipcode, email)
-    VALUES ('abc', '$2b$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'ABC', 'Demo U.', 'St', '2005', 'NZ', 
+    VALUES ('demo', '$2a$10$5ebPOJeVYLUmxo9jQgiHweQQ4gIRT2iTvx6CeE7X26nRIMrsNkgZS', 'Demo', 'Demo U.', 'St', '2005', 'NZ', 
+            'RR', 'X45644', 'demo@abc.com');
+
+
+INSERT INTO "vbazurtobPortfolio".applicant(
+            username, password, names, lastname, address1, address2, country, 
+            state, zipcode, email)
+    VALUES ('abc', '$2a$10$OKpfQs/kMErTVykVNDgPHOxAatoaslUSetOdnvm41D09TIBEzSMSm', 'ABC', 'Demo U.', 'St', '2005', 'NZ', 
             'RR', 'X45644', 'abc@abc.com');
             
             

@@ -161,10 +161,6 @@ public class ApplicantJobsController {
 		jobFilterForm.setTitle(jobForm.getTitle());
 		jobFilterForm.setStatus("Open");
 		jobFilterForm.setJobType(jobForm.getJobType());
-
-		// DEBUG
-//		System.out.println("ON FILTER object created " + jobForm.getSalaryRangeSearchIndex());;
-//		System.out.println("OBJ filter  " + jobFilterForm);;
 		
 		return "redirect:" + controllerMapping + APPLICANT_JOB_SEARCH_PAGE;
 	}
@@ -184,18 +180,11 @@ public class ApplicantJobsController {
 		//Get Controller Name
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		
-//		System.out.println("OBJ clear  " + jobFilterForm);;
-		
-		
 		jobFilterForm.setTitle(null);
 		jobFilterForm.setJobType(null);
 		jobFilterForm.setStatus(null);
 		
-		jobFilterForm.setSalaryRangeSearchIndex( 0 ); // <- BUG find the elem in arraylist with 0 index
-		
-//		System.out.println("======= " + salaryRangeListObj.get(0));;
-		
-		
+		jobFilterForm.setSalaryRangeSearchIndex( 0 ); // <- BUG find the elem in arraylist with 0 index		
 		jobFilterForm.setJobPostedTimeIndex(0);
 		
 		JobType jt = new JobType();
@@ -203,8 +192,6 @@ public class ApplicantJobsController {
 		jt.setId(0);
 		jt.setDescription("All");
 		jobFilterForm.setJobType(jt);
-		
-		System.out.println("AFTER OBJ clear  " + jobFilterForm );;
 		
 		return "redirect:" + controllerMapping + APPLICANT_JOB_SEARCH_PAGE;
 	}
@@ -304,7 +291,7 @@ public class ApplicantJobsController {
 		model.addAttribute("prevPage", previousPageNum);
 		model.addAttribute("nextPage", nextPageNum);
 		model.addAttribute("pageObj", jobAppliedPageObj );
-		model.addAttribute("jobsAppliedList", jobAppliedPageObj.getContent());
+		model.addAttribute("jobsAppliedList", jobAppliedPageObj.getContent() );
 		
 		model.addAttribute("filterJobSearch", filterJobSearch);
 		model.addAttribute("salaryRangeListObj", salaryRangeListObj);

@@ -53,7 +53,6 @@ public class JobSpecification implements Specification<Job> {
 		Predicate titleP, statusP, jobTypeP;
 		if( criteriaFilterObj.getTitle() != null && !criteriaFilterObj.getTitle().trim().isEmpty()  ) {
 			
-	//			System.out.println("Root " + root.get(Job_.title )  );;
 			
 			titleP =  cb.like(root.get(Job_.title ) , '%' + criteriaFilterObj.getTitle() + "%");
 			predicateReturn = cb.and(predicateReturn, titleP);
@@ -64,7 +63,6 @@ public class JobSpecification implements Specification<Job> {
 		
 				jobTypeP = cb.equal(root.get(Job_.jobType) , criteriaFilterObj.getJobType());
 
-//				System.out.println("JobType " + root.get(Job_.jobType));;
 				predicateReturn = cb.and(predicateReturn, jobTypeP);
 			}
 		}
@@ -95,7 +93,6 @@ public class JobSpecification implements Specification<Job> {
 				Date jobPostedFilter = getDateFilter( ((JobSearchFilter) criteriaFilterObj).getJobPostedTimeIndex() );
 				Predicate jobPostedDateP;
 				
-//				System.out.println("Date filtered " + jobPostedFilter);;
 				switch ( ((JobSearchFilter) criteriaFilterObj).getJobPostedTimeIndex()  ) {
 					case 1:
 					case 2:
@@ -119,7 +116,7 @@ public class JobSpecification implements Specification<Job> {
 			
 			if( ((JobSearchFilter) criteriaFilterObj).getSalaryRangeSearchIndex() > 0 ) {
 				
-				System.out.println("Autowired " + jobSearchFiltersService);;
+
 				HashMap<Integer, SalaryRangeOption> salaryRangesHash =  jobSearchFiltersService.getSalaryFilterOptions();
 				
 				SalaryRangeOption salaryRangeSelected = salaryRangesHash.get(((JobSearchFilter) criteriaFilterObj).getSalaryRangeSearchIndex());
@@ -127,8 +124,6 @@ public class JobSpecification implements Specification<Job> {
 				Predicate salaryP = cb.between( root.get(Job_.salary), salaryRangeSelected.getSalaryEqualsMore(),
 						salaryRangeSelected.getSalaryLessEquals() );
 				
-				
-//				System.out.println("[Spec] Between " +  salaryRangeSelected);;
 				predicateReturn = cb.and( predicateReturn , salaryP);
 						
 				

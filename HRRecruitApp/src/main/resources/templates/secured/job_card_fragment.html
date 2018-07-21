@@ -7,8 +7,10 @@
 <body>
 
 
-<th:block th:fragment="job_card" th:object="${jobObj}">
-	<div class="col s2 card jobcard">
+<th:block th:fragment="job_card(classCardOffset)" th:object="${jobObj}">
+	
+	<div  th:class=" ${classCardOffset} + ' col s2 card jobcard'">
+	
 		<div class="row job-title">
 			<div class="col s12">
 				<a th:text="*{title}" th:href="${jobDetailUrl} + *{id}"></a>

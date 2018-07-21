@@ -19,7 +19,16 @@
 		/*]]>*/
 		</script>
 		
-
+		<th:block th:if=" ${academics.size() <= 1 } ">
+			<style>
+				#main-content{
+					height: 80vh;
+				}
+				#profile_form_container{
+					height: 100%;
+				}
+			</style>
+		</th:block>
 		
 		<th:block th:replace="secured/academics_list_fragment.html::js_list_academics">
 		</th:block>

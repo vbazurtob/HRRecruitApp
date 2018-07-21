@@ -18,7 +18,19 @@
 		/*]]>*/
 		</script>
 		
-
+		<style>
+			#main-content{
+				height: 80vh;
+			}
+			
+			#job_form_container{
+				padding: 15px;
+			}
+			.description-p{
+				text-align: justify;
+			}
+		</style>
+		
 		
 
 	
@@ -39,10 +51,6 @@
 				
 				<form th:id="job_form" id="job_form" th:action="${formActionUrl}"  th:object="${jobDetails}" th:method="post" >
 				
-<!-- 					<th:block th:replace="secured/job_form_fragment.html::form_error_messages">Messages</th:block> -->
-				
-					
-					
 					
 					<div class="row">
 						<div class="col s9">
@@ -61,7 +69,7 @@
 					
 					<div class="row">
 						<div class="col s12">
-							<p th:text="*{description}">Job details</p>
+							<p class="description-p" th:text="*{description}">Job details</p>
 						</div>
 					</div>
 					

@@ -20,6 +20,17 @@
 		</script>
 		
 
+
+		<th:block th:if=" ${skills.size() <= 3 } ">
+			<style>
+				#main-content{
+					height: 80vh;
+				}
+				#profile_form_container{
+					height: 100%;
+				}
+			</style>
+		</th:block>
 		
 		<th:block th:replace="secured/skills_list_fragment.html::js_list_skills">
 		</th:block>

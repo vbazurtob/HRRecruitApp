@@ -32,7 +32,7 @@
 <!--	Navbar	-->
 	<nav th:fragment="header" class="main-header">
 		<div class="navbar-wrapper">
-			<a th:href="@{/}">HRRecruitApp</a>
+			<a th:href="@{/}"><span class="logo-text">HRRecruitApp</span></a>
 			
 			<ul sec:authorize="isAuthenticated()" class="right">
 				<div class="" th:replace="secured/menu-bar.html::menu_bar_li">

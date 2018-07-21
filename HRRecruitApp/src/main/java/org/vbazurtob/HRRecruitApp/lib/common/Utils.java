@@ -8,7 +8,6 @@ import org.springframework.validation.ObjectError;
 public class Utils {
 
 	public Utils() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	public static void printFormErrors( BindingResult results ) {

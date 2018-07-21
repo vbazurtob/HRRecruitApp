@@ -16,7 +16,7 @@
 						<div class="row">					
 			</th:block>
 			
-							<div th:replace="secured/job_card_fragment.html::job_card">
+							<div th:replace="secured/job_card_fragment.html::job_card( (  ${iter.index }   % ${colPerRow} )   == 0 ? 'offset-s3' : '' )">
 							</div>
 							
 

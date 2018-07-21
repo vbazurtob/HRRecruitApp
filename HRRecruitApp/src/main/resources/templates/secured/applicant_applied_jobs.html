@@ -20,17 +20,27 @@
 	<th:block th:replace="secured/jobs_list_fragment.html::js_list_skills">
 	</th:block>
 		
-	<style>
-	
-	
-		.jobcard{
-		
-			margin-left: 10px;
-			margin-right: 10px;
+	<style>	
+		.applied-job-card{
+			padding: 15px;
+			margin-left: 5%;
+			margin-right: 5%;
 		
 		}
-	
+		
+		.applied-job-card .card-action{
+			padding: 0px;
+		}
+		
 	</style>
+	
+	<th:block th:if=" ${jobsAppliedList.size() <=3 } ">
+		<style>
+			#main-content{
+				height: 80vh;
+			}
+		</style>
+	</th:block>
 	
 </head>
 <body th:replace="public/master::master_body(~{::#main-content})" >
@@ -43,6 +53,7 @@
 					<div>
 						<h5>My job applications</h5>
 					</div>
+					<br>
 					<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber}  )"></th:block> 
 						<div class="jobs-list">
 				
