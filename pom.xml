@@ -178,13 +178,17 @@ Author: Voltaire Bazurto Blacio</description>
 		    <properties>
 		        <activatedProperties>dev</activatedProperties>
 		    </properties>
+<!-- 		    <activation> -->
+<!-- 		        <activeByDefault>true</activeByDefault> -->
+<!-- 		    </activation> -->
+		    
 		</profile>
 		<profile>
 		    <id>release</id>
 		    <properties>
 		        <activatedProperties>release</activatedProperties>
 		    </properties>
-		    		    <activation>
+		   	<activation>
 		        <activeByDefault>true</activeByDefault>
 		    </activation>
 		    
