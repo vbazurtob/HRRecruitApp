@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - Job Management, View Applicants</title>
+	
+	
+	<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+	</div>
+		
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		
+		/*]]>*/
+	</script>
+		
+		
+	<style>
+	
+	
+		.jobcard{
+		
+			margin-left: 10px;
+			margin-right: 10px;
+		
+		}
+		
+		li {
+		     list-style-type: square;
+		}
+		
+	
+	</style>
+	
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+
+		
+			<div id="main-content">
+				
+					<div>
+						<h5>List of applicants <span th:if="${jobObj}!=null" th:text="'for the ' + ${jobObj.title}+ ' position'"> </span></h5>
+					</div>
+					<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber}  )"></th:block> 
+						<div class="jobs-list">
+				
+
+
+							<th:block th:each="applicantJobObj, iter : ${applicantsJobList}" class="card" >
+						
+								<div class="card applied-job-card" th:object="${applicantJobObj.applicant}">
+
+									<div class="card-content">
+							
+														<div th:text="*{names}+' '+*{lastname}" class="card-title"></div>
+														
+														<div class="row">
+															<div class="col s1"><label>E-mail:</label></div>
+															<div class="col s2">
+																<div th:text="*{email}"></div> 	
+															</div>
+															<div class="col s1"><label>Address:</label></div>
+															<div class="col s2">
+																<div th:text="*{address1}"></div>
+																<div th:text="*{address2}"></div>
+																<div th:text="*{state} + ',' + *{country}"></div>
+																<div th:text="*{zipcode}"></div>	
+															</div>
+															<div class="col s1"><label>Recent education:</label></div>
+															<div class="col s2">
+
+
+																<ul>
+																	
+																	<div th:each="education, iter : ${applicantAcademicService.get3MostRecentEducation( applicantJobObj.applicant.username ) }">
+																		
+																		<li th:text="${education.degreeType} + ', ' + ${education.degreeName} + ' at ' + ${education.institution}">
+																		</li>
+																	
+																	</div>
+																	
+																</ul>
+
+															</div>
+															<div class="col s1"><label>Recent experience:</label></div>
+															<div class="col s2">
+																<ul>
+																	<div th:each="workexp, iter : ${applicantWorkExpService.get3MostRecentExperience( applicantJobObj.applicant.username  )}">
+																		
+																		<li th:text="${workexp.position + ' at ' + workexp.institution}">
+																		</li>
+																	
+																	</div>
+																</ul>
+															</div>
+														</div>
+														
+						
+									</div>
+									<div class="card-action">
+										<a href="#" th:href="${viewCVUrl}" target="_new">
+											<span th:text="'View CV'">View CV</span>
+										</a>
+
+										<a href="#" th:href="'mailto:' + *{email} +'?subject=Application for the ' + ${applicantJobObj.job.title} + ' position&body=Dear ' + *{names}+' '+*{lastname} + ','" >
+											<span th:text="'Email candidate'">Email candidate</span>
+										</a>
+									</div>
+								</div>
+							</th:block>
+
+
+				
+						
+						</div>
+			</div>
+		
+
+
+
+
+</body>
+</html>

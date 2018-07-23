@@ -1,0 +1,160 @@
+<th:block th:fragment="form_messages">
+
+					<div id="form-messages">
+					
+						<ul th:if="${saved}==true" class="form-saved-message green lighten-4">
+									<li th:if="${saved}==true">
+										Form has been saved sucessfully!
+									</li>
+									
+						</ul>
+					
+						<div class="form-error-messages red lighten-4" th:if="${#fields.hasErrors('global')} or ${pwdchangedError} ==  true">
+							<ul>
+								<li th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+									Error  codes
+								</li>
+								
+								
+							</ul>
+						</div>
+					</div>
+
+
+</th:block>
+
+<th:block th:fragment="changepwd_form_messages">
+
+					<div id="form-chgpwd-messages">
+					
+						
+						<div  class="form-saved-message green lighten-4" th:if="(${pwdchanged}==true)"  >
+							<ul>
+								
+								<li th:if="${pwdchanged}==true">
+									Password has been successfully changed!
+								</li>
+								
+							</ul>
+						</div>
+						
+						
+						
+						<div class="form-error-messages red lighten-4" th:if="${#fields.hasErrors('global')} or ${pwdchangedError} ==  true">
+							
+							<ul>
+								<li th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+									Error  codes
+								</li>
+							</ul>
+							
+							<ul>
+								<li th:if="${pwdchangedError} ==  true">
+									An error occurred when trying to update the password. No changes were made!
+								</li>
+							</ul>
+							
+						</div>
+					</div>
+
+</th:block>
+			
+
+
+<th:block th:fragment="user_password_form">
+
+		<div class="row">
+						<div class="col s4">
+							<input id="usernameChangePwdForm" th:id="usernameChangePwdForm" type="hidden"  th:field="*{usernameChangePwdForm}" />
+							
+							<label for="currentPassword">Current Password</label>
+							<input id="currentPassword" th:id="currentPassword"  th:name="currentPassword" type="password" />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('currentPassword')}" th:errors="*{currentPassword}">
+							Current Password error</div>							
+							
+							
+							
+						</div>
+						<div class="col s4">
+							<label for="password">New Password</label>
+							<input id="password" th:id="password"  th:name="password" type="password" />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>													
+						</div>
+						<div class="col s4">
+							<label for="passwordConfirmation">Confirm your password</label>
+							<input id="passwordConfirmation" th:id="passwordConfirmation" th:name="passwordConfirmation" type="password"  />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}">Confirmation Password error</div>							
+						</div>
+		</div>
+
+</th:block>
+
+
+<th:block th:fragment="profile_form" >
+
+					
+
+				
+				
+				
+				
+					
+					<div class="row">
+						<div class="col s4">
+							<input id="username" th:id="username" type="hidden" th:readonly="true" class="disabled-text" th:field="*{username}" />
+							
+							<label for="names">Names</label>
+							<input id="names" th:id="names" type="text" th:field="*{names}" />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('names')}" th:errors="*{names}">Names error</div>
+						</div>
+						<div class="col s4">
+						
+							<label for="lastname">Lastname(s)</label>
+							<input id="lastname" th:id="lastname" type="text" th:field="*{lastname}" />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Lastnames error</div>
+						
+						</div>
+						<div class="col s4">
+							<label for="email">E-mail</label>
+							<input id="email" th:id="email" type="email" maxlength="45" th:field="*{email}" />
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">E-mail error</div>
+						</div>
+						
+					</div>
+					
+					<div class="row">
+						
+						<div class="col s4">
+							<label for="country">Country</label>
+							<select id="country" th:field="*{country}" class="browser-default">
+								<option th:each="countryObj : ${countriesLst}" th:value="${countryObj.getCode()}" th:text="${countryObj.getName()}">Option1</option>
+							</select>
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country error</div>
+						</div>
+						<div class="col s4">
+							<label for="state">State</label>
+							<input id="state" th:id="state" type="text" maxlength="100" th:field="*{state}"/>
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('state')}" th:errors="*{state}">State error</div>						
+						</div>
+						
+						<div class="col s4">
+							<label for="zipcode">Zipcode</label>
+							<input id="zipcode" th:id="zipcode" type="text" maxlength="6" th:field="*{zipcode}"/>
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}">Zipcode error</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col s4">
+							<label for="address1">Address</label>
+							<input id="address1" th:id="address1" type="text"  th:field="*{address1}"/>
+							<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}">Address error</div>
+							<input id="address2" th:id="address2" type="text"  th:field="*{address2}"/>
+							<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}">Address2 error</div>
+						</div>
+						<div class="col s4">
+						</div>
+						<div class="col s4"></div>
+					</div>
+										
+</th:block>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Fragment Profile Forms Layout</title>
+</head>
+<body>
+	<div id="container_two_columns" th:fragment="profile_forms_layout(content)" class="row grey lighten-3 " style="height: 100%;">
+	
+		<style>
+			#container_two_columns{
+				margin-bottom: 0px;
+			}
+			
+			#main-content{
+				margin-bottom: 0px;
+			}
+		</style>
+	
+		<div id="profile_side_menu" class="col s2">
+			<div class="sidemenu-option" th:classappend="${userProfileOptionSelected} ? 'optionFormSelected' : ''">
+				<a title="Applicants profile" href="/profile.html" th:href="@{/cv/profile/}">User Profile</a>
+			</div>
+			<div class="sidemenu-option" th:classappend="${academicsOptionSelected} ? 'optionFormSelected' : ''">
+				<a title="Academics" href="/academics.html" th:href="@{/cv/academics/}">Academics</a>
+			</div>
+			<div class="sidemenu-option"  th:classappend="${workExperienceOptionSelected} ? 'optionFormSelected' : ''">
+				<a title="Work Experience" href="/workexp.html" th:href="@{/cv/workexp/}">Work Experience</a>
+			</div>
+			
+			<div class="sidemenu-option"  th:classappend="${skillsOptionSelected} ? 'optionFormSelected' : ''">
+				<a title="Skills" href="/skills.html" th:href="@{/cv/skills/}">Skills</a>
+			</div>
+			
+		</div>
+		<div id="profile_form_container" class="col s10 m10 l10 white">
+			<div th:replace="${content}"></div>
+		</div>
+	</div>
+</body>
+</html>

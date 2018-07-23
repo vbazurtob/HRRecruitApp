@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title>HRRecruitApp - Academics</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<div th:replace="secured/academics_form_fragment::inlineJsFragment">
+		</div>
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+	
+
+	<div id="main-content">
+
+		<div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_academics_container} )">
+				
+			<div id="applicant_academics_container" >
+				
+				<h4> Edit information</h4>
+				<form th:id="input_form" id="input_form" th:action="${baseURL}"  th:object="${academicsForm}" th:method="post" >
+					<th:block th:replace="secured/academics_form_fragment.html::form_academics(${baseUrl})">
+					</th:block>
+					
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">save</i>
+							</button>		
+						</div>
+					</div>
+				</form>
+			</div> <!--  applicantAcademic Container -->
+									
+				
+				
+				
+		</div>	
+	
+	</div>
+</body>
+</html>

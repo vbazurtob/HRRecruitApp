@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Skills list fragment</title>
+</head>
+<body>
+
+	<div th:fragment="js_list_skills">
+	
+		<script>
+			
+			function ajaxDelete( actionUrl, id ){
+				$.ajax({
+				    url: actionUrl + id,
+				    type: 'DELETE',
+				    success: function(response) {
+						console.log(response.result);
+						if(response.result==='OK'){
+							alert("Record has been deleted!");
+							window.location = baseUrl;
+						}else {
+							console.log(response);
+							alert("Couldn't delete the selected record");
+						}
+						
+				    },
+				    data: {
+				    	id: id
+				    }
+				});
+				
+			}
+			
+			
+			function changePage(page, url){
+					window.location = baseUrl + (page);
+			}
+				
+			function askConfirmation(formDeleteId, actionUrl, id){
+					if ( window.confirm("Are you sure to delete this record?") == true ) {
+						ajaxDelete( actionUrl + 'delete/', id );
+						
+						return false;
+					} else {
+						
+						return false;
+					}
+			}
+				
+				
+			
+		</script>
+	
+	</div>
+
+
+	<div th:fragment="skills_list_table(skills, baseUrl, proficiencyService )">
+	
+		<table th:if="${skills.size()} > 0"  class="responsive-table ">
+											<thead>
+												<tr>
+													<th>Skill name</th>
+													<th>Proficiency</th>
+													<th>Action</th>
+													
+												</tr>
+											</thead>
+											<tbody>
+												<tr th:each="skillsObj : ${skills}"  >
+													
+													<th:block th:object="${skillsObj}">
+														
+														<td>
+															<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{name}">name</a>
+														</td>
+														<td th:text="${proficiencyService.getTextFromScore( skillsObj.proficiency    )}">proficiency</td>
+														<td>
+															
+															<a th:onclick="'return askConfirmation(' + ${'deleteForm'} +', baseUrl, ' + *{id} + '  )'" href="#">Delete</a> 
+														</td>
+														
+													</th:block>
+												</tr>
+											</tbody>
+			</table>
+	
+	
+	</div>
+
+
+</body>
+</html>

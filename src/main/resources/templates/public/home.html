@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+<meta charset="UTF-8">
+<title>HRRecruitApp ::Home Page::</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})">
+	
+	<div id="main-content" class="background-img">
+		
+		<script>
+		  document.addEventListener('DOMContentLoaded', function() {
+			  
+			    var options = {};
+			    var elems = document.querySelectorAll('.parallax');
+			    var instances = M.Parallax.init(elems, options);
+			});
+		  
+		</script>
+	
+		<style>
+			.background-img{
+			    background-image: url(" [[ @{/img/samson-duborg-rankin-91091-unsplash.jpg}  ]] ");
+			    background-repeat: no-repeat;
+			    height: 100vh;
+			    background-size: cover;
+			}
+			
+			.white-container{
+				margin-left: 15%;
+				margin-right: 15%;
+			}
+			
+			.transparent-container-margins{
+				padding-top: 10%;
+			}
+		</style>
+	
+
+
+		<div class="transparent-container-margins transparent">
+		
+			
+			<div class="card section white white-container ">
+				
+				<div class="row">
+					<div class="container section">
+						<h3 class="center-align">The right platform for managing your HR recruiting campaigns</h3>
+						<div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s6">
+					
+						<a th:href="${applicantLoginUrl}">
+							<img class="responsive-img" th:src="@{/img/career-3478983_1920.jpg}">
+						</a>
+						<div class="center-align">
+							For job seekers!
+							<a th:href="${applicantLoginUrl}">Click here</a>
+						</div>
+					</div>
+					<div class="col s6">
+						
+						<a th:href="${hrMemberLoginUrl}">
+							<img class="responsive-img" th:src="@{/img/opportunity-3185099_1920.jpg}">
+						</a>
+						<div class="center-align">
+							For job recruiters!
+							<a th:href="${hrMemberLoginUrl}">Click here</a>
+						</div>
+						
+					</div>
+					
+					
+				</div>
+				
+			</div>
+		</div>		
+		
+	
+	</div>
+</body>
+</html>

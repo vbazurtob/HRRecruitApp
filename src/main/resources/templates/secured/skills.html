@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title>HRRecruitApp - Skills</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		    var currentPage = /*[[${pageObj.getNumber()}]]*/ 0;
+			
+		
+		/*]]>*/
+		</script>
+		
+
+
+		<th:block th:if=" ${skills.size() <= 3 } ">
+			<style>
+				#main-content{
+					height: 80vh;
+				}
+				#profile_form_container{
+					height: 100%;
+				}
+			</style>
+		</th:block>
+		
+		<th:block th:replace="secured/skills_list_fragment.html::js_list_skills">
+		</th:block>
+		
+		<div th:replace="secured/skills_form_fragment::inlineJsFragment">
+		</div>
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+	  <th:block th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_skills_container} )" >
+	
+		<div id="applicant_skills_container" >		
+				<h5>Add a new record</h5>
+				
+				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${skillsForm}" th:method="post" >
+					<th:block th:replace="secured/skills_form_fragment.html::form_skills">
+					
+					</th:block>
+					
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" title="Add new record" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">add</i>
+							</button>		
+						</div>
+					</div>
+				</form>
+				
+				<p class="separator-line"></p>
+				<h5>My skills</h5>
+				<br>
+				<div id="list-skills">
+						<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber})"></th:block>
+						
+						<div class="row">
+							<div class="col s12">
+							
+								<form id="deleteForm" th:action="${baseUrl}+'delete/'" th:method="delete">
+									<th:block th:replace="secured/skills_list_fragment::skills_list_table(${skills}, ${baseUrl}, ${proficiencyService})"> </th:block>
+								</form>
+							</div>
+						</div>
+				</div>
+						
+			</div> <!-- applicant_skills_container -->
+		</th:block>
+	</div> <!-- main-content -->
+</body>
+</html>

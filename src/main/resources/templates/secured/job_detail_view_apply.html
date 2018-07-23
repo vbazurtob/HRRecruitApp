@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title th:text="'HRRecruitApp - ' + ${formTitle}">HRRecruitApp</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+			
+		
+		/*]]>*/
+		</script>
+		
+		<style>
+			#main-content{
+				height: 80vh;
+			}
+			
+			#job_form_container{
+				padding: 15px;
+			}
+			.description-p{
+				text-align: justify;
+			}
+		</style>
+		
+		
+
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+	
+	
+	
+		<div id="job_form_container" >		
+				
+		
+				
+				
+				
+				
+				<form th:id="job_form" id="job_form" th:action="${formActionUrl}"  th:object="${jobDetails}" th:method="post" >
+				
+					
+					<div class="row">
+						<div class="col s9">
+							<h5 th:text="*{title}" class="teal-text text-darken-1">Job details</h5>
+						</div>
+						<div class="col s3 right">
+							Posted on: <span th:text="*{datePosted}"></span>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col s12">
+							<label>Job details</label>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col s12">
+							<p class="description-p" th:text="*{description}">Job details</p>
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col s3">
+							<label>Salary:</label>
+						</div>
+						<div class="col s3">
+							<div th:text="'$' + *{salary} + ' USD'">Salary</div>
+						</div>
+						
+						<div class="col s3">
+							<label>Job Type:</label>
+						</div>
+						<div class="col s3">
+							<div th:text="*{jobType.description}">Salary</div>
+						</div>
+						
+					</div>
+					
+					
+					
+					<div class="row">
+						<div th:if="${alreadyApply} == false" class="col offset-s5 s2 center-align">
+							<button  title="Apply Job and Send CV" type="submit" class="waves-effect waves-light btn center">
+								<i class="material-icons">send</i> Send CV
+							</button>
+						</div>
+						
+						<div th:if="${alreadyApply} == true" class="col offset-s3 s6 center-align">
+							<button class="disabled btn-large ">
+								You already applied to this job on <span th:if="${dateApplied}" th:text="${#dates.format(dateApplied, 'dd-MM-yyyy HH:mm')} "> </span>
+							</button>		
+						</div>
+					</div>
+					
+				</form>
+				
+				
+						
+		</div> <!-- container -->
+
+
+	</div> <!-- main-content -->
+</body>
+</html>
