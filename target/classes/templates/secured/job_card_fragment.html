@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Job Card</title>
+</head>
+<body>
+
+
+<th:block th:fragment="job_card(classCardOffset)" th:object="${jobObj}">
+	
+	<div  th:class=" ${classCardOffset} + ' col s2 card jobcard'">
+	
+		<div class="row job-title">
+			<div class="col s12">
+				<a th:text="*{title}" th:href="${jobDetailUrl} + *{id}"></a>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col s12">
+				<span>Salary: </span> <span th:text="'$'+ *{salary} + ' USD'"></span>
+			</div>
+			
+		
+		</div>
+		
+		
+		<div class="row">
+			<div class="col s12">
+				<div class="right">
+					Posted on: <span th:text="*{datePosted}"></span>
+				</div>
+					
+			</div>
+		</div>
+	</div>
+</th:block>
+
+</body>
+</html>

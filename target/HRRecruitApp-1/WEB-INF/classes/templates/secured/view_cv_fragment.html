@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>View CV fragment</title>
+</head>
+<body>
+
+
+<th:block th:fragment="header" th:object="${applicant}">
+
+	<div class="row">
+		<div class="col s12">
+			<h4 class="center-align" th:text="*{names} +' ' + *{lastname} ">
+			</h4>
+			<p class="divider"></p>
+			<div class="center-align">
+				<div th:text="*{address1} + ' ' + *{address2} + ', ' + *{state} + ', ' + *{country} + ' &#8226; ' + *{email}  "> </div>
+			</div>
+			
+		</div>
+	</div>
+	
+
+
+</th:block>
+
+<th:block th:fragment="workexp" th:object="${workexpLst}">
+	<div class="row">
+		<div class="col s12">
+			<span class="section-title" th:text="'Work experience'">Work experience</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s12">
+			<ul>
+				<li th:each="wexpDetail : ${workexpLst}" th:object="${wexpDetail}">
+					<div class="row" >
+						<div th:text="*{position} + ' at ' + *{institution}" class=" col s6 left-align"></div> 
+						<div class="col s4 left-align offset-s2" th:text=" *{started} + '  to  ' + ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " ></div>
+					</div>
+				<li>
+			</ul>
+		</div>
+	</div>
+	
+
+</th:block>
+
+<th:block th:fragment="academics" th:object="${educationLst}">
+	<div class="row">
+		<div class="col s12">
+			<span class="section-title" th:text="'Academics'">Academics</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s12">
+			<ul>
+				<li th:each="academicDetail : ${educationLst}" th:object="${academicDetail}">
+					<div class="row" >
+						<div th:text="*{degreeName} + ' at ' +  *{institution}" class=" col s6 left-align"></div>
+						<div class="col s4 leftt-align offset-s2" th:text=" *{started} + ' to ' + ( (*{inProgress} == 'Y')? 'Present': *{finished} ) " ></div>
+					</div>
+					<div class="row">
+						<div class="col s12 left-align " th:text="'&nbsp;&nbsp;  Degree type: ' + *{degreeType} " ></div>
+					</div>					
+				<li>
+			</ul>
+		</div>
+	</div>
+	
+
+</th:block>
+
+
+<th:block th:fragment="skills" th:object="${skillsLst}">
+	<div class="row">
+		<div class="col s12">
+			<span class="section-title" th:text="'Skills'">Skills</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s12">
+			<ul>
+				
+				<li th:each="skillDetail : ${skillsLst}" th:object="${skillDetail}">
+					<div class="row"  th:object="${skillDetail}">
+						<span th:text="*{name}" class=" col s6 left-align">						
+						</span>
+						
+						<span class="col s4 offset-s2 left-align">
+							<th:block th:each="i : ${ #numbers.sequence( 1, skillDetail.proficiency  )  }">
+								<span class="" th:text="'&#9733;'">	&#9733; </span>
+							</th:block>
+						</span>
+						
+						
+					</div>
+				<li>
+			</ul>
+		</div>
+	</div>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title th:text="'HRRecruitApp - ' + ${formTitle}">HRRecruitApp</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+			
+		
+		/*]]>*/
+		</script>
+		
+
+		
+
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+	
+	
+	
+		<div id="job_form_container" >		
+				
+		
+				
+				
+				<h5 th:text="${formTitle}">Title</h5>
+				
+				
+				<form th:id="job_form" id="job_form" th:action="${formActionUrl}"  th:object="${jobForm}" th:method="post" >
+				
+					<th:block th:replace="secured/job_form_fragment.html::form_error_messages">Messages</th:block>
+				
+					
+					<th:block th:replace="secured/job_form_fragment.html::job_form">
+					</th:block>
+					
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">save</i>
+							</button>		
+						</div>
+					</div>
+					
+				</form>
+				
+				
+						
+		</div> <!-- container -->
+
+
+	</div> <!-- main-content -->
+</body>
+</html>

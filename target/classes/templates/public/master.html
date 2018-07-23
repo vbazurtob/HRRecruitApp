@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head th:fragment="master_head(title, links, css)">
+	<meta charset="UTF-8">
+	<title th:replace="${title}">HRRecruitApp</title>
+		
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}"  media="screen,projection"/>
+
+
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	
+	<!-- Basic css -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/app-materialize.css}" />
+	
+	<!-- Additional scripts -->
+	<th:block th:replace="${links}" />
+		
+	<!-- Additional css -->
+	<th:block th:replace="${css}" />
+	
+	
+</head>
+
+<body th:fragment="master_body(bodycontent)">
+
+<!--	Navbar	-->
+	<nav th:fragment="header" class="main-header">
+		<div class="navbar-wrapper">
+			<a th:href="@{/}"><span class="logo-text">HRRecruitApp</span></a>
+			
+			<ul sec:authorize="isAuthenticated()" class="right">
+				<div class="" th:replace="secured/menu-bar.html::menu_bar_li">
+ 				</div>
+ 				<div class="" th:replace="secured/menu-bar.html::dropdown_system_user">
+ 				</div>
+			</ul>
+		</div>
+	</nav>
+	
+	
+<!-- 	Main content -->
+	<div class="main-content" th:replace="${bodycontent}">Content is here</div>
+	
+<!-- 	Footer -->
+	 <th:block th:replace="public/footer.html::footer"></th:block>
+
+	
+	 
+	 <!-- Basic required scripts -->
+	
+	<script
+	  src="https://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>	 
+	 
+	<script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
+  
+  	<script type="text/javascript" th:src="@{/js/main-app.js}"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Menu Bar</title>
+</head>
+<body>
+
+
+
+<th:block th:fragment="menu_bar_li">
+	<th:block  th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+		
+<!-- 		Applicant user menu options -->
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE}">
+				 <i class="material-icons" style="display:inline;">home</i> Home
+			</a>
+		</li>
+		
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ JOBS_CNTROLLER + APPLICANT_JOB_SEARCH_PAGE } ">
+				<i class="material-icons" style="display:inline;">work</i> Jobs
+			</a>
+		</li>
+
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ JOBS_CNTROLLER + APPLICANT_JOB_APPLICANTS_JOBS_APPLIED } ">
+				<i class="material-icons" style="display:inline;">list</i> My applications
+			</a>
+		</li>
+		
+		
+		<li  sec:authorize="hasAuthority('APPLICANT')">
+			<a th:href="*{ APPLICANT_CV_CNTROLLER + VIEW_CV } ">
+				<i class="material-icons" style="display:inline;">description</i> My CV
+			</a>
+		</li>
+
+
+<!-- HR Member menu options -->
+			
+		<li class="col s2" sec:authorize="hasAuthority('HR_ADMIN')">
+			<a th:href="*{ JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_SUMMARY_PAGE } ">
+				<i class="material-icons" style="display:inline;"></i> Home
+			</a>
+		</li>
+		
+		
+		<li  sec:authorize="hasAuthority('HR_ADMIN')">
+			<a th:href="*{ JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_JOBS_MANAGEMENT_PAGE } ">
+				<i class="material-icons" style="display:inline;">create</i>Manage jobs
+			</a>
+		</li>
+	
+	
+<!-- Logout dropdown	 -->
+		<li>
+			<a class="dropdown-trigger" href="#!" data-target="dropdown-system-user"><i class="material-icons left">account_circle</i><span sec:authentication="name">User</span><i class="material-icons right">arrow_drop_down</i></a>
+		</li>
+		
+	</th:block>
+</th:block>
+
+<th:block th:fragment="dropdown_system_user">
+	<ul id="dropdown-system-user" class="dropdown-content" th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+	 
+	  <li sec:authorize="hasAuthority('APPLICANT')">
+	  	<a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE}">My profile</a>
+	  </li>
+	  
+	  
+	  <li class="divider"></li>
+	  
+<!-- 	  Logout -->
+
+	  <li sec:authorize="hasAuthority('HR_ADMIN')">
+	  	<a th:href="*{JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT}">Logout</a>
+	  </li>
+	  <li sec:authorize="hasAuthority('APPLICANT')">
+	  	<a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT}">Logout</a>
+	  </li>
+	</ul>
+	
+</th:block>
+
+</body>
+</html>

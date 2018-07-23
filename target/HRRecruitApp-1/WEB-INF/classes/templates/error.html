@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+<meta charset="UTF-8">
+<title>HRRecruitApp - Error</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+	
+
+
+	<div id="main-content" th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}" class=" center-align">
+			
+			<h1 th:text="|${httpStatus} - ${httpStatus.getReasonPhrase()}|">404</h1>
+	        <p th:utext="${errorMessage}">Error java.lang.NullPointerException</p>
+	        <a href="index.html" th:href="@{/index}">Back to Home Page</a>
+
+			
+				<style>
+					#main-content{
+						height: 80vh;
+						padding-top: 50px;
+						padding-bottom: 15px;
+					}
+				</style>
+
+	</div>
+</body>
+</html>

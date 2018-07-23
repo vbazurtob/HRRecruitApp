@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - Job search</title>
+	
+	
+	<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+	</div>
+		
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		
+		/*]]>*/
+	</script>
+		
+	<th:block th:replace="secured/jobs_list_fragment.html::js_list_skills">
+	</th:block>
+		
+	<style>
+	
+	
+		.jobcard{
+		
+			margin-left: 10px;
+			margin-right: 10px;
+		
+		}
+		
+		.first-top-elem{
+			padding-top: 20px;
+			height: 100%;
+		}
+		
+		#main-content{
+			height: 80vh;
+		}
+	
+	</style>
+	
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+
+		
+			<div id="main-content">
+			
+				<div class="row first-top-elem">
+					<div class="col s3">
+						
+						<div class="row">
+							<div class="col s6">
+								<h5>Filters</h5>
+							</div>
+							<div class="col s6">
+								<form th:action="${clearFilterFormUrl}" th:object="${filterJobForm}" th:method="post">
+											<div class="row">
+												<div class="col s12">
+													<button type="submit" title="Clear filters" class="waves-effect waves-light  btn ">
+														<i class="material-icons left">cancel</i><span th:text="'Clear filters'"></span>
+													</button>		
+												</div>
+											</div>
+										</form>
+							</div>
+						</div>
+						
+						
+						<form th:action="${filterFormUrl}" th:object="${filterJobSearch}" th:method="post">
+							
+							<input th:id="jobId" th:name="jobId" type="hidden" th:field="*{id}" />
+							<div>
+							
+								<label  for="title">Job Title</label>
+								<input id="title" th:id="title" th:name="title" type="text" th:field="*{title}" class="validate" />
+							
+							</div>
+							
+							
+							<div>
+							
+								<label for="salaryRangeQuery">Salary</label> 
+								<select id="salaryRangeQuery" th:name="salaryRangeQuery" th:field="*{salaryRangeSearchIndex}" class="browser-default">
+									<option th:each="salaryObj : ${salaryRangeListObj.keySet()}" th:value="${salaryObj.intValue()}" th:text="${salaryRangeListObj.get( salaryObj.intValue() ).text}">Option1</option>
+	 							</select> 
+							
+							</div>
+							
+							<div>
+								<label for="jobType">Job type</label>
+								<select id="jobType" th:name="jobType" th:field="*{jobType.id}" class="browser-default">
+									<option th:each="jobTypeObj : ${jobTypeList}" th:value="${jobTypeObj.id}" th:text="${jobTypeObj.description}">Option1</option>
+								</select>
+							</div>
+							
+							<div>
+								<label for="jobPostedTimeIndex">Date posted</label>
+								<select id="jobPostedTimeIndex" th:name="jobPostedTimeIndex" th:field="*{jobPostedTimeIndex}" class="browser-default">
+									<option th:each="jobPostedDateObj : ${jobDatePostedOptions.keySet()}" th:value="${jobPostedDateObj.intValue()}" th:text="${jobDatePostedOptions.get( jobPostedDateObj.intValue() )}">Option1</option>
+								</select>
+							</div>
+							
+							
+							<button title="Search" type="submit" class="waves-effect waves-light btn-floating btn-large right">
+									<i class="material-icons right">search</i>
+							</button>	
+							
+						</form>
+						
+						
+						
+										
+						
+						
+					</div>
+					
+					<div class="col s9">
+						<div class="jobs-list ">
+				
+							<th:block th:replace="secured/job_form_fragment.html::form_messages">Messages</th:block>			
+						
+							<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber}  )"></th:block>
+								
+							<th:block th:replace="secured/applicant_job_search_list.html::list_job_search_result" ></th:block>
+						
+						</div>
+					</div>
+		
+		
+	</div>
+</div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+	<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
+		<meta charset="UTF-8">
+		
+		<title>HRRecruitApp - Skills Edit</title>
+		<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+		</div>
+		
+		<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		   			
+		
+		/*]]>*/
+		</script>
+		
+
+		
+		<th:block th:replace="secured/skills_list_fragment.html::js_list_skills">
+		</th:block>
+		
+		<div th:replace="secured/skills_form_fragment::inlineJsFragment">
+		</div>
+	
+	</head>
+
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+	<div id="main-content">
+	  <th:block th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_skills_container} )" >
+	
+		<div id="applicant_skills_container" >		
+				<h5>Edit Skill</h5>
+				
+				<form th:id="input_form" id="input_form" th:action="${baseUrl}"  th:object="${skillsForm}" th:method="post" >
+					<th:block th:replace="secured/skills_form_fragment.html::form_skills">
+					
+					</th:block>
+					
+						
+					<div class="row">
+						<div class="col s12">
+							<button type="submit" class="waves-effect waves-light btn-floating btn-large right">
+								<i class="material-icons right">save</i>
+							</button>		
+						</div>
+					</div>
+
+				</form>
+				
+				
+						
+			</div> <!-- applicant_skills_container -->
+		</th:block>
+	</div> <!-- main-content -->
+</body>
+</html>

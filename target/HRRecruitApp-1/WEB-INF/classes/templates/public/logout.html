@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Logout</title>
+</head>
+<body>
+
+<div th:fragment="post_logout" class="logout_container">
+	<script>
+		function postLogout(){
+			console.log("CLICK");
+			// console.log($('#form_logout'));
+			document.querySelector('#form_logout').submit();
+		}
+	</script>
+
+	<form th:id="form_logout" th:action="@{/logout}" method="post">
+		<a href="#" id="logout_link" onclick="postLogout()" title="Sign off">Log out</a>
+	</form>
+</div>
+
+</body>
+</html>

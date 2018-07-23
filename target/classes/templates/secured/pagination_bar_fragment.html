@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:fragment="paginationBar( baseUrl, prevPage, nextPage, pageObj, pageNumber)">
+	
+		<div id="paginationBar" class="row">
+							<div class="col s3">
+								<a class="btn" title="Previous page"  th:href="${baseUrl} + ${prevPage}">
+									<i class="material-icons">chevron_left</i>
+								</a>
+														
+								<a class="btn" title="Next page" th:href="${baseUrl} + ${nextPage}">
+									<i class="material-icons">chevron_right</i>
+								</a>
+							
+							</div>
+
+
+							
+							
+							<div class="col s9 ">
+								<span th:if="${pageObj.getTotalPages()} > 1" class="row">
+									<div class="col s2 offset-s7">
+										Page #
+									</div>
+									<div class="col s1 offset-1">
+										<select id="selectPage" th:name="selectPage" onchange="changePage(this.options[this.selectedIndex].value)"
+											th:value="${pageObj.getNumber()}" class="browser-default" style="height: 1.8em;width:3.5em;"
+											>
+											<option th:each="pageNumber : ${#numbers.sequence(1,  pageObj.getTotalPages()) }"
+											 th:value="${pageNumber}-1" th:text="${pageNumber}" th:selected=" ( ${pageNumber} - 1 ) == ${pageObj.getNumber()} " >0</option>
+										</select>
+									</div>
+									<div class="col s1">
+										/ <span th:text="${pageObj.getTotalPages()}"></span>																			
+									</div>
+								
+								</span>
+							</div>
+							
+		</div>
+	
+	</div>
+
+
+</body>
+</html>

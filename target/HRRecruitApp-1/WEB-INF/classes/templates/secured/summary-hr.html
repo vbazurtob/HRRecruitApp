@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+<meta charset="UTF-8">
+<title>HRRecruitApp ::Home Page::</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})">
+	<div id="main-content">
+		<style>
+			p{
+				text-align: justify;
+			}
+			
+			.welcome-message{
+				padding-top:10%;
+			}
+			
+			#main-content{
+				height: 80vh;
+			}
+			
+		</style>
+		
+		<div class="section container welcome-message">
+			<h4>Welcome <span sec:authentication="name"></span>!</h4>
+			
+			<p>
+				
+				Use the options located in the upper navigation bar to get access to:
+				<ul>
+					<li>
+						Manage jobs: use this option to create, edit, delete and close job offers.
+						From here you can also review the list of candidates who have applied to a specific job.
+					</li>
+				</ul>
+			</p>
+			<p>
+				By clicking on the last option containing your username, a dropdown list will be displayed where you 
+				can access to the logout link to sign off the system.
+				
+			</p>
+		</div>
+	</div>
+</body>
+</html>

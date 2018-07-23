@@ -1,0 +1,116 @@
+<th:block th:fragment="inlineJsFragment">
+
+
+	
+
+	
+	<script>
+		window.onload = function(){
+			
+			const inProgressChk = document.getElementById('inProgress');
+			
+			if(inProgressChk.value === 'Y'){
+				
+				document.getElementById('finished').disabled = false;
+				document.getElementById('finished').value = '';
+				document.getElementById('finished').disabled = true;
+				
+				
+			}else{
+				console.log(inProgressChk.value);
+			}
+			
+		}
+
+		
+		
+		
+		
+		
+		
+	</script>
+
+</th:block>
+
+
+<th:block th:fragment="form_workexp" th:object="${workexpForm}" >
+	
+	
+							    <ul th:if="${saved}==true" class="form-saved-message green lighten-4">
+									<li th:if="${saved}==true">
+										Form has been saved sucessfully!
+									</li>
+									
+								</ul>
+								
+								<ul th:if="${updated}==true" class="form-saved-message green lighten-4">
+									<li th:if="${updated}==true">
+										Record has been updated sucessfully!
+									</li>
+									
+								</ul>
+								
+								<div class="form-error-messages red lighten-4 " th:if="${#fields.hasErrors('global')}">
+									<ul class="general-errors ">
+										<li th:errors="*{global}">
+											Error  codes
+										</li>
+										
+										
+									</ul>
+								</div>
+								
+								
+							<input type="hidden" th:name="applicant.username" th:id="applicant.username" th:value="*{applicant.username}"> 
+							<div id="newWorkExpRecord" >
+							
+								<div class="row">
+									
+									<div class="input-field col s4">
+										<label  for="institution">Institution</label>
+										<input id="institution" th:id="institution" th:name="institution" type="text" th:value="*{institution}" class="validate" />
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('institution')}" th:errors="*{institution}">Institution error</div>
+									</div>
+									
+									<div class="col s4 input-field">
+										<label for="position">Position</label>
+										<input  id="position" th:id="position" th:name="position" type="text" th:value="*{position}" class="validate" />
+										<div  class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Position name error</div>
+									</div>
+									<div class="col s4">&nbsp;</div>
+										
+									
+								</div>
+								
+								<div class="row">
+									
+									<div class="col s4">
+										<label for="started">Started</label>
+										<input format="mm/dd/yyyy" class="datepicker" id="started" th:id="started" type="date" th:name="started" th:value="${#dates.format(workexpForm.started, 'yyyy-MM-dd')}"/>		
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('started')}" th:errors="*{started}">From error</div>
+									</div>
+								
+								
+									<div class="col s4">
+										<label for="finished">Finished</label>
+										<input id="finished" th:id="finished" type="date" th:name="finished" 
+											th:value="${#dates.format(workexpForm.finished, 'yyyy-MM-dd')}" 
+											th:disabled="(*{inProgress} == 'Y') ? 'true'  : 'false' "
+											/>
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('finished')}" th:errors="*{finished}">To error</div>
+									</div>
+									<div class="col s4">
+										<label for="inProgress">
+											<input th:id="inProgress" th:name="inProgress" th:value="*{inProgress}" type="checkbox" id="inProgress" onclick="enableDisableToDateInput(this, 'finished')"  th:checked="${workexpForm.inProgress == 'Y' }" >
+											<span>Present</span>
+										</label>
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('inProgress')}" th:errors="*{inProgress}">In Progress error</div>
+									</div>
+									
+									
+								</div>
+								
+								
+																
+							</div>
+</th:block>

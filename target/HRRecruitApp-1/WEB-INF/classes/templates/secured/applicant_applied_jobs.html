@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - Job search</title>
+	
+	
+	<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+	</div>
+		
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		
+		/*]]>*/
+	</script>
+		
+	<th:block th:replace="secured/jobs_list_fragment.html::js_list_skills">
+	</th:block>
+		
+	<style>	
+		.applied-job-card{
+			padding: 15px;
+			margin-left: 5%;
+			margin-right: 5%;
+		
+		}
+		
+		.applied-job-card .card-action{
+			padding: 0px;
+		}
+		
+	</style>
+	
+	<th:block th:if=" ${jobsAppliedList.size() <=3 } ">
+		<style>
+			#main-content{
+				height: 80vh;
+			}
+		</style>
+	</th:block>
+	
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+
+		
+			<div id="main-content">
+				
+					<div>
+						<h5>My job applications</h5>
+					</div>
+					<br>
+					<th:block th:replace="secured/pagination_bar_fragment.html::paginationBar( ${baseUrl}, ${prevPage}, ${nextPage}, ${pageObj}, ${pageNumber}  )"></th:block> 
+						<div class="jobs-list">
+				
+
+
+							<th:block th:each="jobObj, iter : ${jobsAppliedList}" class="card" >
+						
+								<div class="card applied-job-card">
+									<div th:object="${jobObj.job}">
+							
+														<div th:text="*{title}" class="card-title"></div>
+														
+														<div class="row">
+															<div class="col s1"><label>Salary:</label></div>
+															<div class="col s3">
+																<div th:text="'$' + *{salary} + ' USD'"></div> 	
+															</div>
+															<div class="col s1"><label>Posted on:</label></div>
+															<div class="col s2">
+																<div th:text="*{datePosted}"></div>	
+															</div>
+															<div class="col s1"><label>Status:</label></div>
+															<div class="col s4">
+																<div th:text="*{status} == 'O'? 'Open': (*{status} == 'C'? 'Closed' : 'Deleted' )  "></div>	
+															</div>
+														</div>
+														
+						
+									</div>
+									<div class="card-action">
+										 <div class="right-align label" th:text="${'Applied on ' + #dates.format(jobObj.dateApplicationSent, 'yyyy-MM-dd HH:mm')}"></div>
+									</div>
+								</div>
+							</th:block>
+
+
+				
+						
+						</div>
+			</div>
+		
+
+
+
+
+</body>
+</html>

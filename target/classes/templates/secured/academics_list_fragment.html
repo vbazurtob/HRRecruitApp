@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Academics List Fragment</title>
+</head>
+<body>
+
+<div th:fragment="js_list_academics">
+
+	<script>
+		
+		function ajaxDelete( actionUrl, id ){
+			$.ajax({
+			    url: actionUrl + id,
+			    type: 'DELETE',
+			    success: function(response) {
+					console.log(response.result);
+					if(response.result==='OK'){
+						alert("Record has been deleted!");
+						window.location = baseUrl;
+					}else {
+						console.log(response);
+						alert("Couldn't delete the selected record");
+					}
+					
+			    },
+			    data: {
+			    	id: id
+			    }
+			});
+			
+		}
+		
+		
+		function changePage(page, url){
+				window.location = baseUrl + (page);
+		}
+			
+		function askConfirmation(formDeleteId, actionUrl, id){
+				if ( window.confirm("Are you sure to delete this record?") == true ) {
+					ajaxDelete( actionUrl + 'delete/', id );
+					
+					return false;
+				} else {
+					
+					return false;
+				}
+		}
+			
+			
+		
+	</script>
+
+</div>
+
+
+<div th:fragment="academics_list_table(academics, baseUrl)">
+
+	<table th:if="${academics.size()} > 0"  class="responsive-table ">
+										<thead>
+											<tr>
+												<th>Institution</th>
+												<th>Degree type</th>
+												<th>Degree name</th>
+												<th>Started</th>
+												<th>Finished</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="academicObj : ${academics}"  >
+												
+												<th:block th:object="${academicObj}">
+													
+													<td>
+														<a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{institution}">Edit</a>
+													</td>
+													<td th:text="*{degreeType}">degreetype</td>
+													<td th:text="*{degreeName}">degreename</td>
+													<td th:text="*{started}  ">started</td>
+													<td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
+													<td>
+														
+														<a th:onclick="'return askConfirmation(' + ${'deleteForm'} +', baseUrl, ' + *{id} + '  )'" href="#">Delete</a> 
+													</td>
+													
+												</th:block>
+											</tr>
+										</tbody>
+		</table>
+
+
+</div>
+
+
+</body>
+</html>

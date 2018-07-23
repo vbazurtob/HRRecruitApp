@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+html, body{
+	font-family: Verdana, Ubuntu;
+	font size: 11pt;
+	height: 100%;
+}
+
+.logo-text{
+	font-size: 1.3em;
+	padding-top: 15px;
+	padding-left:15px;
+}
+
+.main-header{
+	height: 90px;
+}
+.main-menu {
+	height: 50px;
+}
+
+#main-content{
+/* 	height: 100%; */
+	padding-top: 0px;
+}
+
+.main-footer{
+	height: 10vh;
+	text-align: center;
+	font-size: 0.8em;
+	padding-top: 25px;
+	margin: 0px;
+}
+
+.main-footer div{
+	margin: 0px;
+}
+
+.form-errors{
+	font-size: 0.8em;
+}
+
+.form-error-messages, .form-saved-message{
+	border-radius: 3px;
+	text-align: center;
+	
+	margin-left: 15%;
+	margin-right: 15%;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#profile_side_menu{
+
+	height: 100%;
+	margin: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+}
+
+.sidemenu-option{
+	padding: 15px;
+	border-bottom-left-radius: 10px;
+	
+	border-right-width: 0px;	
+	
+}
+
+.optionFormSelected{
+	border-right-width: 0px;
+	padding: 15px;
+	border: 0px none;
+	border-bottom-left-radius: 10px;
+	background-color: white;
+	
+}
+
+#profile_form_container{
+	padding-top: 15px;
+	padding-left: 25px;
+	padding-right: 10px;
+}
+
+.separator-line{
+	border-bottom: 1px solid #eeeeee;
+}
+
+.app-title{
+	font-size: 1.5em;
+	padding-left: 10px;
+	padding-top: 2px;	
+}

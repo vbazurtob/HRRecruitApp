@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HRRecruitApp - List job offers</title>
+</head>
+<body>
+
+<th:block th:fragment="list_job_search_result">
+
+	<th:block th:each="jobObj, iter : ${jobsList}" class="card" >
+		<th:block th:object="${jobObj}" >
+			
+			
+			<th:block th:if="${iter.index}==0">
+						<div class="row">					
+			</th:block>
+			
+							<div th:replace="secured/job_card_fragment.html::job_card( (  ${iter.index }   % ${colPerRow} )   == 0 ? 'offset-s3' : '' )">
+							</div>
+							
+
+			<th:block th:if="${iter.index} == 0 and ${iter.size}==1">
+						</div>
+			</th:block>			
+
+							
+			<th:block th:if=" ${iter.index + 1}   % ${colPerRow} == 0 and ${iter.index}!=0">
+						</div>
+						<div class="row">
+						
+			</th:block>			
+						
+
+			
+
+		</th:block>
+	
+	</th:block>
+	
+
+</th:block>
+
+
+
+
+</body>
+</html>

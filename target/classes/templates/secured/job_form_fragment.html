@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Job form fragment</title>
+</head>
+<body>
+
+
+<th:block th:fragment="form_messages">
+
+						       <ul th:if="${saved}==true" class="form-saved-message green lighten-4">
+									<li th:if="${saved}==true">
+										Form has been saved sucessfully!
+									</li>
+									
+								</ul>
+								
+								<ul th:if="${updated}==true" class="form-saved-message green lighten-4">
+									<li th:if="${updated}==true">
+										Record has been updated sucessfully!
+									</li>
+									
+								</ul>
+								
+
+
+
+</th:block>
+
+<th:block th:fragment="form_error_messages">
+								<div class="form-error-messages red lighten-4 " th:if="${#fields.hasErrors('global')}">
+									<ul class="general-errors ">
+										<li th:errors="*{global}">
+											Error  codes
+										</li>
+										
+										
+									</ul>
+								</div>
+
+</th:block>
+
+<th:block th:fragment="job_form">
+
+
+								
+							<div class="fields-job-form">
+							
+								<div class="row">
+									
+									<div class="input-field col s4">
+										<label  for="title">Job Title</label>
+										<input id="title" th:id="title" th:name="title" type="text" th:value="*{title}" class="validate" />
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+									</div>
+									
+									
+									
+									<div class="col s4">
+										<label for="jobType">Job type</label>
+										<select id="jobType" th:name="jobType" th:field="*{jobType.id}" class="browser-default">
+											<option th:each="jobTypeObj : ${jobTypeList}" th:value="${jobTypeObj.id}" th:text="${jobTypeObj.description}">Option1</option>
+										</select>
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('jobType')}" th:errors="*{jobType}">Job type error</div>
+									</div>
+									<div class="col s4">
+										<label for="salary">Salary</label>
+										<input id="salary" th:id="salary" type="number" th:name="salary" th:value="*{salary}" min=0 max="999999.99"/>		
+										<div class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">Salary error</div>
+									</div>
+									
+									
+								</div>
+								
+								<div class="row">
+								
+									<div class="col s8 input-field">
+											<label for="">Description</label>
+											<textarea  id="description" th:id="description" th:name="description" type="text"  class="validate" cols="40" rows="35" style="text-align: left;width: 100%; height: 200px;" >[[*{description}]]</textarea>
+											<div  class="form-errors red-text text-darken-2" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
+									</div>
+								
+									
+								</div>								
+							</div>
+
+
+
+</th:block>
+
+</body>
+</html>

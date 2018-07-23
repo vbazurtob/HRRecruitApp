@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head th:replace="public/master::master_head(~{::title}, ~{::#additionalCss}, ~{})">
+	<meta charset="UTF-8">
+	<title>HRRecruitApp - My CV</title>
+	
+	
+	<div id="scriptsjs">
+			<script src="/js/formHelpers.js"></script>
+	</div>
+		
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		
+		    var baseUrl = /*[[${baseUrl}]]*/ '';
+		
+		/*]]>*/
+	</script>
+		
+
+	<th:block id="additionalCss">
+		<link rel="stylesheet" th:href="@{/css/cv.css}">
+	</th:block>
+	
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})" >
+
+
+
+		
+			<div id="main-content" class="cv-container">
+				
+					<div th:object="${applicant}">
+						<th:block th:replace="secured/view_cv_fragment.html::header"></th:block> 
+					</div>
+					<br>
+					<br>
+					<div th:object="${workexpLst}">
+						<th:block th:replace="secured/view_cv_fragment.html::workexp"></th:block> 
+					</div>
+					
+					<div th:object="${educationLst}">
+						<th:block th:replace="secured/view_cv_fragment.html::academics"></th:block> 
+					</div>
+					
+					<div th:object="${skillsLst}">
+						<th:block th:replace="secured/view_cv_fragment.html::skills"></th:block> 
+					</div>
+					
+			</div>
+		
+
+
+
+
+</body>
+</html>

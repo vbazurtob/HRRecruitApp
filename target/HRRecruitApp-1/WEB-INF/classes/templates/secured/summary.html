@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="public/master::master_head(~{::title}, ~{}, ~{})">
+<meta charset="UTF-8">
+<title>HRRecruitApp ::Home Page::</title>
+</head>
+<body th:replace="public/master::master_body(~{::#main-content})">
+	<div id="main-content">
+		<style>
+			p{
+				text-align: justify;
+			}
+			
+			.welcome-message{
+				padding-top:10%;
+			}
+			
+			#main-content{
+				height: 80vh;
+			}
+			
+		</style>
+		<div class="section container welcome-message">
+			<h4>Welcome <span sec:authentication="name"></span>!</h4>
+			
+			<p>
+				
+				Use the options located in the upper navigation bar to get access to:
+				<ol>
+					<li>
+						Jobs: use this option to search and apply for new jobs available
+					</li>
+					
+					<li>
+						My applications: you can review all the jobs you have applied to in the past.
+					</li>
+					
+					<li>
+						My CV: view your current full-CV.
+					</li>
+				</ol>
+			</p>
+			<p>
+				By clicking on the last option containing your username, a dropdown list will be displayed where you 
+				can access to your personal profile and the logout link to sign off the system.
+				
+				Use the profile option to access, view and edit your personal information, your account's password, your 
+				academic and work experience history; and the list of skills you have.
+			</p>
+		</div>			 
+				 
+				
+	</div>
+</body>
+</html>
