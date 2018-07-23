@@ -5,11 +5,11 @@
 
 	<groupId>org.vbazurtob</groupId>
 	<artifactId>HRRecruitApp</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>HRRecruitApp</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for Spring Boot
+Author: Voltaire Bazurto Blacio</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -17,12 +17,19 @@
 		<version>2.0.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
+	
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.9</java.version>
+		
+		
+		
+		
 	</properties>
+
 
 	<dependencies>
 		<dependency>
@@ -81,14 +88,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- 
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		 -->
 
 		<dependency>
 		    <groupId>com.opencsv</groupId>
@@ -123,6 +122,15 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		
+
+	    <resources>
+	        <resource>
+	            <directory>src/main/resources</directory>
+	            <filtering>true</filtering>
+	        </resource>
+	    </resources>
+		
 	</build>
 
 	<repositories>
@@ -164,4 +172,23 @@
 	</pluginRepositories>
 
 
+	<profiles>
+		<profile>
+		    <id>dev</id>
+		    <properties>
+		        <activatedProperties>dev</activatedProperties>
+		    </properties>
+		    <activation>
+		        <activeByDefault>true</activeByDefault>
+		    </activation>
+		</profile>
+		<profile>
+		    <id>release</id>
+		    <properties>
+		        <activatedProperties>release</activatedProperties>
+		    </properties>
+		</profile>
+	</profiles>
+
+	<version>1</version>
 </project>

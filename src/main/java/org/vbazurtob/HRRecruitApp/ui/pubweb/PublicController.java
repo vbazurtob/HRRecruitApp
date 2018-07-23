@@ -108,8 +108,6 @@ public class PublicController implements ControllerEndpoints{
 	public String LoginHrMemberController( Model model ) {
 		
 		
-		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-		
 		model.addAttribute("loginHrUrl", JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGIN_PAGE );
 	
 		return "public/admin_login";
@@ -118,7 +116,7 @@ public class PublicController implements ControllerEndpoints{
 
 	@RequestMapping( NOT_AUTHORIZED_PAGE )	
 	public String NotAuthorizedToViewController( Model model ) {
-		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
+		
 		return "403";
 	}
 	
