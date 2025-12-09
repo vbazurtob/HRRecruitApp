@@ -21,8 +21,6 @@
 package org.vbazurtob.HRRecruitApp.model.service;
 
 import java.util.HashMap;
-
-
 import org.springframework.stereotype.Service;
 import org.vbazurtob.HRRecruitApp.model.SalaryRangeOption;
 

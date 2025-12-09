@@ -22,7 +22,6 @@ package org.vbazurtob.HRRecruitApp.lib.validators;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
 import org.springframework.beans.BeanWrapperImpl;
 
 public class FormFieldsMatchValidator implements ConstraintValidator<FormFieldsMatchConstraint, Object> {

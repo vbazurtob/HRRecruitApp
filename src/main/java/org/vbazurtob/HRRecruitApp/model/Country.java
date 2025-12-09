@@ -21,8 +21,6 @@
 package org.vbazurtob.HRRecruitApp.model;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvBindByPosition;
-import com.opencsv.bean.CsvCustomBindByName;
 
 public class Country {
 

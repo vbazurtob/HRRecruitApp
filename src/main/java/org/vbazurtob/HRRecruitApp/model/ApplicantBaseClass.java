@@ -20,7 +20,6 @@
 
 package org.vbazurtob.HRRecruitApp.model;
 import java.util.List;
-
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
@@ -28,7 +27,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 
 @MappedSuperclass
 public class ApplicantBaseClass {
@@ -271,12 +269,9 @@ public class ApplicantBaseClass {
 		} else if (!username.equals(other.username))
 			return false;
 		if (zipcode == null) {
-			if (other.zipcode != null)
-				return false;
-		} else if (!zipcode.equals(other.zipcode))
-			return false;
-		return true;
-	}
+            return other.zipcode == null;
+		} else return zipcode.equals(other.zipcode);
+    }
 
 
 	

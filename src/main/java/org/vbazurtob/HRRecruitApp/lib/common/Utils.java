@@ -21,7 +21,6 @@
 package org.vbazurtob.HRRecruitApp.lib.common;
 
 import java.util.List;
-
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 

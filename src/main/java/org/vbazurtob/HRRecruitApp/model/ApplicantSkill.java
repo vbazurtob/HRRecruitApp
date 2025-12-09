@@ -29,7 +29,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 /**
  * The persistent class for the applicant_skills database table.
  * 
@@ -132,12 +131,9 @@ public class ApplicantSkill implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		if (proficiency == null) {
-			if (other.proficiency != null)
-				return false;
-		} else if (!proficiency.equals(other.proficiency))
-			return false;
-		return true;
-	}
+            return other.proficiency == null;
+		} else return proficiency.equals(other.proficiency);
+    }
 	
 	
 

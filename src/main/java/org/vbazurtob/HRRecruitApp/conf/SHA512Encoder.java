@@ -20,8 +20,6 @@
 
 package org.vbazurtob.HRRecruitApp.conf;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;

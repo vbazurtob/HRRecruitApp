@@ -20,8 +20,9 @@
 
 package org.vbazurtob.HRRecruitApp.conf;
 
-import javax.sql.DataSource;
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -30,8 +31,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
 /**
  * @author voltaire
@@ -107,8 +106,8 @@ public class AppSecurityConfig  {
 		    .and().csrf().disable()
 			;
 			
-			System.out.println("app login " + PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE);;
-		}
+			System.out.println("app login " + PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE);
+        }
 
 		
 		@Autowired
@@ -176,9 +175,9 @@ public class AppSecurityConfig  {
 				.csrf().disable()
 				;
 			
-			System.out.println("hr login " + PUBLIC_CNTROLLER + HR_MEMBER_LOGIN_PAGE);;
-			
-		}
+			System.out.println("hr login " + PUBLIC_CNTROLLER + HR_MEMBER_LOGIN_PAGE);
+
+        }
 
 		
 		@Autowired

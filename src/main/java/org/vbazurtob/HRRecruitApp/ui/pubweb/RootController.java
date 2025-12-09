@@ -27,9 +27,8 @@ import org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints;
 @Controller
 public class RootController implements ControllerEndpoints {
 
-	@RequestMapping({ ROOT_PAGE, INDEX_PAGE })
-	public String rootRedirect() {
-		return "redirect:/public/home";
-	}
-	
+  @RequestMapping({ROOT_PAGE, INDEX_PAGE})
+  public String rootRedirect() {
+    return "redirect:/public/home";
+  }
 }

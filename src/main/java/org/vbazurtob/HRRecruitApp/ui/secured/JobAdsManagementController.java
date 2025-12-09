@@ -21,17 +21,16 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
 
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -71,8 +70,6 @@ import org.vbazurtob.HRRecruitApp.model.service.ApplicantWorkExpService;
 import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
 import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
-
-import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
 /**
  * @author Voltaire Bazurto Blacio
@@ -124,7 +121,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	private ApplicantAcademicsRepository applicantAcademicRepository;
 	
 	
-	private String[] arrStatus = new String[]{ "All", "Open", "Closed" };
+	private final String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	private List<String> jobStatusListObj;
 	
 	

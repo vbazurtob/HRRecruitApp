@@ -27,59 +27,55 @@ import javax.validation.constraints.NotNull;
 @MappedSuperclass
 public class UserBaseClass {
 
-	@Id
-	@NotNull
-	private String username;
+  @Id @NotNull private String username;
 
-	private String email;
+  private String email;
 
-	private String lastname;
+  private String lastname;
 
-	private String names;
+  private String names;
 
-	private String role;
-	
-	public UserBaseClass() {
-	}
-	
-	public String getUsername() {
-		return this.username;
-	}
+  private String role;
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+  public UserBaseClass() {}
 
-	public String getEmail() {
-		return this.email;
-	}
+  public String getUsername() {
+    return this.username;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-	public String getLastname() {
-		return this.lastname;
-	}
+  public String getEmail() {
+    return this.email;
+  }
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public String getNames() {
-		return this.names;
-	}
+  public String getLastname() {
+    return this.lastname;
+  }
 
-	public void setNames(String names) {
-		this.names = names;
-	}
-	
-	public String getRole() {
-		return this.role;
-	}
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
+  }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
-	
+  public String getNames() {
+    return this.names;
+  }
+
+  public void setNames(String names) {
+    this.names = names;
+  }
+
+  public String getRole() {
+    return this.role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
 }

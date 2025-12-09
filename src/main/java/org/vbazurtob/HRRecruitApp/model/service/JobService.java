@@ -21,7 +21,6 @@
 package org.vbazurtob.HRRecruitApp.model.service;
 
 import java.util.Optional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;

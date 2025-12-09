@@ -25,21 +25,17 @@ package org.vbazurtob.HRRecruitApp.model;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.springframework.data.jpa.domain.Specification;
 import org.vbazurtob.HRRecruitApp.model.service.JobSearchFiltersService;
-
-
 
 public class JobSpecification implements Specification<Job> {
 
 	
-	private JobSearchFiltersService jobSearchFiltersService;
+	private final JobSearchFiltersService jobSearchFiltersService;
 	
 	/**
 	 * 

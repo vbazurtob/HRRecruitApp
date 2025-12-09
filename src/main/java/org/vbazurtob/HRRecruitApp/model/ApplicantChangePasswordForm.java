@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsMatchConstraint;
 
 @FormFieldsMatchConstraint.List({
@@ -136,12 +135,9 @@ public class ApplicantChangePasswordForm {
 		} else if (!passwordConfirmation.equals(other.passwordConfirmation))
 			return false;
 		if (usernameChangePwdForm == null) {
-			if (other.usernameChangePwdForm != null)
-				return false;
-		} else if (!usernameChangePwdForm.equals(other.usernameChangePwdForm))
-			return false;
-		return true;
-	}
+            return other.usernameChangePwdForm == null;
+		} else return usernameChangePwdForm.equals(other.usernameChangePwdForm);
+    }
 
 	
 

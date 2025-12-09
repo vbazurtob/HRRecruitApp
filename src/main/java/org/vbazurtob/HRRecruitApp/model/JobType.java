@@ -21,9 +21,8 @@
 package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
-
+import javax.persistence.*;
 
 /**
  * The persistent class for the job_type database table.

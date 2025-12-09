@@ -21,17 +21,14 @@
 package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDateToPresentNotNullConstraint;
 import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsDatesConstraint;
-
-import java.util.Date;
-
 
 /**
  * The persistent class for the applicant_work_experience database table.

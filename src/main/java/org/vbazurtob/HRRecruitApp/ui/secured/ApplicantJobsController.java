@@ -21,15 +21,14 @@
 package org.vbazurtob.HRRecruitApp.ui.secured;
 
 
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -58,8 +57,6 @@ import org.vbazurtob.HRRecruitApp.model.service.JobApplicantService;
 import org.vbazurtob.HRRecruitApp.model.service.JobSearchFiltersService;
 import org.vbazurtob.HRRecruitApp.model.service.JobService;
 import org.vbazurtob.HRRecruitApp.model.service.JobTypeService;
-
-import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
 /**
  * @author Voltaire Bazurto Blacio
@@ -235,10 +232,10 @@ public class ApplicantJobsController {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		
-		boolean alreadyApplied = jobApplicantRepository.countByApplicantUsernameAndJobId(username, id) > 0 ? true : false;
+		boolean alreadyApplied = jobApplicantRepository.countByApplicantUsernameAndJobId(username, id) > 0;
 		
 		
-		if(alreadyApplied == true) {
+		if(alreadyApplied) {
 			JobApplicant jaDetails = jobApplicantRepository.findByApplicantUsernameAndJobId(username, id).get(0);
 			model.addAttribute("dateApplied", jaDetails.getDateApplicationSent() );
 		}

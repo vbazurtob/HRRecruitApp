@@ -22,28 +22,24 @@ package org.vbazurtob.HRRecruitApp.model;
 
 public class Proficiency {
 
-	private long score;
-	private String text;
-	
-	public Proficiency() {
-	}
+  private long score;
+  private String text;
 
-	public long getScore() {
-		return score;
-	}
+  public Proficiency() {}
 
-	public void setScore(long score) {
-		this.score = score;
-	}
+  public long getScore() {
+    return score;
+  }
 
-	public String getText() {
-		return text;
-	}
+  public void setScore(long score) {
+    this.score = score;
+  }
 
-	public void setText(String text) {
-		this.text = text;
-	}
-	
-	
+  public String getText() {
+    return text;
+  }
 
+  public void setText(String text) {
+    this.text = text;
+  }
 }

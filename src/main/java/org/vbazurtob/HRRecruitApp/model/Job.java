@@ -21,18 +21,15 @@
 package org.vbazurtob.HRRecruitApp.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
-import java.util.List;
-
 
 /**
  * The persistent class for the job database table.
@@ -233,12 +230,9 @@ public class Job implements Serializable {
 		} else if (!status.equals(other.status))
 			return false;
 		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		return true;
-	}
+            return other.title == null;
+		} else return title.equals(other.title);
+    }
 	
 	
 	

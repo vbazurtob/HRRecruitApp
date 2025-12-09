@@ -26,7 +26,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.vbazurtob.HRRecruitApp.lib.validators.FormFieldsMatchConstraint;
 
 @FormFieldsMatchConstraint.List({
@@ -150,12 +149,9 @@ public class NewApplicantForm {
 		} else if (!passwordConfirmation.equals(other.passwordConfirmation))
 			return false;
 		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
-	}
+            return other.username == null;
+		} else return username.equals(other.username);
+    }
 
 
 
