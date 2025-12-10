@@ -14,8 +14,6 @@
 --
 -- Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 
-\c "HRRecruitApp";
-
 SET search_path TO "vbazurtobPortfolio";
 
 
