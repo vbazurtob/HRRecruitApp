@@ -21,7 +21,6 @@
 package org.vbazurtob.HRRecruitApp.model.repository;
 
 import java.util.List;
-import org.eclipse.persistence.jpa.jpql.parser.TrimExpression.Specification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -33,8 +32,6 @@ public interface JobRepository extends CrudRepository<Job, Long>, JpaSpecificati
   List<Job> findByTitle(String title);
 
   Page<Job> findAll(Pageable page);
-
-  Page<Job> findAll(Specification spec, Pageable page);
 
   Page<Job> findAllByTitleContainingOrStatusOrJobTypeId(
           String title, String status, int jobTypeId, Pageable page);
