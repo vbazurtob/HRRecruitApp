@@ -139,6 +139,9 @@ public class PublicController implements ControllerEndpoints{
 		
 		return "403";
 	}
-	
-	
+
+    @RequestMapping( "/error")
+    public String ErrorController(Model model) {
+        return "error";
+    }
 }

@@ -44,12 +44,15 @@ public class CountryService {
     // Replaced code for reading the country files inside a packaged .war (or jar). InpuStream in
     // required to be used
     InputStream in = getClass().getResourceAsStream("/list_countries.csv");
-        InputStreamReader reader = new InputStreamReader(in)) {
-
+    InputStreamReader reader = new InputStreamReader(in)) {
       this.listCountries =
           new CsvToBeanBuilder<Country>(reader).withType(Country.class).build().parse();
     } catch (Exception e) {
       e.printStackTrace();
+      Country  us =  new Country();
+      us.setName("United States");
+      us.setCode("US");
+        this.listCountries = List.of(us);
     }
   }
 

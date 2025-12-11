@@ -20,17 +20,12 @@
 
 package org.vbazurtob.HRRecruitApp;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
 
 public class BlankTest {
 
-  @Before
-  public void setUp() throws Exception {}
-
-  @Test
+  @org.junit.jupiter.api.Test
   public void test() {
     // fail("Not yet implemented");
     assertEquals(1, 1);
