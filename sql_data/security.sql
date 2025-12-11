@@ -19,27 +19,27 @@
 -- FROM PUBLIC;
 
 GRANT ALL 
-ON ALL TABLES IN SCHEMA "vbazurtobPortfolio" 
+ON ALL TABLES IN SCHEMA "vbazurtob_portfolio" 
 TO hrapp_demo;
 
-GRANT USAGE ON SCHEMA "vbazurtobPortfolio" 
+GRANT USAGE ON SCHEMA "vbazurtob_portfolio" 
 TO hrapp_demo; -- For viewing data in pgAdmin
 
-ALTER USER hrapp_demo SET search_path to "vbazurtobPortfolio";
+ALTER USER hrapp_demo SET search_path to "vbazurtob_portfolio";
 
 -- Grant usage on sequences
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".job_id_seq TO hrapp_demo;
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".job_type_id_seq TO hrapp_demo;
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".applicant_academics_id_seq TO hrapp_demo;
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".applicant_work_experience_id_seq TO hrapp_demo;
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".applicant_skills_id_seq TO hrapp_demo;
-GRANT USAGE ON SEQUENCE "vbazurtobPortfolio".job_applicant_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".job_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".job_type_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".applicant_academics_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".applicant_work_experience_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".applicant_skills_id_seq TO hrapp_demo;
+GRANT USAGE ON SEQUENCE "vbazurtob_portfolio".job_applicant_id_seq TO hrapp_demo;
 
 
 
 
 ALTER DEFAULT PRIVILEGES 
     FOR ROLE hrapp_demo 
-    IN SCHEMA "vbazurtobPortfolio" 
+    IN SCHEMA "vbazurtob_portfolio" 
     GRANT ALL ON TABLES TO hrapp_demo;
   

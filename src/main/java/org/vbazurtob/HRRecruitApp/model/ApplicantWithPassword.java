@@ -28,7 +28,7 @@ import javax.validation.Valid;
 
 /** The persistent class for the applicant database table. */
 @Entity
-@Table(name = "applicant")
+@Table(name = "applicant", schema = "vbazurtob_portfolio")
 @NamedQuery(name = "ApplicantWithPassword.findAll", query = "SELECT a FROM ApplicantWithPassword a")
 public class ApplicantWithPassword extends ApplicantBaseClass implements Serializable {
 

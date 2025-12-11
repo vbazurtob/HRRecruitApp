@@ -22,18 +22,18 @@ package org.vbazurtob.HRRecruitApp.conf;
 
 import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 
-import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -190,6 +190,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class AppSecurityConfig  {
+    @Autowired
+    private AppUserDetailsService appUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -228,32 +230,43 @@ public class AppSecurityConfig  {
 
 //    @Bean
 //    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user = User.builder()
-//                .username("user")
-//                .password(passwordEncoder.encode("password"))
-//                .roles("USER")
-//                .build();
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder.encode("admin"))
-//                .roles("ADMIN", "USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(user, admin);
+//        auth.jdbcAuthentication().dataSource(datasource)
+////			.passwordEncoder(bcryptEncoder)
+////
+////			//True means the user is enabled. Usually this would be implement as a field in the DB.
+////			.usersByUsernameQuery("SELECT username, password, true FROM hr_user WHERE username = ?")
+////			//Since we don't have an authorities(roles) table we assume every user is admin
+////			.authoritiesByUsernameQuery("SELECT username, role FROM hr_user WHERE username = ?");
 //    }
-
+//
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
 //        return new BCryptPasswordEncoder();
 //    }
 //
-//    @Bean
-//    public AuthenticationManager authenticationManager(
-//            UserDetailsService userDetailsService,
-//            PasswordEncoder passwordEncoder) {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setUserDetailsService(userDetailsService);
-//        authenticationProvider.setPasswordEncoder(passwordEncoder);
-//        return new ProviderManager(authenticationProvider);
-//    }
+//    public void configureGlobal(AuthenticationManagerBuilder auth, BCryptPasswordEncoder bcryptEncoder  , DataSource datasource ) throws Exception {
+//
+//			auth.jdbcAuthentication().dataSource(datasource)
+//			.passwordEncoder(bcryptEncoder)
+//
+//			//True means the user is enabled. Usually this would be implement as a field in the DB.
+//			.usersByUsernameQuery("SELECT username, password, true FROM hr_user WHERE username = ?")
+//			//Since we don't have an authorities(roles) table we assume every user is admin
+//			.authoritiesByUsernameQuery("SELECT username, role FROM hr_user WHERE username = ?");
+//		}
+
+    @Bean
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+    authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        return new ProviderManager(authenticationProvider);
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return appUserDetailsService;
+    }
 }
 

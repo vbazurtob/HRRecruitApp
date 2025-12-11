@@ -11,4 +11,5 @@
 --
 -- Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 
+-- TODO -- change database name separated by _
 CREATE DATABASE "HRRecruitApp";
