@@ -14,12 +14,12 @@
 --
 -- Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 
-CREATE DATABASE "HRRecruitApp";
+CREATE DATABASE "hr_recruit_app";
 
 
 
 
-\c "HRRecruitApp";
+\c "hr_recruit_app";
 
 
 

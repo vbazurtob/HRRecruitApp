@@ -18,24 +18,24 @@
  * By accessing this portfolio, you agree to abide by these terms.
  */
 
-SET search_path TO "vbazurtobPortfolio";
+SET search_path TO "vbazurtob_portfolio";
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_type (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".job_type (
     id SERIAL PRIMARY KEY,
     description VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".job (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(150),
     description TEXT,
-    job_type_id INTEGER NOT NULL REFERENCES "vbazurtobPortfolio".job_type(id),
+    job_type_id INTEGER NOT NULL REFERENCES "vbazurtob_portfolio".job_type(id),
     salary INTEGER,
     date_posted DATE,
     status CHAR(1) -- O open, C closed
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".applicant (
     username VARCHAR(35) PRIMARY KEY,
     password VARCHAR(128),
     names VARCHAR(100),
@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant (
     email VARCHAR(45)
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_academics (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".applicant_academics (
     id BIGSERIAL PRIMARY KEY,
-    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
+    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtob_portfolio".applicant(username),
     institution VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
     finished DATE,
@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_academics (
     degree_name VARCHAR(150) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_work_experience (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".applicant_work_experience (
     id BIGSERIAL PRIMARY KEY,
-    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
+    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtob_portfolio".applicant(username),
     institution VARCHAR(255) NOT NULL,
     position VARCHAR(255) NOT NULL,
     started DATE NOT NULL,
@@ -69,21 +69,21 @@ CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_work_experience (
     in_progress CHAR(1) DEFAULT 'N'
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".applicant_skills (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".applicant_skills (
     id BIGSERIAL PRIMARY KEY,
-    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
+    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtob_portfolio".applicant(username),
     name VARCHAR(100) NOT NULL,
     proficiency INTEGER NOT NULL -- 1 - 5 Scale
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".job_applicant (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".job_applicant (
     id BIGSERIAL PRIMARY KEY,
-    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtobPortfolio".applicant(username),
-    job_id BIGINT NOT NULL REFERENCES "vbazurtobPortfolio".job(id),
+    applicant_id VARCHAR(35) NOT NULL REFERENCES "vbazurtob_portfolio".applicant(username),
+    job_id BIGINT NOT NULL REFERENCES "vbazurtob_portfolio".job(id),
     date_application_sent TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS "vbazurtobPortfolio".hr_user (
+CREATE TABLE IF NOT EXISTS "vbazurtob_portfolio".hr_user (
     username VARCHAR(35) PRIMARY KEY,
     password VARCHAR(128),
     names VARCHAR(100),

@@ -14,7 +14,7 @@
 --
 -- Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 
-\c "HRRecruitApp";
+\c "hr_recruit_app";
 
 
 

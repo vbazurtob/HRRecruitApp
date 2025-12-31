@@ -32,5 +32,5 @@ END IF;
 END
 $body$;
 
--- REVOKE CONNECT ON DATABASE "HRRecruitApp" FROM PUBLIC;
-GRANT CONNECT ON DATABASE "HRRecruitApp" TO hrapp_demo;
+-- REVOKE CONNECT ON DATABASE "hr_recruit_app" FROM PUBLIC;
+GRANT CONNECT ON DATABASE "hr_recruit_app" TO hrapp_demo;
