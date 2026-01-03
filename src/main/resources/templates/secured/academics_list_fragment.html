@@ -55,9 +55,10 @@
                 window.location = baseUrl + (page);
         }
 
-        function askConfirmation(formDeleteId, actionUrl, id){
+        function askConfirmation(thisNode){
+          const id = thisNode.dataset.id;
                 if ( window.confirm("Are you sure to delete this record?") == true ) {
-                    ajaxDelete( actionUrl + 'delete/', id );
+                    ajaxDelete( baseUrl + 'delete/', id );
 
                     return false;
                 } else {
@@ -65,8 +66,6 @@
                     return false;
                 }
         }
-
-
     </script>
 
 </div>
@@ -98,8 +97,9 @@
                 <td th:text="*{started}  ">started</td>
                 <td th:text="(*{inProgress} == 'Y' ) ? 'Present' : *{finished} ">finished</td>
                 <td>
-
-                    <a th:onclick="'return askConfirmation(' + ${'deleteForm'} +', baseUrl, ' + *{id} + '  )'" href="#">Delete</a>
+                    <a
+                       th:data-id="*{id}"
+                       th:onclick="'return askConfirmation(this)'" href="#">Delete</a>
                 </td>
 
             </th:block>
