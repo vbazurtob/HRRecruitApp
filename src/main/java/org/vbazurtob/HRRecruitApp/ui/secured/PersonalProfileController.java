@@ -439,6 +439,13 @@ public class PersonalProfileController {
       results.addError(errorDuplicateRecord);
     }
 
+    String errorsFound = applicantWorkExpService.validateFormContent(workexpForm);
+    if ( errorsFound != null) {
+        ObjectError errorInFormFields = new ObjectError("WorkExpRecordFieldError", errorsFound);
+        results.addError(errorInFormFields);
+    }
+
+
     // Get Controller Name for url construction
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -465,7 +472,7 @@ public class PersonalProfileController {
     model.addAttribute("workExperienceOptionSelected", true);
 
     // DEBUG form Validations
-    //		Utils.printFormErrors(results);
+    // Utils.printFormErrors(results);
 
     if (results.hasErrors()) { // Reload the form with errors
       model.addAttribute("degreeTypeLst", degreeTypeService.getListDegreeTypes());

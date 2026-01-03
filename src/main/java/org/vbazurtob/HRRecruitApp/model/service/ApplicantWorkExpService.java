@@ -41,12 +41,17 @@ public class ApplicantWorkExpService {
 
   public ApplicantWorkExpService() {}
 
-  public void saveWorkExpDetail(
-      ApplicantWorkExperience applicantWorkExperienceForm, String applicantUsername) {
+  public String validateFormContent(ApplicantWorkExperience applicantWorkExperienceForm) {
+      String errorFound = null;
+      if (applicantWorkExperienceForm.getStarted() == null) {
+          errorFound = "Empty start date. It can't be empty.";
+      }
+      return errorFound;
+  }
 
-    applicantWorkExperienceForm.setApplicant(
-        applicantRepository.findOneByUsername(applicantUsername));
-    appWorkExpRepository.save(applicantWorkExperienceForm);
+  public void saveWorkExpDetail(ApplicantWorkExperience applicantWorkExperienceForm, String applicantUsername) {
+      applicantWorkExperienceForm.setApplicant(applicantRepository.findOneByUsername(applicantUsername));
+      appWorkExpRepository.save(applicantWorkExperienceForm);
   }
 
   public boolean recordExists(

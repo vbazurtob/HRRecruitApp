@@ -30,15 +30,11 @@ public class Utils {
 	}
 	
 	public static void printFormErrors( BindingResult results ) {
-		
-//		 DEBUG form Validations
-				System.out.println("Errors? " + results.hasErrors() );
-				
-				List<ObjectError> oes = results.getAllErrors();
-				for( ObjectError oe: oes ) {
-					System.out.println(oe.toString());
-				}
-		
+        //		 DEBUG form Validations
+		System.out.println("Errors? " + results.hasErrors() );
+		List<ObjectError> oes = results.getAllErrors();
+		for( ObjectError oe: oes ) {
+            System.out.println(oe.toString());
+        }
 	}
-
 }

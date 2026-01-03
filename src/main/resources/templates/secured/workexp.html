@@ -60,17 +60,17 @@
 </head>
 
 <body th:replace="public/master::master_body(~{::#main-content})">
-
 <div id="main-content">
     <th:block th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_workexp_container} )">
-
         <div id="applicant_workexp_container">
             <h5>Add a new record</h5>
-
             <form th:id="input_form" id="input_form" th:action="${baseUrl}" th:object="${workexpForm}" th:method="post">
-                <th:block th:replace="secured/workexp_form_fragment.html::form_workexp">
-
-                </th:block>
+                <div th:if="${#fields.hasAnyErrors()}">
+                    <ul>
+                        <li th:each="err : ${#fields.allErrors()}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <th:block th:replace="secured/workexp_form_fragment.html::form_workexp"></th:block>
 
                 <div class="row">
                     <div class="col s12">
