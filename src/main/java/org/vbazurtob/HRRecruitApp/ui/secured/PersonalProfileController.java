@@ -617,6 +617,12 @@ public class PersonalProfileController {
       results.addError(errorDuplicateRecord);
     }
 
+    String errorsFound = applicantSkillService.validateFormContent(skillForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("SkillFieldError", errorsFound);
+      results.addError(errorInFormFields);
+    }
+
     // Get Controller Name for url construction
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -659,9 +665,6 @@ public class PersonalProfileController {
 
     // Get Controller Name
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
-    // Get logged username
-    //		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
     Optional<ApplicantSkill> applicantOpt = applicantSkillRepository.findById(id);
 
     if (applicantOpt.isPresent()) {
@@ -695,8 +698,13 @@ public class PersonalProfileController {
     // Get logged username
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-    if (results.hasErrors()) { // Reload the form with errors
+    String errorsFound = applicantSkillService.validateFormContent(skillsForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("SkillFieldError", errorsFound);
+      results.addError(errorInFormFields);
+    }
 
+    if (results.hasErrors()) { // Reload the form with errors
       model.addAttribute("baseUrl", controllerMapping + APPLICANT_SKILLS_PAGE + "edit/" + id);
       model.addAttribute("skillsForm", skillsForm);
       model.addAttribute("skillsOptionSelected", true);
