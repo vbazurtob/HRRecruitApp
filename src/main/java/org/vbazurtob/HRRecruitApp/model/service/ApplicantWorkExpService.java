@@ -45,12 +45,12 @@ public class ApplicantWorkExpService {
 
   public String validateFormContent(ApplicantWorkExperience applicantWorkExperienceForm) {
     String errorFound = null;
-    if (applicantWorkExperienceForm.getStarted() == null) {
-      errorFound = "Empty start date. It can't be empty.";
-    } else if (StringUtils.isEmpty(applicantWorkExperienceForm.getInstitution())) {
+    if (StringUtils.isEmpty(applicantWorkExperienceForm.getInstitution())) {
       errorFound = "Empty institution. It can't be empty.";
     } else if (StringUtils.isEmpty(applicantWorkExperienceForm.getPosition())) {
       errorFound = "Empty position. It can't be empty.";
+    } else if (applicantWorkExperienceForm.getStarted() == null) {
+      errorFound = "Empty start date. It can't be empty.";
     }
     return errorFound;
   }

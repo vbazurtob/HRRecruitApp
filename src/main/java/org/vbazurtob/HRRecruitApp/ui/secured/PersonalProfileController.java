@@ -440,11 +440,10 @@ public class PersonalProfileController {
     }
 
     String errorsFound = applicantWorkExpService.validateFormContent(workexpForm);
-    if ( errorsFound != null) {
-        ObjectError errorInFormFields = new ObjectError("WorkExpRecordFieldError", errorsFound);
-        results.addError(errorInFormFields);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("WorkExpRecordFieldError", errorsFound);
+      results.addError(errorInFormFields);
     }
-
 
     // Get Controller Name for url construction
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
@@ -524,6 +523,12 @@ public class PersonalProfileController {
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
     // Get logged username
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    String errorsFound = applicantWorkExpService.validateFormContent(workexpForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("WorkExpRecordFieldError", errorsFound);
+      results.addError(errorInFormFields);
+    }
 
     if (results.hasErrors()) { // Reload the form with errors
 
