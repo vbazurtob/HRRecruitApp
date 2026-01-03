@@ -23,6 +23,8 @@ package org.vbazurtob.HRRecruitApp.model.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,16 +44,22 @@ public class ApplicantWorkExpService {
   public ApplicantWorkExpService() {}
 
   public String validateFormContent(ApplicantWorkExperience applicantWorkExperienceForm) {
-      String errorFound = null;
-      if (applicantWorkExperienceForm.getStarted() == null) {
-          errorFound = "Empty start date. It can't be empty.";
-      }
-      return errorFound;
+    String errorFound = null;
+    if (applicantWorkExperienceForm.getStarted() == null) {
+      errorFound = "Empty start date. It can't be empty.";
+    } else if (StringUtils.isEmpty(applicantWorkExperienceForm.getInstitution())) {
+      errorFound = "Empty institution. It can't be empty.";
+    } else if (StringUtils.isEmpty(applicantWorkExperienceForm.getPosition())) {
+      errorFound = "Empty position. It can't be empty.";
+    }
+    return errorFound;
   }
 
-  public void saveWorkExpDetail(ApplicantWorkExperience applicantWorkExperienceForm, String applicantUsername) {
-      applicantWorkExperienceForm.setApplicant(applicantRepository.findOneByUsername(applicantUsername));
-      appWorkExpRepository.save(applicantWorkExperienceForm);
+  public void saveWorkExpDetail(
+      ApplicantWorkExperience applicantWorkExperienceForm, String applicantUsername) {
+    applicantWorkExperienceForm.setApplicant(
+        applicantRepository.findOneByUsername(applicantUsername));
+    appWorkExpRepository.save(applicantWorkExperienceForm);
   }
 
   public boolean recordExists(
