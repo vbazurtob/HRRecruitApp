@@ -185,9 +185,6 @@ public class PersonalProfileController {
       results.addError(errorCurrentPasswordIsNotValid);
     }
 
-    //		DEBUG
-    //		Utils.printFormErrors(results);
-
     if (results.hasErrors()) {
 
       // In case of error set the data for the applicant profile data
@@ -260,7 +257,13 @@ public class PersonalProfileController {
       RedirectAttributes redirectAttrs,
       Model model) {
 
-    //		Check if record already exists (DB validation)
+    String errorsFound = applicantAcademicsService.validateFormContent(academicsForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("AcademicsFieldError", errorsFound);
+      results.addError(errorInFormFields);
+    }
+
+    //	Check if record already exists (DB validation)
     if (applicantAcademicsService.recordExists(
         academicsForm.getApplicant().getUsername(),
         academicsForm.getStarted(),
@@ -315,9 +318,6 @@ public class PersonalProfileController {
     // Get Controller Name
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 
-    // Get logged username
-    //		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
     Optional<ApplicantAcademic> academicsOpt = appAcademicsRepository.findById(id);
 
     if (academicsOpt.isPresent()) {
@@ -348,6 +348,12 @@ public class PersonalProfileController {
     String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
     // Get logged username
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    String errorsFound = applicantAcademicsService.validateFormContent(academicsForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("AcademicsFieldError", errorsFound);
+      results.addError(errorInFormFields);
+    }
 
     if (results.hasErrors()) { // Reload the form with errors
 
