@@ -32,12 +32,10 @@
                     url: actionUrl + id,
                     type: 'DELETE',
                     success: function(response) {
-                        console.log(response.result);
                         if(response.result==='OK'){
                             alert("Record has been deleted!");
                             window.location = baseUrl;
                         }else {
-                            console.log(response);
                             alert("Couldn't delete the selected record");
                         }
 
@@ -57,10 +55,8 @@
             function askConfirmation(thisNode){
                     const actionUrl = thisNode.dataset.deleteFormAction;
                     const id = thisNode.dataset.id;
-                    console.log(baseUrl + 'delete/', id);
                     if ( window.confirm("Are you sure to delete this record?") == true ) {
                         ajaxDelete( baseUrl + 'delete/', id );
-
                         return false;
                     } else {
 

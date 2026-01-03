@@ -35,12 +35,10 @@
                 url: actionUrl + id,
                 type: 'DELETE',
                 success: function(response) {
-                    console.log(response.result);
                     if(response.result==='OK'){
                         alert("Record has been deleted!");
                         window.location = baseUrl;
                     }else {
-                        console.log(response);
                         alert("Couldn't delete the selected record");
                     }
 
