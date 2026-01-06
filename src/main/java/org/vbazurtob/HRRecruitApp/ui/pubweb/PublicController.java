@@ -57,7 +57,7 @@ public class PublicController implements ControllerEndpoints{
 		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		model.addAttribute("applicantLoginUrl", controllerMapping + APPLICANT_LOGIN_PAGE);
-		model.addAttribute("hrMemberLoginUrl" , controllerMapping + HR_MEMBER_LOGIN_PAGE);
+		model.addAttribute("hrMemberLoginUrl" , HR_LOGIN_URL);
 		return "public/home";
 	}
 
@@ -67,7 +67,7 @@ public class PublicController implements ControllerEndpoints{
 		
 		String controllerMapping = this.getClass().getAnnotation(RequestMapping.class).value()[0];
 		model.addAttribute("applicantSignupUrl", controllerMapping + CREATE_NEW_APPLICANT_PAGE );
-		model.addAttribute("postFormUrl",  APPLICANT_CV_CNTROLLER + APPLICANT_LOGIN_PAGE ); // APPLICANT_LOGIN_PAGE
+		model.addAttribute("postFormUrl",  APPLICANT_POST_LOGIN_URL );
 		
 		return "public/login";
 	}
@@ -122,17 +122,6 @@ public class PublicController implements ControllerEndpoints{
 		return "redirect:" + controllerMapping + CREATE_NEW_APPLICANT_PAGE;
 		
 	}
-	
-	
-	@RequestMapping( HR_MEMBER_LOGIN_PAGE )	
-	public String LoginHrMemberController( Model model ) {
-		
-		
-		model.addAttribute("loginHrUrl", JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGIN_PAGE );
-	
-		return "public/admin_login";
-	}
-	
 
 	@RequestMapping( NOT_AUTHORIZED_PAGE )	
 	public String NotAuthorizedToViewController( Model model ) {
