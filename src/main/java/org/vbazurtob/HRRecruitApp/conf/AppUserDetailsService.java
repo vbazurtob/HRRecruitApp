@@ -21,30 +21,61 @@
 package org.vbazurtob.HRRecruitApp.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.JdbcUserDetailsManagerConfigurer;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 import org.vbazurtob.HRRecruitApp.model.repository.ApplicantRepository;
 
+import javax.sql.DataSource;
+
 @Service
 public class AppUserDetailsService implements UserDetailsService {
+
+    public static final String ROLE_ADMIN = "HR_ADMIN";
+
+    public static final String ROLE_APPLICANT = "APPLICANT";
 
     @Autowired
     private ApplicantRepository applicantRepository;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (username == null) throw new UsernameNotFoundException(null);
+
+        if (username.equals("admin")) {
+            try {
+                return getAdminInfo();
+            } catch (Exception e) {
+                throw new UsernameNotFoundException(username);
+            }
+        }
+
         ApplicantWithPassword applicantWithPassword = applicantRepository.findOneByUsername(username);
         if (applicantWithPassword != null) {
             return User.builder().username(username)
                     .password(applicantWithPassword.getPassword())
-                    .authorities("APPLICANT").build();
+                    .authorities(ROLE_APPLICANT).build();
         } else {
             throw new UsernameNotFoundException(username);
         }
+    }
+
+    @Autowired
+    private UserDetails getAdminInfo() {
+        String sql = "SELECT username, password, role FROM hr_user WHERE username = ?";
+        // Fetch admin details using JdbcTemplate
+        return  jdbcTemplate.queryForObject(sql,new UserRowMapper(), "admin");
     }
 }

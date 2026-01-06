@@ -25,17 +25,23 @@ import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.JdbcUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
 
 /**
  * @author voltaire
@@ -193,74 +199,104 @@ public class AppSecurityConfig  {
     @Autowired
     private AppUserDetailsService appUserDetailsService;
 
+//    @Bean
+//    @Order(1)
+//    public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable()) // Example: Disable CSRF
+//                .authorizeHttpRequests(auth -> auth
+//                                .requestMatchers(new AntPathRequestMatcher(ROOT_PAGE)).permitAll()
+//                                .antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**").permitAll()
+//                                .antMatchers(INDEX_PAGE, PUBLIC_CNTROLLER  +  HOME_PAGE, PUBLIC_CNTROLLER  +  "/**", "/error/**").permitAll()// Example: Public access
+//                                .anyRequest().authenticated()
+//                        // All other requests require authentication
+//                );
+//        return http.build();
+//    }
+//
+//    @Bean
+////    @Order(2)
+//    public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable()) // Example: Disable CSRF
+//                .authorizeHttpRequests(auth -> auth
+//                                .requestMatchers(new AntPathRequestMatcher(ROOT_PAGE)).permitAll()
+//                                .antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**").permitAll()
+//                                .antMatchers(INDEX_PAGE, PUBLIC_CNTROLLER  +  HOME_PAGE, PUBLIC_CNTROLLER  +  "/**", "/error/**").permitAll()// Example: Public access
+//                                .anyRequest().authenticated()
+//                        // All other requests require authentication
+//                )
+////                .authorizeHttpRequests(auth -> auth
+////                        .requestMatchers(new AntPathRequestMatcher(ROOT_PAGE)).permitAll()
+////                        .anyRequest().authenticated()
+////                        // All other requests require authentication
+////                )
+//
+//			.formLogin()
+//				.loginPage(PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE)
+//				.loginProcessingUrl( APPLICANT_CV_CNTROLLER + APPLICANT_LOGIN_PAGE ) // This POST URL has to match with root AntMatcher
+//
+//				.failureUrl( PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE + "?error=Failure when trying to log in")
+//				.defaultSuccessUrl( APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE )
+//				.permitAll()
+//
+//			.and()
+//			.logout()
+//				.logoutUrl(APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT) // <-- logout
+//				.logoutSuccessUrl( PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE + "?logout")
+//				.deleteCookies("JSESSIONID")
+//				.permitAll()
+//
+//			.and()
+//		          .exceptionHandling()
+//		          .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE)
+//        ; // Example: Enable HTTP Basic authentication
+//        return http.build();
+//    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Example: Disable CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher(ROOT_PAGE)).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher(ROOT_PAGE)).permitAll()
                                 .antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**").permitAll()
-                        .antMatchers(INDEX_PAGE, PUBLIC_CNTROLLER  +  HOME_PAGE, PUBLIC_CNTROLLER  +  "/**", "/error/**").permitAll()// Example: Public access
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") // Example: Admin role access
-                        .anyRequest().authenticated()
+                                .antMatchers(INDEX_PAGE, PUBLIC_CNTROLLER  +  HOME_PAGE, PUBLIC_CNTROLLER  +  "/**", "/error/**").permitAll()
+//                                .antMatchers(JOBS_ADS_MANAGEMENT_CNTROLLER  +  "/**").hasAuthority("HR_ADMIN")// Example: Public access
+                            .anyRequest().authenticated()
                         // All other requests require authentication
                 )
 
-			.formLogin()
-				.loginPage(PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE)
-				.loginProcessingUrl( APPLICANT_CV_CNTROLLER + APPLICANT_LOGIN_PAGE ) // This POST URL has to match with root AntMatcher
+                 // <-- Root ant matcher
+                .formLogin()
+                    .loginPage(PUBLIC_CNTROLLER + HR_MEMBER_LOGIN_PAGE)
+                    .loginProcessingUrl(JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGIN_PAGE ) // <-- post login url must match root ant patter
+                    .failureUrl( PUBLIC_CNTROLLER + HR_MEMBER_LOGIN_PAGE + "?error")
+                    .defaultSuccessUrl( JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_SUMMARY_PAGE )
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutUrl(JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT)
+                    .logoutSuccessUrl(PUBLIC_CNTROLLER + HR_MEMBER_LOGIN_PAGE + "?logout") // <-- post login url must match root ant patter
+                    .deleteCookies("JSESSIONID")
+                    .permitAll()
 
-				.failureUrl( PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE + "?error=Failure when trying to log in")
-				.defaultSuccessUrl( APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE )
-				.permitAll()
-
-			.and()
-			.logout()
-				.logoutUrl(APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT) // <-- logout
-				.logoutSuccessUrl( PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE + "?logout")
-				.deleteCookies("JSESSIONID")
-				.permitAll()
-
-			.and()
-		          .exceptionHandling()
-		          .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE)
+                .and()
+                      .exceptionHandling()
+                      .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE)
+                .and()
+				.csrf().disable();
         ; // Example: Enable HTTP Basic authentication
         return http.build();
     }
-
-//    @Bean
-//    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-//        auth.jdbcAuthentication().dataSource(datasource)
-////			.passwordEncoder(bcryptEncoder)
-////
-////			//True means the user is enabled. Usually this would be implement as a field in the DB.
-////			.usersByUsernameQuery("SELECT username, password, true FROM hr_user WHERE username = ?")
-////			//Since we don't have an authorities(roles) table we assume every user is admin
-////			.authoritiesByUsernameQuery("SELECT username, role FROM hr_user WHERE username = ?");
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    public void configureGlobal(AuthenticationManagerBuilder auth, BCryptPasswordEncoder bcryptEncoder  , DataSource datasource ) throws Exception {
-//
-//			auth.jdbcAuthentication().dataSource(datasource)
-//			.passwordEncoder(bcryptEncoder)
-//
-//			//True means the user is enabled. Usually this would be implement as a field in the DB.
-//			.usersByUsernameQuery("SELECT username, password, true FROM hr_user WHERE username = ?")
-//			//Since we don't have an authorities(roles) table we assume every user is admin
-//			.authoritiesByUsernameQuery("SELECT username, role FROM hr_user WHERE username = ?");
-//		}
 
     @Bean
     public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
-    authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        authenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return new ProviderManager(authenticationProvider);
     }
 
