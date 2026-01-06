@@ -58,59 +58,37 @@ public class AppSecurityConfig {
                         INDEX_PAGE,
                         PUBLIC_CNTROLLER + HOME_PAGE,
                         PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE,
-//                        APPLICANT_LOGIN_URL,
-//                        APPLICANT_POST_LOGIN_URL,
-//                        APPLICANT_LOGOUT_URL,
-//                        HR_LOGIN_URL,
-//                        HR_POST_LOGIN_URL,
-//                        HR_LOGOUT_URL,
                         PUBLIC_CNTROLLER + "/**",
                         "/error/**")
-                    .permitAll()
-            //                     .antMatchers(JOBS_ADS_MANAGEMENT_CNTROLLER  +
-            //                     "/**").hasAuthority(AppUserDetailsService.ROLE_ADMIN)
-            //                                        .anyRequest()
-            //                                        .authenticated()
-            // All other requests require authentication
-            );
-    //    return http;
+                    .permitAll());
   }
 
-  // Admin
+  // Admin config
   @Bean
   @Order(1)
   public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
     publicFilterChain(http);
     http.csrf(csrf -> csrf.disable()) // Example: Disable CSRF
-            .requestMatchers( matchers -> matchers.antMatchers(ADMIN_CNTROLLER + "/**",
-                    JOBS_ADS_MANAGEMENT_CNTROLLER + "/**" ) )
-            .authorizeHttpRequests(auth ->
-
-                    //                requestMatchers(new AntPathRequestMatcher(ADMIN_CNTROLLER +
-                    // HR_MEMBER_LOGIN_PAGE)).permitAll()
-                    //                .requestMatchers(new AntPathRequestMatcher(PUBLIC_CNTROLLER +
-                    // APPLICANT_LOGIN_PAGE)).permitAll()
-
-                    //                PUBLIC_CNTROLLER + APPLICANT_LOGIN_PAGE,
-
-                    //                    .antMatchers(
-                    //                        ADMIN_CNTROLLER + HR_MEMBER_LOGIN_PAGE,
-                    //                        JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT)
-                    //                    .permitAll()
-
-                    auth.antMatchers(HR_LOGIN_URL, HR_POST_LOGIN_URL).permitAll()
-                        .antMatchers(HR_LOGOUT_URL).permitAll()
-//                        .antMatchers(JOBS_ADS_MANAGEMENT_CNTROLLER  +
-//                                         "/**").hasAuthority(AppUserDetailsService.ROLE_ADMIN)
+        // Specify the paths where admin filter chain config must be matched
+        .requestMatchers(
+            matchers ->
+                matchers.antMatchers(
+                    ADMIN_CNTROLLER + "/**", JOBS_ADS_MANAGEMENT_CNTROLLER + "/**"))
+        .authorizeHttpRequests(
+            auth ->
+                auth.antMatchers(HR_LOGIN_URL, HR_POST_LOGIN_URL)
+                    .permitAll()
+                    .antMatchers(HR_LOGOUT_URL)
+                    .permitAll()
+                    .antMatchers(JOBS_ADS_MANAGEMENT_CNTROLLER + "/**")
+                    .hasAuthority(AppUserDetailsService.ROLE_ADMIN)
                     .anyRequest()
-                    .authenticated()
-            // All other requests require authentication
+                    .authenticated() // All other requests require authentication
             )
-
-        // <-- Root ant matcher
         .formLogin()
         .loginPage(HR_LOGIN_URL)
-        .loginProcessingUrl(HR_POST_LOGIN_URL) // <-- post login url must match root ant
+        .loginProcessingUrl(
+            HR_POST_LOGIN_URL) // <-- post login url must match value in template forms
         .failureUrl(HR_LOGIN_URL + "?error")
         .defaultSuccessUrl(JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_SUMMARY_PAGE)
         .permitAll()
@@ -129,7 +107,7 @@ public class AppSecurityConfig {
     return http.build();
   }
 
-  // Applicant
+  // Applicant config (Default for all other paths)
   @Bean
   @Order(2)
   public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
@@ -137,31 +115,32 @@ public class AppSecurityConfig {
     http.csrf(csrf -> csrf.disable()) // Example: Disable CSRF
         .authorizeHttpRequests(
             auth ->
-                auth
-                        .antMatchers(APPLICANT_LOGIN_URL,
-                                APPLICANT_POST_LOGIN_URL,
-                                APPLICANT_LOGOUT_URL).permitAll()
-                    .antMatchers(APPLICANT_CV_CNTROLLER  + "/**", APPLICANT_PROFILE_PAGE + "**" )
+                auth.antMatchers(
+                        APPLICANT_LOGIN_URL, APPLICANT_POST_LOGIN_URL, APPLICANT_LOGOUT_URL)
+                    .permitAll()
+                    .antMatchers(APPLICANT_CV_CNTROLLER + "/**", APPLICANT_PROFILE_PAGE + "**")
                     .hasAuthority(AppUserDetailsService.ROLE_APPLICANT)
                     .anyRequest()
                     .authenticated() // All other requests require authentication
             )
         .formLogin()
         .loginPage(APPLICANT_LOGIN_URL)
-        .loginProcessingUrl(APPLICANT_POST_LOGIN_URL) // Must match the POST URL that is being printed in the template
-            // form
+        .loginProcessingUrl(
+            APPLICANT_POST_LOGIN_URL) // Must match the POST URL that is being printed in the
+        // template form
         .failureUrl(APPLICANT_LOGIN_URL + "?error=Failure when trying to log in")
         .defaultSuccessUrl(APPLICANT_CV_CNTROLLER + APPLICANT_SUMMARY_PAGE)
         .permitAll()
         .and()
-            .logout()
-                .logoutUrl(APPLICANT_LOGOUT_URL) // <-- logout
-                .logoutSuccessUrl(APPLICANT_LOGIN_URL + "?logout")
-                .deleteCookies(JSESSIONID_COOKIE)
-                .permitAll()
+        .logout()
+        .logoutUrl(APPLICANT_LOGOUT_URL) // <-- logout
+        .logoutSuccessUrl(APPLICANT_LOGIN_URL + "?logout")
+        .deleteCookies(JSESSIONID_COOKIE)
+        .permitAll()
         .and()
-            .exceptionHandling()
-            .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE); // Example: Enable HTTP Basic authentication
+        .exceptionHandling()
+        .accessDeniedPage(
+            PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE); // Example: Enable HTTP Basic authentication
     return http.build();
   }
 
