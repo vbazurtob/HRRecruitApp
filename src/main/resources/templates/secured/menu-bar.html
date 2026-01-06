@@ -96,7 +96,7 @@
         <!-- 	  Logout -->
 
         <li sec:authorize="hasAuthority('HR_ADMIN')">
-            <a th:href="*{JOBS_ADS_MANAGEMENT_CNTROLLER + HR_MEMBER_LOGOUT}">Logout</a>
+            <a th:href="*{HR_LOGOUT_URL}">Logout</a>
         </li>
         <li sec:authorize="hasAuthority('APPLICANT')">
             <a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT}">Logout</a>
