@@ -83,26 +83,26 @@
 </th:block>
 
 <th:block th:fragment="dropdown_system_user">
+    <th:block th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
+        <form th:id="form_logout" sec:authorize="hasAuthority('APPLICANT')" th:action="*{APPLICANT_LOGOUT_URL}" method="post"></form>
+        <form th:id="form_logout" sec:authorize="hasAuthority('HR_ADMIN')"  th:action="*{HR_LOGOUT_URL}" method="post"></form>
+    </th:block>
     <ul id="dropdown-system-user" class="dropdown-content"
         th:object="${ T(org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints) }">
 
         <li sec:authorize="hasAuthority('APPLICANT')">
             <a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_PROFILE_PAGE}">My profile</a>
         </li>
-
-
         <li class="divider"></li>
 
         <!-- 	  Logout -->
-
         <li sec:authorize="hasAuthority('HR_ADMIN')">
-            <a th:href="*{HR_LOGOUT_URL}">Logout</a>
+            <a href="#!" th:onclick="postLogout()" title="Sign off">Logout</a>
         </li>
         <li sec:authorize="hasAuthority('APPLICANT')">
-            <a th:href="*{APPLICANT_CV_CNTROLLER + APPLICANT_LOGOUT}">Logout</a>
+            <a href="#!" th:onclick="postLogout()" title="Sign off">Logout</a>
         </li>
     </ul>
-
 </th:block>
 
 </body>

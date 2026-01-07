@@ -23,3 +23,7 @@ $( document ).ready(function(){
 		console.log('ERR ' + e);
 	}
 });
+
+function postLogout(){
+    document.querySelector('#form_logout').submit();
+}

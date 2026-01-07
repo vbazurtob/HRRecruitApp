@@ -47,7 +47,7 @@ public class AppSecurityConfig {
   @Autowired private AppUserDetailsService appUserDetailsService;
 
   private void publicFilterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable()) // Example: Disable CSRF
+    http
         .authorizeHttpRequests(
             auth ->
                 auth.antMatchers(ROOT_PAGE)
@@ -68,7 +68,7 @@ public class AppSecurityConfig {
   @Order(1)
   public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
     publicFilterChain(http);
-    http.csrf(csrf -> csrf.disable()) // Example: Disable CSRF
+    http
         // Specify the paths where admin filter chain config must be matched
         .requestMatchers(
             matchers ->
@@ -100,10 +100,7 @@ public class AppSecurityConfig {
         .permitAll()
         .and()
         .exceptionHandling()
-        .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE)
-        .and()
-        .csrf()
-        .disable();
+        .accessDeniedPage(PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE);
     return http.build();
   }
 
@@ -112,7 +109,7 @@ public class AppSecurityConfig {
   @Order(2)
   public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
     publicFilterChain(http);
-    http.csrf(csrf -> csrf.disable()) // Example: Disable CSRF
+    http
         .authorizeHttpRequests(
             auth ->
                 auth.antMatchers(
