@@ -38,6 +38,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -236,6 +237,12 @@ public class JobAdsManagementController implements ControllerEndpoints {
     // Get logged username
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+    String errorsFound = jobService.validateFormContent(jobForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("JobFieldErrors", errorsFound);
+      results.addError(errorInFormFields);
+    }
+
     if (results.hasErrors()) {
 
       ArrayList<JobType> jobTypeList =
@@ -298,8 +305,11 @@ public class JobAdsManagementController implements ControllerEndpoints {
     // Get logged username
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-    // DEBUG
-    Utils.printFormErrors(results);
+    String errorsFound = jobService.validateFormContent(jobForm);
+    if (errorsFound != null) {
+      ObjectError errorInFormFields = new ObjectError("JobFieldErrors", errorsFound);
+      results.addError(errorInFormFields);
+    }
 
     if (results.hasErrors()) {
 
@@ -342,7 +352,7 @@ public class JobAdsManagementController implements ControllerEndpoints {
 
       jobDb.setStatus(
           "D"); // Deleted. In this version, no validation is made regarding if there might be or
-                // not already applicants or this job.
+      // not already applicants or this job.
       jobRepository.save(jobDb);
 
     } catch (Exception e) {

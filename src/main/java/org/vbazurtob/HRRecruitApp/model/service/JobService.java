@@ -23,11 +23,14 @@ package org.vbazurtob.HRRecruitApp.model.service;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.vbazurtob.HRRecruitApp.model.ApplicantAcademic;
 import org.vbazurtob.HRRecruitApp.model.Job;
 import org.vbazurtob.HRRecruitApp.model.JobSpecification;
 import org.vbazurtob.HRRecruitApp.model.repository.JobRepository;
@@ -75,16 +78,12 @@ public class JobService {
     return new long[] {previousPageNum, nextPageNum};
   }
 
-  //	public void getPaginatedApplicantsJob(long jobId) {
-  //
-  //		Job jobFound = jobRepository.findById(jobId).get();
-  //
-  //		if(jobFound != null) {
-  //
-  //			jobFound.getJobApplicants()
-  //
-  //		}
-  //
-  //	}
+  public String validateFormContent(Job jobForm) {
+    String errorFound = null;
+    if (StringUtils.isEmpty(jobForm.getTitle())) {
+      errorFound = "Empty Job Title. It can't be empty.";
+    }
 
+    return errorFound;
+  }
 }
