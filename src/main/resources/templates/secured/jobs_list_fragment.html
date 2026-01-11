@@ -70,7 +70,6 @@
 
         }
 
-
         function changePage(page, url){
                 window.location = baseUrl + (page);
         }
@@ -99,13 +98,10 @@
 
 
     </script>
-
 </div>
 
 <th:block th:fragment="jobs_list">
-
-
-    <table th:if="${jobsList.size()} > 0" class="responsive-table ">
+    <table class="responsive-table " th:if="${jobsList.size()} > 0">
         <thead>
         <tr>
             <th>Title</th>
@@ -147,20 +143,16 @@
                 <td th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "></td>
                 <td>
 
-                    <a th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'" href="#">Delete</a>
+                    <a href="#" th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'">Delete</a>
                     &nbsp;
 
-                    <a th:onclick="'return closeJobConfirmation( baseUrl, ' + *{id} + '  )'" href="#">CloseOffer</a>
+                    <a href="#" th:onclick="'return closeJobConfirmation( baseUrl, ' + *{id} + '  )'">CloseOffer</a>
                 </td>
 
             </th:block>
         </tr>
         </tbody>
     </table>
-
-
 </th:block>
-
-
 </body>
 </html>
