@@ -22,7 +22,6 @@ package org.vbazurtob.HRRecruitApp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 public class BlankTest {
 
   @org.junit.jupiter.api.Test

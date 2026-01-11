@@ -20,14 +20,13 @@
 
 package org.vbazurtob.HRRecruitApp.ui.dialects;
 
+import java.util.Collections;
+import java.util.Set;
 import org.thymeleaf.context.IExpressionContext;
 import org.thymeleaf.dialect.AbstractDialect;
 import org.thymeleaf.dialect.IExpressionObjectDialect;
 import org.thymeleaf.expression.IExpressionObjectFactory;
 import org.vbazurtob.HRRecruitApp.lib.common.Utils;
-
-import java.util.Collections;
-import java.util.Set;
 
 public class UtilDialect extends AbstractDialect implements IExpressionObjectDialect {
     private static final String UTIL_NAME = "util";

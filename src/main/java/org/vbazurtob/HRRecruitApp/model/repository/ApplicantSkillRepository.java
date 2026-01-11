@@ -31,25 +31,16 @@ import org.vbazurtob.HRRecruitApp.model.ApplicantWithPassword;
 
 @Repository
 @Transactional
-public interface ApplicantSkillRepository extends CrudRepository<ApplicantSkill, Long>{
+public interface ApplicantSkillRepository extends CrudRepository<ApplicantSkill, Long> {
 
-	Page<ApplicantSkill> findAll(Pageable page);
-	
-	
-	Page<ApplicantSkill> findByApplicant(ApplicantWithPassword applicant, Pageable page);
-	
-	Page<ApplicantSkill> findByApplicantUsername(String username, Pageable page);
-	
-	
-	List<ApplicantSkill> findByApplicantUsernameOrderByProficiencyDescNameDesc(String username);
-	
-	long countByApplicantUsernameAndNameAndProficiency(
-            String username,
-            String name,
-            Integer proficiency
-    );
-	
-	
-	
-	
+  Page<ApplicantSkill> findAll(Pageable page);
+
+  Page<ApplicantSkill> findByApplicant(ApplicantWithPassword applicant, Pageable page);
+
+  Page<ApplicantSkill> findByApplicantUsername(String username, Pageable page);
+
+  List<ApplicantSkill> findByApplicantUsernameOrderByProficiencyDescNameDesc(String username);
+
+  long countByApplicantUsernameAndNameAndProficiency(
+      String username, String name, Integer proficiency);
 }

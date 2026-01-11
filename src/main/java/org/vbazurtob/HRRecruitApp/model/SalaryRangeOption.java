@@ -97,7 +97,7 @@ public class SalaryRangeOption {
     if (salaryEqualsMore != other.salaryEqualsMore) return false;
     if (salaryLessEquals != other.salaryLessEquals) return false;
     if (text == null) {
-        return other.text == null;
+      return other.text == null;
     } else return text.equals(other.text);
   }
 

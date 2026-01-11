@@ -32,28 +32,23 @@ import org.vbazurtob.HRRecruitApp.model.repository.JobTypeRepository;
 @Service
 public class JobTypeService {
 
-	@PersistenceContext
-	private EntityManager entityManager;
-	
-	@Autowired
-	private JobTypeRepository jobTypeRepository;
-	
+  @PersistenceContext private EntityManager entityManager;
 
-	public List<JobType> getListJobTypeUI(){
-		
-		ArrayList<JobType> jobTypeList = (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
-		
-		JobType jtAll = new JobType();
-		jtAll.setId(0);
-		jtAll.setDescription("All");
-		
-		ArrayList<JobType> newTmpLst = new ArrayList<>();		
-		newTmpLst.add(jtAll);
-		newTmpLst.addAll(jobTypeList);
-		
-		return newTmpLst;
-	}
-	
-	
+  @Autowired private JobTypeRepository jobTypeRepository;
 
+  public List<JobType> getListJobTypeUI() {
+
+    ArrayList<JobType> jobTypeList =
+        (ArrayList<JobType>) jobTypeRepository.findAllByOrderByDescriptionAsc();
+
+    JobType jtAll = new JobType();
+    jtAll.setId(0);
+    jtAll.setDescription("All");
+
+    ArrayList<JobType> newTmpLst = new ArrayList<>();
+    newTmpLst.add(jtAll);
+    newTmpLst.addAll(jobTypeList);
+
+    return newTmpLst;
+  }
 }

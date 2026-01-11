@@ -160,11 +160,10 @@ public class ApplicantAcademic implements Serializable {
     if (this == other) {
       return true;
     }
-    if (!(other instanceof ApplicantAcademic)) {
+    if (!(other instanceof ApplicantAcademic castOther)) {
       return false;
     }
-    ApplicantAcademic castOther = (ApplicantAcademic) other;
-    return this.id == (castOther.id)
+      return this.id == (castOther.id)
         && this.institution.equals(castOther.institution)
         && this.started.equals(castOther.started)
         && this.finished.equals(castOther.finished)

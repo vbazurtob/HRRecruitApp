@@ -31,26 +31,17 @@ import org.vbazurtob.HRRecruitApp.model.JobApplicant;
 
 @Repository
 @Transactional
-public interface JobApplicantRepository extends CrudRepository<JobApplicant, Long>{
+public interface JobApplicantRepository extends CrudRepository<JobApplicant, Long> {
 
-	Page<JobApplicant> findAll(Pageable page);
-	
-	
-	Page<JobApplicant> findByApplicant(ApplicantWithPassword applicant, Pageable page);
-	
-	Page<JobApplicant> findByApplicantUsername(String username, Pageable page);
-	
-	List<JobApplicant> findByApplicantUsernameAndJobId(String username, Long id);
-	
-	Page<JobApplicant> findByJobId(long jobId, Pageable page);
+  Page<JobApplicant> findAll(Pageable page);
 
-	
-	long countByApplicantUsernameAndJobId(
-            String username,
-            Long id
-    );
-	
-	
-	
-	
+  Page<JobApplicant> findByApplicant(ApplicantWithPassword applicant, Pageable page);
+
+  Page<JobApplicant> findByApplicantUsername(String username, Pageable page);
+
+  List<JobApplicant> findByApplicantUsernameAndJobId(String username, Long id);
+
+  Page<JobApplicant> findByJobId(long jobId, Pageable page);
+
+  long countByApplicantUsernameAndJobId(String username, Long id);
 }

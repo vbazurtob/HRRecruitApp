@@ -37,63 +37,68 @@ import org.vbazurtob.HRRecruitApp.model.repository.JobApplicantRepository;
 @Service
 public class JobApplicantService {
 
-	@PersistenceContext
-	private EntityManager entityManager;
-	
-	@Autowired
-	private JobApplicantRepository jobApplicantRepository;
-	
-	@Autowired
-	private ApplicantRepository applicantRepository;
-	
-	
-	public boolean saveApplicantForJob( Job jobForm, String username ) {
-		
-		if( jobApplicantRepository.countByApplicantUsernameAndJobId(username, jobForm.getId()) <=0 ) {
-			JobApplicant jA = new JobApplicant();
-			jA.setApplicant(applicantRepository.findOneByUsername(username));
-			jA.setDateApplicationSent(new Date());
-			jA.setJob(jobForm);
-			jobApplicantRepository.save(jA);
-			return true;
-		}else {
-			System.out.println( "Already applied" ); // TODO check thro exception
-			return false;
-		}
-		
-				
-	}
-	
-	public Page<JobApplicant> getPaginatedRecords(String username, Optional<Integer> page, int recordsPerPage) {
-		
-		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "dateApplicationSent", "job.datePosted" ); 
-		Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByApplicantUsername(username, pageReqObj);
-						
-		return jobApplicantPageObj;
-		
-	}
-	
+  @PersistenceContext private EntityManager entityManager;
 
-	
-	public long[] getPaginationNumbers(Page<JobApplicant> jobPageObj) {
-		int previousPageNum = jobPageObj.isFirst() ? 0 : jobPageObj.previousPageable().getPageNumber() ;
-		int nextPageNum = jobPageObj.isLast() ?   jobPageObj.getTotalPages() - 1 : jobPageObj.nextPageable().getPageNumber() ;
-		if(nextPageNum < 0) {
-			nextPageNum = 0;
-		}
-		
-		return  new  long[]{ previousPageNum, nextPageNum };
-	}
-	
-	public Page<JobApplicant> getPaginatedApplicantsFromJob(long jobId, Optional<Integer> page, int recordsPerPage) {
-		
-		
-		PageRequest pageReqObj = PageRequest.of(page.orElse(Integer.valueOf(0)) , recordsPerPage, Direction.DESC, "dateApplicationSent", "job.datePosted" ); 
-		Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByJobId( jobId, pageReqObj );
-						
-		return jobApplicantPageObj;
-		
-	}
-		
+  @Autowired private JobApplicantRepository jobApplicantRepository;
 
+  @Autowired private ApplicantRepository applicantRepository;
+
+  public boolean saveApplicantForJob(Job jobForm, String username) {
+
+    if (jobApplicantRepository.countByApplicantUsernameAndJobId(username, jobForm.getId()) <= 0) {
+      JobApplicant jA = new JobApplicant();
+      jA.setApplicant(applicantRepository.findOneByUsername(username));
+      jA.setDateApplicationSent(new Date());
+      jA.setJob(jobForm);
+      jobApplicantRepository.save(jA);
+      return true;
+    } else {
+      System.out.println("Already applied"); // TODO check thro exception
+      return false;
+    }
+  }
+
+  public Page<JobApplicant> getPaginatedRecords(
+      String username, Optional<Integer> page, int recordsPerPage) {
+
+    PageRequest pageReqObj =
+        PageRequest.of(
+            page.orElse(Integer.valueOf(0)),
+            recordsPerPage,
+            Direction.DESC,
+            "dateApplicationSent",
+            "job.datePosted");
+    Page<JobApplicant> jobApplicantPageObj =
+        jobApplicantRepository.findByApplicantUsername(username, pageReqObj);
+
+    return jobApplicantPageObj;
+  }
+
+  public long[] getPaginationNumbers(Page<JobApplicant> jobPageObj) {
+    int previousPageNum = jobPageObj.isFirst() ? 0 : jobPageObj.previousPageable().getPageNumber();
+    int nextPageNum =
+        jobPageObj.isLast()
+            ? jobPageObj.getTotalPages() - 1
+            : jobPageObj.nextPageable().getPageNumber();
+    if (nextPageNum < 0) {
+      nextPageNum = 0;
+    }
+
+    return new long[] {previousPageNum, nextPageNum};
+  }
+
+  public Page<JobApplicant> getPaginatedApplicantsFromJob(
+      long jobId, Optional<Integer> page, int recordsPerPage) {
+
+    PageRequest pageReqObj =
+        PageRequest.of(
+            page.orElse(Integer.valueOf(0)),
+            recordsPerPage,
+            Direction.DESC,
+            "dateApplicationSent",
+            "job.datePosted");
+    Page<JobApplicant> jobApplicantPageObj = jobApplicantRepository.findByJobId(jobId, pageReqObj);
+
+    return jobApplicantPageObj;
+  }
 }

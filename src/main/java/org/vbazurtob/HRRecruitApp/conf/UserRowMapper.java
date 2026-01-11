@@ -20,12 +20,11 @@
 
 package org.vbazurtob.HRRecruitApp.conf;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class UserRowMapper implements RowMapper<UserDetails> {
     @Override

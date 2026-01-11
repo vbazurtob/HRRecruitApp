@@ -75,7 +75,7 @@ public class JobSearchFilter extends Job {
     if (getClass() != obj.getClass()) return false;
     JobSearchFilter other = (JobSearchFilter) obj;
     if (jobPostedTimeIndex != other.jobPostedTimeIndex) return false;
-      return salaryRangeSearchIndex == other.salaryRangeSearchIndex;
+    return salaryRangeSearchIndex == other.salaryRangeSearchIndex;
   }
 
   @Override

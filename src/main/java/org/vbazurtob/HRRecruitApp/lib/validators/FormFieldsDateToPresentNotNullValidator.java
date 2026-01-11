@@ -21,10 +21,8 @@
 package org.vbazurtob.HRRecruitApp.lib.validators;
 
 import java.util.Date;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
 import org.springframework.beans.BeanWrapperImpl;
 
 public class FormFieldsDateToPresentNotNullValidator

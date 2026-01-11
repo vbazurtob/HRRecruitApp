@@ -115,7 +115,7 @@ public class JobApplicant implements Serializable {
       if (other.id != null) return false;
     } else if (!id.equals(other.id)) return false;
     if (job == null) {
-        return other.job == null;
+      return other.job == null;
     } else return job.equals(other.job);
   }
 

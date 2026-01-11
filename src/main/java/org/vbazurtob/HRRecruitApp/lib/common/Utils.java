@@ -26,23 +26,22 @@ import org.springframework.validation.ObjectError;
 
 public class Utils {
 
-	public Utils() {
-	}
-	
-	public static void printFormErrors( BindingResult results ) {
-        //		 DEBUG form Validations
-		System.out.println("Errors? " + results.hasErrors() );
-		List<ObjectError> oes = results.getAllErrors();
-		for( ObjectError oe: oes ) {
-            System.out.println(oe.toString());
-        }
-	}
+  public Utils() {}
 
-    public static String limitText(String text, int limit) {
-        if( text.length() > limit ) {
-            return text.substring(0, limit) + "...";
-        } else  {
-            return text;
-        }
+  public static void printFormErrors(BindingResult results) {
+    //		 DEBUG form Validations
+    System.out.println("Errors? " + results.hasErrors());
+    List<ObjectError> oes = results.getAllErrors();
+    for (ObjectError oe : oes) {
+      System.out.println(oe.toString());
     }
+  }
+
+  public static String limitText(String text, int limit) {
+    if (text.length() > limit) {
+      return text.substring(0, limit) + "...";
+    } else {
+      return text;
+    }
+  }
 }

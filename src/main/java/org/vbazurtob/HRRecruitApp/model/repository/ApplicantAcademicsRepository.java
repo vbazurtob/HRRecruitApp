@@ -41,14 +41,13 @@ public interface ApplicantAcademicsRepository
 
   Page<ApplicantAcademic> findByApplicantUsername(String username, Pageable page);
 
-  List<ApplicantAcademic> findByApplicantUsernameOrderByStartedDescFinishedDesc(
-          String username);
+  List<ApplicantAcademic> findByApplicantUsernameOrderByStartedDescFinishedDesc(String username);
 
   long countByApplicantUsernameAndStartedAndFinishedAndDegreeNameAndDegreeTypeAndInstitution(
-          String username,
-          Date started,
-          Date finished,
-          String degreeName,
-          String degreeType,
-          String institution);
+      String username,
+      Date started,
+      Date finished,
+      String degreeName,
+      String degreeType,
+      String institution);
 }

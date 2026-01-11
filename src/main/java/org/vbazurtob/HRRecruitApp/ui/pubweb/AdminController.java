@@ -20,19 +20,19 @@
 
 package org.vbazurtob.HRRecruitApp.ui.pubweb;
 
+import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.ADMIN_CNTROLLER;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints;
 
-import static org.vbazurtob.HRRecruitApp.conf.ControllerEndpoints.ADMIN_CNTROLLER;
-
 @Controller
 @RequestMapping(ADMIN_CNTROLLER)
 public class AdminController implements ControllerEndpoints {
-    @RequestMapping( HR_MEMBER_LOGIN_PAGE )
-    public String LoginHrMemberController( Model model ) {
-        model.addAttribute("loginHrUrl", HR_POST_LOGIN_URL );
-        return "admin/admin_login";
-    }
+  @RequestMapping(HR_MEMBER_LOGIN_PAGE)
+  public String LoginHrMemberController(Model model) {
+    model.addAttribute("loginHrUrl", HR_POST_LOGIN_URL);
+    return "admin/admin_login";
+  }
 }

@@ -47,20 +47,19 @@ public class AppSecurityConfig {
   @Autowired private AppUserDetailsService appUserDetailsService;
 
   private void publicFilterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(
-            auth ->
-                auth.antMatchers(ROOT_PAGE)
-                    .permitAll()
-                    .antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**")
-                    .permitAll()
-                    .antMatchers(
-                        INDEX_PAGE,
-                        PUBLIC_CNTROLLER + HOME_PAGE,
-                        PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE,
-                        PUBLIC_CNTROLLER + "/**",
-                        "/error/**")
-                    .permitAll());
+    http.authorizeHttpRequests(
+        auth ->
+            auth.antMatchers(ROOT_PAGE)
+                .permitAll()
+                .antMatchers(CSS_FOLDER + "**", JS_FOLDER + "**", IMG_FOLDER + "**")
+                .permitAll()
+                .antMatchers(
+                    INDEX_PAGE,
+                    PUBLIC_CNTROLLER + HOME_PAGE,
+                    PUBLIC_CNTROLLER + NOT_AUTHORIZED_PAGE,
+                    PUBLIC_CNTROLLER + "/**",
+                    "/error/**")
+                .permitAll());
   }
 
   // Admin config
@@ -109,8 +108,7 @@ public class AppSecurityConfig {
   @Order(2)
   public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
     publicFilterChain(http);
-    http
-        .authorizeHttpRequests(
+    http.authorizeHttpRequests(
             auth ->
                 auth.antMatchers(
                         APPLICANT_LOGIN_URL, APPLICANT_POST_LOGIN_URL, APPLICANT_LOGOUT_URL)

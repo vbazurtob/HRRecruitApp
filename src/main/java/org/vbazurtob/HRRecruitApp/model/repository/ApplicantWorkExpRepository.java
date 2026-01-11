@@ -36,16 +36,15 @@ public interface ApplicantWorkExpRepository extends CrudRepository<ApplicantWork
 
   Page<ApplicantWorkExperience> findAll(Pageable page);
 
-  Page<ApplicantWorkExperience> findByApplicant(
-          ApplicantWithPassword applicant, Pageable page);
+  Page<ApplicantWorkExperience> findByApplicant(ApplicantWithPassword applicant, Pageable page);
 
   Page<ApplicantWorkExperience> findByApplicantUsername(String username, Pageable page);
 
   List<ApplicantWorkExperience> findByApplicantUsernameOrderByStartedDescFinishedDesc(
-          String username);
+      String username);
 
   long countByApplicantUsernameAndStartedAndFinishedAndPositionAndInstitution(
-          String username, Date started, Date finished, String position, String institution);
+      String username, Date started, Date finished, String position, String institution);
 
   //	public List<ApplicantWorkExperience> findByApplicantUsernameOrderByStartedFinished(String
   // username);

@@ -27,8 +27,8 @@ import org.vbazurtob.HRRecruitApp.ui.dialects.UtilDialect;
 @Configuration
 public class ThymeleafConfig {
 
-    @Bean
-    public UtilDialect utilDialect() {
-        return new UtilDialect();
-    }
+  @Bean
+  public UtilDialect utilDialect() {
+    return new UtilDialect();
+  }
 }

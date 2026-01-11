@@ -34,5 +34,5 @@ public interface JobRepository extends CrudRepository<Job, Long>, JpaSpecificati
   Page<Job> findAll(Pageable page);
 
   Page<Job> findAllByTitleContainingOrStatusOrJobTypeId(
-          String title, String status, int jobTypeId, Pageable page);
+      String title, String status, int jobTypeId, Pageable page);
 }

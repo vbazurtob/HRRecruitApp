@@ -20,43 +20,37 @@
 
 package org.vbazurtob.HRRecruitApp.conf;
 
-
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class SHA512Encoder implements PasswordEncoder{
+public class SHA512Encoder implements PasswordEncoder {
 
-	private String salt;
-	
-	
-	
-	//DELETE???
+  private String salt;
 
-	public SHA512Encoder(String salt) {
-		super();
-		this.salt = salt;
-	}
+  // DELETE???
 
-	@Override
-	public String encode(CharSequence pwd) {
-		
-		return Sha512DigestUtils.sha(pwd.toString()).toString();
-	}
+  public SHA512Encoder(String salt) {
+    super();
+    this.salt = salt;
+  }
 
-	@Override
-	public boolean matches(CharSequence arg0, String arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	
+  @Override
+  public String encode(CharSequence pwd) {
 
-	public String getSalt() {
-		return salt;
-	}
+    return Sha512DigestUtils.sha(pwd.toString()).toString();
+  }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+  @Override
+  public boolean matches(CharSequence arg0, String arg1) {
+    // TODO Auto-generated method stub
+    return false;
+  }
 
+  public String getSalt() {
+    return salt;
+  }
+
+  public void setSalt(String salt) {
+    this.salt = salt;
+  }
 }

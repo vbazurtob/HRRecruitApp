@@ -40,42 +40,42 @@ import javax.sql.DataSource;
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
-    public static final String ROLE_ADMIN = "HR_ADMIN";
+  public static final String ROLE_ADMIN = "HR_ADMIN";
 
-    public static final String ROLE_APPLICANT = "APPLICANT";
+  public static final String ROLE_APPLICANT = "APPLICANT";
 
-    @Autowired
-    private ApplicantRepository applicantRepository;
+  @Autowired private ApplicantRepository applicantRepository;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+  @Autowired private JdbcTemplate jdbcTemplate;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (username == null) throw new UsernameNotFoundException(null);
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    if (username == null) throw new UsernameNotFoundException(null);
 
-        if (username.equals("admin")) {
-            try {
-                return getAdminInfo();
-            } catch (Exception e) {
-                throw new UsernameNotFoundException(username);
-            }
-        }
-
-        ApplicantWithPassword applicantWithPassword = applicantRepository.findOneByUsername(username);
-        if (applicantWithPassword != null) {
-            return User.builder().username(username)
-                    .password(applicantWithPassword.getPassword())
-                    .authorities(ROLE_APPLICANT).build();
-        } else {
-            throw new UsernameNotFoundException(username);
-        }
+    if (username.equals("admin")) {
+      try {
+        return getAdminInfo();
+      } catch (Exception e) {
+        throw new UsernameNotFoundException(username);
+      }
     }
 
-    @Autowired
-    private UserDetails getAdminInfo() {
-        String sql = "SELECT username, password, role FROM hr_user WHERE username = ?";
-        // Fetch admin details using JdbcTemplate
-        return  jdbcTemplate.queryForObject(sql,new UserRowMapper(), "admin");
+    ApplicantWithPassword applicantWithPassword = applicantRepository.findOneByUsername(username);
+    if (applicantWithPassword != null) {
+      return User.builder()
+          .username(username)
+          .password(applicantWithPassword.getPassword())
+          .authorities(ROLE_APPLICANT)
+          .build();
+    } else {
+      throw new UsernameNotFoundException(username);
     }
+  }
+
+  @Autowired
+  private UserDetails getAdminInfo() {
+    String sql = "SELECT username, password, role FROM hr_user WHERE username = ?";
+    // Fetch admin details using JdbcTemplate
+    return jdbcTemplate.queryForObject(sql, new UserRowMapper(), "admin");
+  }
 }
