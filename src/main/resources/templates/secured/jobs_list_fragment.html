@@ -85,9 +85,9 @@
                 }
         }
 
-        function closeJobConfirmation(actionUrl, id){
+        function closeJobConfirmation(id){
             if ( window.confirm("Are you sure you want to close this job offer?") == true ) {
-                ajaxPut( actionUrl + 'close/', id );
+                ajaxPut( baseUrl + 'close/', id );
 
                 return false;
             } else {
@@ -144,9 +144,8 @@
                 <td>
 
                     <a href="#" th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'">Delete</a>
-                    &nbsp;
-
-                    <a href="#" th:onclick="'return closeJobConfirmation( baseUrl, ' + *{id} + '  )'">CloseOffer</a>
+                    &nbsp
+                    <a href="#" th:onclick="'return closeJobConfirmation(' + *{id} + ' )'">CloseOffer</a>
                 </td>
 
             </th:block>

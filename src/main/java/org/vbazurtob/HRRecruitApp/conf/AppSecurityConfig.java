@@ -84,6 +84,11 @@ public class AppSecurityConfig {
                     .anyRequest()
                     .authenticated() // All other requests require authentication
             )
+            .csrf().ignoringAntMatchers(
+                    JOBS_ADS_MANAGEMENT_CNTROLLER + "/manage/close/**",
+                    JOBS_ADS_MANAGEMENT_CNTROLLER + "/manage/delete/**"
+            ) // Required for API REST calls to work because csrf will make them fail with 403
+            .and()
         .formLogin()
         .loginPage(HR_LOGIN_URL)
         .loginProcessingUrl(
