@@ -18,31 +18,17 @@
  * By accessing this portfolio, you agree to abide by these terms.
  */
 
-package org.vbazurtob.HRRecruitApp.lib.common;
+package org.vbazurtob.HRRecruitApp.conf;
 
-import java.util.List;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.vbazurtob.HRRecruitApp.ui.dialects.UtilDialect;
 
-public class Utils {
+@Configuration
+public class ThymeleafConfig {
 
-	public Utils() {
-	}
-	
-	public static void printFormErrors( BindingResult results ) {
-        //		 DEBUG form Validations
-		System.out.println("Errors? " + results.hasErrors() );
-		List<ObjectError> oes = results.getAllErrors();
-		for( ObjectError oe: oes ) {
-            System.out.println(oe.toString());
-        }
-	}
-
-    public static String limitText(String text, int limit) {
-        if( text.length() > limit ) {
-            return text.substring(0, limit) + "...";
-        } else  {
-            return text;
-        }
+    @Bean
+    public UtilDialect utilDialect() {
+        return new UtilDialect();
     }
 }

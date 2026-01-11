@@ -126,7 +126,7 @@
                 <td>
                     <a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{title}">Edit</a>
                 </td>
-                <td th:text="   ${#strings.substring( jobObj.description , 0, 10) + ' ... ' }   ">description</td>
+                <td th:text=" ${#util.limitText( jobObj.description, 10)}   ">description</td>
                 <td th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) ">jobType</td>
                 <td th:text="*{salary}">salary</td>
 

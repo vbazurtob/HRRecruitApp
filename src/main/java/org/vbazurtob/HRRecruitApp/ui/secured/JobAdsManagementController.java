@@ -86,42 +86,29 @@ public class JobAdsManagementController implements ControllerEndpoints {
 	
 	
 	private final static int RECORDS_PER_PAGE = 10;
-	
+	private final String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	@Autowired
 	private JobRepository jobRepository;
-	
 	@Autowired
 	private JobService jobService;
-	
 	@Autowired
 	private JobTypeRepository jobTypeRepository;
-	
 	@Autowired
 	private JobTypeService jobTypeService;
-	
 	@Autowired
 	private JobApplicantService jobApplicantService;
-	
 	@Autowired
 	private ApplicantWorkExpRepository applicantWorkExpRepository;
-	
 	@Autowired
 	private ApplicantWorkExpService applicantWorkExpService;
-	
 	@Autowired
 	private ApplicantAcademicsService applicantAcademicService;
-	
 	@Autowired
 	private ApplicantRepository applicantRepository;
-	
 	@Autowired
 	private ApplicantSkillRepository applicantSkillRepository;
-	
 	@Autowired
 	private ApplicantAcademicsRepository applicantAcademicRepository;
-	
-	
-	private final String[] arrStatus = new String[]{ "All", "Open", "Closed" };
 	private List<String> jobStatusListObj;
 	
 	
