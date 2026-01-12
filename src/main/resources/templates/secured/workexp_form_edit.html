@@ -18,47 +18,56 @@
   ~ By accessing this portfolio, you agree to abide by these terms.
   -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})">
-    <meta charset="UTF-8">
+  <head
+    th:replace="public/master::master_head(~{::title}, ~{::#scriptsjs}, ~{})"
+  >
+    <meta charset="UTF-8" />
 
     <title>HRRecruitApp - Work Experience</title>
     <div id="scriptsjs">
-        <script src="/js/formHelpers.js"></script>
+      <script src="/js/formHelpers.js"></script>
     </div>
 
-    <div th:replace="secured/workexp_form_fragment.html::inlineJsFragment">
-    </div>
+    <div
+      th:replace="secured/workexp_form_fragment.html::inlineJsFragment"
+    ></div>
+  </head>
 
-</head>
-
-<body th:replace="public/master::master_body(~{::#main-content})">
-
-
-<div id="main-content">
-
-    <div th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_workexp_container} )">
-
+  <body th:replace="public/master::master_body(~{::#main-content})">
+    <div id="main-content">
+      <div
+        th:replace="secured/profile_fragment_layout::profile_forms_layout( ~{::#applicant_workexp_container} )"
+      >
         <div id="applicant_workexp_container">
+          <h4>Edit information</h4>
+          <form
+            th:id="input_form"
+            id="input_form"
+            th:action="${baseURL}"
+            th:object="${workexpForm}"
+            th:method="post"
+          >
+            <th:block
+              th:replace="secured/workexp_form_fragment.html::form_workexp"
+            >
+            </th:block>
 
-            <h4> Edit information</h4>
-            <form th:id="input_form" id="input_form" th:action="${baseURL}" th:object="${workexpForm}" th:method="post">
-                <th:block th:replace="secured/workexp_form_fragment.html::form_workexp">
-                </th:block>
-
-                <div class="row">
-                    <div class="col s12">
-                        <button type="submit" class="waves-effect waves-light btn-floating btn-large right">
-                            <i class="material-icons right">save</i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div> <!--  applicant_workexp_container Container -->
+            <div class="row">
+              <div class="col s12">
+                <button
+                  type="submit"
+                  class="waves-effect waves-light btn-floating btn-large right"
+                >
+                  <i class="material-icons right">save</i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--  applicant_workexp_container Container -->
+      </div>
     </div>
-
-</div>
-</body>
+  </body>
 </html>

@@ -18,16 +18,15 @@
   ~ By accessing this portfolio, you agree to abide by these terms.
   -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>User Info</title>
-</head>
-<body>
-
-<th:block th:fragment="user_info">
-    <div class="user-info col s3">
+  </head>
+  <body>
+    <th:block th:fragment="user_info">
+      <div class="user-info col s3">
         <!--/*
 
             Username is shown using the thymeleaf-extras-springsecurity4 dependency which allows
@@ -39,9 +38,7 @@
 
         */-->
         Hi <span sec:authentication="name">TestUser</span>
-    </div>
-
-</th:block>
-
-</body>
+      </div>
+    </th:block>
+  </body>
 </html>

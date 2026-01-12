@@ -16,14 +16,14 @@
  Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 */
 
-$( document ).ready(function(){
-	try{
-		$(".dropdown-trigger").dropdown();
-	}catch(e){
-		console.log('ERR ' + e);
-	}
+$(document).ready(function () {
+  try {
+    $(".dropdown-trigger").dropdown();
+  } catch (e) {
+    console.log("ERR " + e);
+  }
 });
 
-function postLogout(){
-    document.querySelector('#form_logout').submit();
+function postLogout() {
+  document.querySelector("#form_logout").submit();
 }

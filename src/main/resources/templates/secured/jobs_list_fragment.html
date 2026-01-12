@@ -18,92 +18,84 @@
   ~ By accessing this portfolio, you agree to abide by these terms.
   -->
 
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Fragment Job List</title>
-</head>
-<body>
-
-<div th:fragment="js_list_skills">
-
-    <script>
-
-        function ajaxDelete( actionUrl, id ){
-            $.ajax({
-                url: actionUrl + id,
-                type: 'DELETE',
-                success: function(response) {
-                    if(response.result==='OK'){
-                        alert("Record has been deleted!");
-                        window.location = baseUrl;
-                    }else {
-                        alert("Couldn't delete the selected record");
-                    }
-
-                },
-                data: {
-                    id: id
-                }
-            });
-
+  </head>
+  <body>
+    <div th:fragment="js_list_skills">
+      <script>
+        function ajaxDelete(actionUrl, id) {
+          $.ajax({
+            url: actionUrl + id,
+            type: "DELETE",
+            success: function (response) {
+              if (response.result === "OK") {
+                alert("Record has been deleted!");
+                window.location = baseUrl;
+              } else {
+                alert("Couldn't delete the selected record");
+              }
+            },
+            data: {
+              id: id,
+            },
+          });
         }
 
-        function ajaxPut( actionUrl, id ){
-            $.ajax({
-                url: actionUrl + id,
-                type: 'PUT',
-                success: function(response) {
-                    if(response.result==='OK'){
-                        alert("Job offer has been closed!");
-                        window.location = baseUrl;
-                    }else {
-                        alert("Couldn't closed selected job offer");
-                    }
-
-                },
-                data: {
-                    id: id
-                }
-            });
-
+        function ajaxPut(actionUrl, id) {
+          $.ajax({
+            url: actionUrl + id,
+            type: "PUT",
+            success: function (response) {
+              if (response.result === "OK") {
+                alert("Job offer has been closed!");
+                window.location = baseUrl;
+              } else {
+                alert("Couldn't closed selected job offer");
+              }
+            },
+            data: {
+              id: id,
+            },
+          });
         }
 
-        function changePage(page, url){
-                window.location = baseUrl + (page);
+        function changePage(page, url) {
+          window.location = baseUrl + page;
         }
 
-        function askConfirmation(actionUrl, id){
-                if ( window.confirm("Are you sure to delete this record?") == true ) {
-                    ajaxDelete( actionUrl + 'delete/', id );
+        function askConfirmation(actionUrl, id) {
+          if (window.confirm("Are you sure to delete this record?") == true) {
+            ajaxDelete(actionUrl + "delete/", id);
 
-                    return false;
-                } else {
-
-                    return false;
-                }
+            return false;
+          } else {
+            return false;
+          }
         }
 
-        function closeJobConfirmation(id){
-            if ( window.confirm("Are you sure you want to close this job offer?") == true ) {
-                ajaxPut( baseUrl + 'close/', id );
+        function closeJobConfirmation(id) {
+          if (
+            window.confirm("Are you sure you want to close this job offer?") ==
+            true
+          ) {
+            ajaxPut(baseUrl + "close/", id);
 
-                return false;
-            } else {
-
-                return false;
-            }
+            return false;
+          } else {
+            return false;
+          }
         }
+      </script>
+    </div>
 
-
-    </script>
-</div>
-
-<th:block th:fragment="jobs_list">
-    <table class="responsive-table " th:if="${jobsList.size()} > 0">
+    <th:block th:fragment="jobs_list">
+      <table class="responsive-table" th:if="${jobsList.size()} > 0">
         <thead>
-        <tr>
+          <tr>
             <th>Title</th>
             <th>Description</th>
             <th>Job Type</th>
@@ -112,46 +104,62 @@
             <th>Posted on</th>
             <th>Status</th>
             <th>Action</th>
-        </tr>
+          </tr>
         </thead>
         <tbody>
-        <tr th:each="jobObj : ${jobsList}">
-
+          <tr th:each="jobObj : ${jobsList}">
             <th:block th:object="${jobObj}">
+              <td>
+                <a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{title}"
+                  >Edit</a
+                >
+              </td>
+              <td th:text=" ${#util.limitText( jobObj.description, 10)}   ">
+                description
+              </td>
+              <td
+                th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) "
+              >
+                jobType
+              </td>
+              <td th:text="*{salary}">salary</td>
 
-                <td>
-                    <a th:href="${baseUrl + 'edit/'} + *{id}" th:text="*{title}">Edit</a>
-                </td>
-                <td th:text=" ${#util.limitText( jobObj.description, 10)}   ">description</td>
-                <td th:text="( *{jobType}!= null ? *{jobType.description}  : ''  ) ">jobType</td>
-                <td th:text="*{salary}">salary</td>
+              <td>
+                <div th:if=" ${ jobObj.getJobApplicants().size() > 0 } ">
+                  <a
+                    th:href="${applicantsJobsUrl} + ${jobObj.id} "
+                    th:text="${ jobObj.getJobApplicants().size() }"
+                  >
+                  </a>
+                </div>
 
-                <td>
-                    <div th:if=" ${ jobObj.getJobApplicants().size() > 0 } ">
+                <div
+                  th:if=" ${ jobObj.getJobApplicants().size() == 0 } "
+                  th:text="${ jobObj.getJobApplicants().size() } "
+                ></div>
+              </td>
 
-                        <a th:href="${applicantsJobsUrl} + ${jobObj.id} "
-                           th:text="${ jobObj.getJobApplicants().size() }">
-                        </a>
-                    </div>
-
-                    <div th:if=" ${ jobObj.getJobApplicants().size() == 0 } "
-                         th:text="${ jobObj.getJobApplicants().size() } "></div>
-
-                </td>
-
-                <td th:text="*{datePosted}">datePosted</td>
-                <td th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "></td>
-                <td>
-
-                    <a href="#" th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'">Delete</a>
-                    &nbsp
-                    <a href="#" th:onclick="'return closeJobConfirmation(' + *{id} + ' )'">CloseOffer</a>
-                </td>
-
+              <td th:text="*{datePosted}">datePosted</td>
+              <td
+                th:text="*{status}=='O'? 'Open' : (*{status}=='C'?'Closed':'') "
+              ></td>
+              <td>
+                <a
+                  href="#"
+                  th:onclick="'return askConfirmation( baseUrl, ' + *{id} + '  )'"
+                  >Delete</a
+                >
+                &nbsp
+                <a
+                  href="#"
+                  th:onclick="'return closeJobConfirmation(' + *{id} + ' )'"
+                  >CloseOffer</a
+                >
+              </td>
             </th:block>
-        </tr>
+          </tr>
         </tbody>
-    </table>
-</th:block>
-</body>
+      </table>
+    </th:block>
+  </body>
 </html>

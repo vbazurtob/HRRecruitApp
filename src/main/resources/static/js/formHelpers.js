@@ -16,16 +16,14 @@
  Disclaimer: The code is provided "as is" without warranty of any kind, either express or implied. I am not responsible for any damages resulting from the use of this code.
 */
 
-function enableDisableToDateInput(src, idElem){
-				checked = src.checked;
-				
-				document.getElementById(idElem).disabled=checked;
-				if(checked === true){
-					src.value = "Y";
-				}else{
-					src.value = "N";
-					
-				}
-				document.getElementById(idElem).value="";	
+function enableDisableToDateInput(src, idElem) {
+  checked = src.checked;
+
+  document.getElementById(idElem).disabled = checked;
+  if (checked === true) {
+    src.value = "Y";
+  } else {
+    src.value = "N";
+  }
+  document.getElementById(idElem).value = "";
 }
-	
