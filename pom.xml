@@ -181,6 +181,7 @@
   <scm>
     <tag>HRRecruitApp-1.0.1</tag>
     <connection>scm:git:git://github.com/vbazurtob/HRRecruitApp.git</connection>
+    <developerConnection>scm:git@github.com:vbazurtob/HRRecruitApp.git</developerConnection>
     <url>https://github.com/vbazurtob/HRRecruitApp.git</url>
   </scm>
 </project>
