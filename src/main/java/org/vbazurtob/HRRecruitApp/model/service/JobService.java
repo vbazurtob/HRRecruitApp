@@ -82,6 +82,8 @@ public class JobService {
     String errorFound = null;
     if (StringUtils.isEmpty(jobForm.getTitle())) {
       errorFound = "Empty Job Title. It can't be empty.";
+    } else if (jobForm.getSalary() == null || jobForm.getSalary() <= 0) {
+        errorFound = "Empty Salary. It can't be empty, neither zero.";
     }
 
     return errorFound;
