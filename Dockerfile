@@ -1,17 +1,22 @@
-# Simple Tomcat-based image that copies the built WAR into ROOT.war
+# Build-time argument pointing to your built WAR (default: target/app.war)
 ARG WAR_FILE=target/app.war
-FROM tomcat:9.0-jdk17
 
-# Remove default webapps (optional)
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Use a Java 17 runtime image suitable for Spring Boot apps
+FROM maven:3.9-eclipse-temurin-17 AS build
 
-ARG APP_PATH=/usr/local/tomcat/webapps/HRRecruitApp.war
+# Create app directory
+WORKDIR /app
 
-# Copy the WAR produced by Maven into Tomcat's webapps as ROOT.war
-# The WAR_FILE arg is expanded at build time; the workflow passes the actual target/*.war path.
+# Re-declare the build arg so COPY can see it
 ARG WAR_FILE
-COPY ${WAR_FILE} ${APP_PATH}
+# Copy the built Spring Boot executable WAR into the image
+COPY ${WAR_FILE} /app/app.war
 
+# Expose the default Spring Boot port
 EXPOSE 8080
 
-CMD ["java", "-jar", "${APP_PATH}"]
+# Allow users to pass JVM options at runtime (e.g. -Xmx)
+ENV JAVA_OPTS=""
+
+# Run the Spring Boot executable WAR. Use exec + sh -c so JAVA_OPTS expands and signals are forwarded.
+ENTRYPOINT ["sh", "-c", "exec java ${JAVA_OPTS} -jar /app/app.war"]
