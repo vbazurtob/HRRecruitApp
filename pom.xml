@@ -177,9 +177,9 @@
             </activation>
         </profile>
     </profiles>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <scm>
-        <connection>scm:git:https://github.com/vbazurtob/HRRecruitApp.git</connection>
+        <connection>scm:ssh:git@github.com:vbazurtob/HRRecruitApp.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/vbazurtob/HRRecruitApp.git</developerConnection>
         <url>https://github.com/vbazurtob/HRRecruitApp</url>
     </scm>
