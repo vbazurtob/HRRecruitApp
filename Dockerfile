@@ -14,4 +14,4 @@ COPY ${WAR_FILE} ${APP_PATH}
 
 EXPOSE 8080
 
-CMD ["java -jar", "${APP_PATH}"]
+CMD ["java", "-jar", "${APP_PATH}"]
