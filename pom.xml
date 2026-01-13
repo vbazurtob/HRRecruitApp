@@ -19,7 +19,8 @@
   ~ By accessing this portfolio, you agree to abide by these terms.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.vbazurtob</groupId>
@@ -32,7 +33,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.18</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -176,12 +177,5 @@
             </activation>
         </profile>
     </profiles>
-    <version>v1.0.2-SNAPSHOT</version>
-
-  <scm>
-    <tag>v1.0.2-SNAPSHOT</tag>
-    <connection>scm:git:git://github.com/vbazurtob/HRRecruitApp.git</connection>
-    <developerConnection>scm:git@github.com:vbazurtob/HRRecruitApp.git</developerConnection>
-    <url>https://github.com/vbazurtob/HRRecruitApp.git</url>
-  </scm>
+    <version>1.0.1</version>
 </project>
