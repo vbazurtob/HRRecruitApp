@@ -176,11 +176,11 @@
             </activation>
         </profile>
     </profiles>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <scm>
         <connection>scm:ssh:git@github.com:vbazurtob/HRRecruitApp.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/vbazurtob/HRRecruitApp.git</developerConnection>
         <url>https://github.com/vbazurtob/HRRecruitApp</url>
-      <tag>v1.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 </project>
