@@ -22,12 +22,12 @@ PostgreSQL SQL files can be found in the folder `sql_data`. A database named `hr
 
 This is a list of the important SQL script files required to run the application:
 
-* **database.sql** : creates the database that will be used for storing data for the HRRecruitApp application.
-* **schema.sql** : creates the schema under which all tables and database objects will be created for this application
-* **tables.sql** : creates the tables to store data about jobs, applicants, users, etc.
-* **security.sql** : grant the required privileges to the app user role to use the objects in the HRRecruitApp db.
-* **initialData.sql** : creates all the minimum required data in the db so the application can work properly. It also create two demo users.
-* **testData.sql** : creates extra records for testing
+* **0000_database.sql** : creates the database that will be used for storing data for the HRRecruitApp application.
+* **0001_schema.sql** : creates the schema under which all tables and database objects will be created for this application
+* **0002_tables.sql** : creates the tables to store data about jobs, applicants, users, etc.
+* **0006_security.sql** : grant the required privileges to the app user role to use the objects in the HRRecruitApp db.
+* **0003_initialData.sql** : creates all the minimum required data in the db so the application can work properly. It also create two demo users.
+* **0004_testData.sql** : creates extra records for testing
 
 
 ## Building the source code
